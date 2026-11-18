@@ -5,8 +5,10 @@ Source tokens come from the server's environment for now.
 """
 
 from fastapi import FastAPI, HTTPException, Query
+from pydantic import BaseModel
 
 from libarrei import normalise
+from libarrei.jobs import Job, JobStore
 from libarrei.lookup import LookupResult, lookup
 from libarrei.merge import MergedEdition, MergedWork, merge
 from libarrei.model import Source
@@ -46,6 +48,43 @@ def lookup_merged(
         "work": merged.model_dump(mode="json", exclude_defaults=True),
         "notes": {s.value: n for s, n in result.notes.items()},
     }
+
+
+class JobRequest(BaseModel):
+    isbn: str | None = None
+    title: str | None = None
+    author: str | None = None
+
+
+def _full_lookup(isbn: str | None, title: str | None, author: str | None) -> dict:
+    return lookup_merged(isbn=isbn, title=title, author=author, editions="all")
+
+
+jobs = JobStore(lambda **query: _full_lookup(**query))
+
+
+def _job_view(job: Job) -> dict:
+    view = {"id": job.id, "status": job.status, "query": job.query}
+    if job.status == "done":
+        view["result"] = job.result
+    if job.status == "failed":
+        view["error"] = job.error
+    return view
+
+
+@app.post("/v1/jobs", status_code=202)
+def start_job(request: JobRequest) -> dict:
+    """Fetches every edition in the background; poll GET /v1/jobs/{id} for the result."""
+    if not request.isbn and not request.title:
+        raise HTTPException(422, "give isbn or title")
+    return _job_view(jobs.submit(request.model_dump()))
+
+
+@app.get("/v1/jobs/{job_id}")
+def job_status(job_id: str) -> dict:
+    if not (job := jobs.get(job_id)):
+        raise HTTPException(404, "no such job, or it expired")
+    return _job_view(job)
 
 
 @app.get("/v1/metadata")
