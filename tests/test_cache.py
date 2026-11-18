@@ -20,3 +20,12 @@ def test_cache_does_not_store_missing_results():
     cache.fetch("openlibrary", "x", lambda: None)
     assert cache.get("openlibrary", "x") is None
 
+
+
+def test_file_cache_works_across_threads(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+
+    cache = Cache(tmp_path / "c.sqlite3")
+    with ThreadPoolExecutor(3) as pool:
+        list(pool.map(lambda i: cache.put("s", str(i), {"i": i}), range(9)))
+    assert [cache.get("s", str(i)) for i in range(9)] == [{"i": i} for i in range(9)]

@@ -7,6 +7,7 @@ such as a URL or a GraphQL query name plus its variables.
 
 import json
 import sqlite3
+import threading
 import time
 from pathlib import Path
 
@@ -19,13 +20,32 @@ class Cache:
     def __init__(self, path: Path | str = DEFAULT_PATH, max_age: float = DEFAULT_MAX_AGE_SECONDS, clock=time.time):
         if path != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(path)
-        self.db.execute(
+        self.path = path
+        self.max_age = max_age
+        self.clock = clock
+        # sqlite3 connections can't cross threads, and sources are fetched in parallel.
+        self._local = threading.local()
+        # An in-memory database exists per connection, so it must stay shared.
+        self._shared = self._connect() if path == ":memory:" else None
+
+    def _connect(self) -> sqlite3.Connection:
+        db = sqlite3.connect(self.path, timeout=30, check_same_thread=self.path != ":memory:")
+        if self.path != ":memory:":
+            # WAL lets one source write while another reads.
+            db.execute("PRAGMA journal_mode=WAL")
+        db.execute(
             "CREATE TABLE IF NOT EXISTS responses ("
             "source TEXT, request TEXT, body TEXT, fetched_at REAL, PRIMARY KEY (source, request))"
         )
-        self.max_age = max_age
-        self.clock = clock
+        return db
+
+    @property
+    def db(self) -> sqlite3.Connection:
+        if self._shared:
+            return self._shared
+        if not hasattr(self._local, "db"):
+            self._local.db = self._connect()
+        return self._local.db
 
     def get(self, source: str, request: str):
         row = self.db.execute(
