@@ -23,6 +23,7 @@ def test_work_fields():
         ("Test Translator", "translator"),
     ]
     assert work.ids == {Source.HARDCOVER: "2243188"}
+    assert work.slugs == {Source.HARDCOVER: "salt-lakes-an-unnatural-history"}
 
 
 def test_edition_fields():
@@ -35,3 +36,5 @@ def test_edition_fields():
     assert values(edition.pages) == [272]
     assert edition.contributors[0].value[0].role == "author"
     assert edition.ids == {Source.HARDCOVER: "32475686"}
+    # Edition pages live under their book's slug.
+    assert edition.slugs == {Source.HARDCOVER: "salt-lakes-an-unnatural-history"}

@@ -188,6 +188,13 @@ export interface components {
             fields: {
                 [key: string]: components["schemas"]["Resolved"];
             };
+            /**
+             * Slugs
+             * @default {}
+             */
+            slugs: {
+                [key: string]: string;
+            };
         };
         /** MergedWork */
         MergedWork: {
@@ -201,6 +208,13 @@ export interface components {
             };
             /** Editions */
             editions: components["schemas"]["MergedEdition"][];
+            /**
+             * Slugs
+             * @default {}
+             */
+            slugs: {
+                [key: string]: string;
+            };
         };
         /** Resolved */
         Resolved: {

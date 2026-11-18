@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from libarrei import api
 from libarrei.jobs import KEEP_SECONDS, JobStore
 
-EMPTY_WORK = {"ids": {}, "fields": {}, "editions": []}
+EMPTY_WORK = {"ids": {}, "fields": {}, "editions": [], "slugs": {}}
 
 
 class Inline(Executor):

@@ -60,12 +60,15 @@ class MergedEdition(BaseModel):
     # Which identifiers each duplicated source's records share, e.g. {"openlibrary": ["isbn13"]}.
     duplicate_reasons: dict[Source, list[str]] = {}
     fields: dict[str, Resolved]
+    # Page slugs for sources that address records by slug, such as Hardcover's book slug.
+    slugs: dict[Source, str] = {}
 
 
 class MergedWork(BaseModel):
     ids: dict[Source, str]
     fields: dict[str, Resolved]
     editions: list[MergedEdition]
+    slugs: dict[Source, str] = {}
 
 
 def merge(works: dict[Source, Work]) -> MergedWork:
@@ -78,6 +81,7 @@ def merge(works: dict[Source, Work]) -> MergedWork:
         ids={s: w.ids[s] for s, w in works.items() if s in w.ids},
         fields=work_fields,
         editions=[merge_group(g) for g in align(works)],
+        slugs={s: w.slugs[s] for s, w in works.items() if s in w.slugs},
     )
 
 
@@ -93,7 +97,7 @@ def merge_group(group: EditionGroup) -> MergedEdition:
             fields[name] = resolved
     return MergedEdition(ids=ids, match_reason=group.reason, confidence=group.confidence,
                          duplicates=group.duplicates, duplicate_reasons=group.duplicate_reasons,
-                         fields=fields)
+                         fields=fields, slugs={s: slug for _, e in group.members for s, slug in e.slugs.items()})
 
 
 def resolve(name: str, candidates: list[Candidate]) -> Resolved | None:
