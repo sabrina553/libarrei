@@ -27,6 +27,60 @@ export function isSparse(edition: MergedEdition): boolean {
   return lowest !== null && lowest < SPARSE
 }
 
+export function bestQuality(edition: MergedEdition): number | null {
+  const scores = Object.values(edition.quality ?? {})
+  return scores.length ? Math.max(...scores) : null
+}
+
+type SortValue = string | number | null
+const text = (name: string) => (e: MergedEdition): SortValue => {
+  const value = e.fields[name]?.value
+  return value === null || value === undefined || value === '' ? null : String(value)
+}
+
+// Sortable table columns; dates are ISO 8601, so they sort correctly as text.
+export const SORT_COLUMNS = {
+  isbn13: text('isbn13'),
+  format: text('format'),
+  language: text('language'),
+  release_date: text('release_date'),
+  publisher: text('publisher'),
+  match: (e: MergedEdition): SortValue => e.match_reason ?? null,
+  conflicts: (e: MergedEdition): SortValue => conflictCount(e),
+  quality: (e: MergedEdition): SortValue => lowestQuality(e),
+} as const
+
+export type SortColumn = keyof typeof SORT_COLUMNS
+export type Sort = { column: SortColumn; descending: boolean } | null
+
+// Gaps go last whichever way the column is sorted.
+function compare(a: SortValue, b: SortValue, descending = false): number {
+  if (a === null || b === null) return a === b ? 0 : a === null ? 1 : -1
+  const order = typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b))
+  return descending ? -order : order
+}
+
+/**
+ * The table's order: by the chosen column, or by default language, then the best
+ * record's quality (fullest first), then release date.
+ */
+export function sortEditions(editions: MergedEdition[], sort: Sort): MergedEdition[] {
+  const by = sort
+    ? (a: MergedEdition, b: MergedEdition) => compare(SORT_COLUMNS[sort.column](a), SORT_COLUMNS[sort.column](b), sort.descending)
+    : (a: MergedEdition, b: MergedEdition) =>
+        compare(SORT_COLUMNS.language(a), SORT_COLUMNS.language(b))
+        || compare(bestQuality(a), bestQuality(b), true)
+        || compare(SORT_COLUMNS.release_date(a), SORT_COLUMNS.release_date(b))
+  // toSorted is stable, so equal rows keep the API's order.
+  return editions.toSorted(by)
+}
+
+/** A header click: ascending, then descending, then back to the default order. */
+export function nextSort(current: Sort, column: SortColumn): Sort {
+  if (current?.column !== column) return { column, descending: false }
+  return current.descending ? null : { column, descending: true }
+}
+
 /** "possible stub of 9780593820247": the fuller edition this one probably duplicates. */
 export function stubLabel(edition: MergedEdition, editions: MergedEdition[]): string | null {
   if (!edition.stub_of) return null
