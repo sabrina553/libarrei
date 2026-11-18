@@ -89,3 +89,10 @@ def edition_from_scrape(scraped: dict) -> Edition:
     edition.add("format", normalise_format(scraped.get("book_type")), GR, sid)
     edition.add("language", scraped.get("language"), GR, sid)
     return edition
+
+
+def edition_from_editions_page(scraped: dict) -> Edition:
+    """An edition from the /work/editions listing: the scrape fields plus the cover."""
+    edition = edition_from_scrape(scraped)
+    edition.add("cover_url", scraped.get("cover_url"), GR, scraped.get("goodreads_id") or "")
+    return edition
