@@ -100,6 +100,7 @@ class Hardcover:
                 }
                 isbn_10
                 isbn_13
+                asin
                 language {
                   code2
                 }
@@ -146,6 +147,7 @@ class Hardcover:
               }
               isbn_10
               isbn_13
+              asin
               language {
                 code2
               }

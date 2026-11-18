@@ -24,14 +24,14 @@ test('shows each source value, marks the chosen one and the conflict', () => {
 })
 
 test('shows every field and tells unsupported fields apart from empty ones', () => {
-  render(<FieldGrid fields={{ pages }} order={['title', 'asin', 'pages']} level="edition" />)
+  render(<FieldGrid fields={{ pages }} order={['title', 'duration_seconds', 'pages']} level="edition" />)
 
   expect(screen.getByText('Title')).toBeInTheDocument()
-  // Only Goodreads can carry an ASIN, so the other two cells are greyed out.
+  // Only Hardcover gives an audiobook length, so the other two cells are greyed out.
   const unsupported = screen.getAllByText('not provided')
   expect(unsupported).toHaveLength(2)
-  expect(unsupported[0]).toHaveAttribute('title', 'Hardcover does not provide this field')
-  // Empty: title on all three sources, ASIN on Goodreads, pages on Goodreads.
+  expect(unsupported[0]).toHaveAttribute('title', 'Goodreads does not provide this field')
+  // Empty: title on all three sources, duration on Hardcover, pages on Goodreads.
   expect(screen.getAllByText('—')).toHaveLength(5)
 })
 

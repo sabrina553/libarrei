@@ -21,14 +21,15 @@ DATA_PRIORITY = [HC, GR, OL]
 TEXT_FIELDS = {"description", "genres"}
 
 # Fields that legitimately differ between sources, so differences aren't conflicts.
-NEVER_CONFLICT = {"genres", "cover_url"}
+NEVER_CONFLICT = {"genres", "cover_url", "identifiers"}
 
 # Placeholders until each source's terms are confirmed.
 LICENCES = {OL: "CC0-1.0", GR: "publisher copyright", HC: "see Hardcover terms"}
 
 WORK_FIELDS = ["title", "subtitle", "contributors", "description", "series", "genres", "original_release_date"]
-EDITION_FIELDS = ["title", "subtitle", "edition_statement", "contributors", "isbn13", "isbn10", "asin", "publisher",
-                  "release_date", "pages", "format", "format_detail", "duration_seconds", "language", "cover_url", "series"]
+EDITION_FIELDS = ["title", "subtitle", "edition_statement", "contributors", "isbn13", "isbn10", "asin",
+                  "identifiers", "publisher", "release_date", "pages", "format", "format_detail",
+                  "duration_seconds", "language", "cover_url", "series"]
 DATE_FIELDS = {"release_date", "original_release_date"}
 
 
@@ -127,6 +128,8 @@ def key(name: str, value):
         return frozenset(text_key(c.name) for c in value)
     if name == "series":
         return frozenset((text_key(s.name), s.position) for s in value)
+    if name == "identifiers":
+        return frozenset((i.scheme, i.value) for i in value)
     if name == "genres":
         return frozenset(text_key(g) for g in value)
     if isinstance(value, str):

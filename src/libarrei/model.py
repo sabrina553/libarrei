@@ -37,6 +37,12 @@ class SeriesEntry(BaseModel):
     position: str | None = None
 
 
+class Identifier(BaseModel):
+    # Open Library's names: "goodreads", "librarything", "oclc", "lccn", ...
+    scheme: str
+    value: str
+
+
 class Record(BaseModel):
     ids: dict[Source, str] = {}
 
@@ -56,6 +62,8 @@ class Edition(Record):
     isbn13: list[Candidate[str]] = []
     isbn10: list[Candidate[str]] = []
     asin: list[Candidate[str]] = []
+    # Other catalogues' ids for this edition, which also let editions be matched across sources.
+    identifiers: list[Candidate[list[Identifier]]] = []
     publisher: list[Candidate[str]] = []
     # Free text, because sources disagree on precision ("2026", "April 28th 2026").
     release_date: list[Candidate[str]] = []

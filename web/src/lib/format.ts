@@ -1,12 +1,17 @@
 // Field values arrive untyped (a title, a page count, a list of contributors…),
 // so one function turns any of them into display text.
 type Named = { name: string; role?: string; position?: string | null }
+type Identifier = { scheme: string; value: string }
 
 export function formatValue(value: unknown): string {
   if (value === null || value === undefined || value === '') return '—'
   if (Array.isArray(value)) return value.map(formatValue).join(', ')
   if (typeof value === 'object') {
     const v = value as Named
+    if ('scheme' in value) {
+      const id = value as Identifier
+      return `${id.scheme}: ${id.value}`
+    }
     if ('position' in v) return v.position ? `${v.name} #${v.position}` : v.name
     if (v.role && v.role !== 'author') return `${v.name} (${v.role})`
     return v.name ?? JSON.stringify(value)
