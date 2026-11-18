@@ -221,4 +221,5 @@ __marimo__/
 tests/fixtures/raw/
 
 # Claude Code agent worktrees
+.claude/
 .claude/worktrees/
