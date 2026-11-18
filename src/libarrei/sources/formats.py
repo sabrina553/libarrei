@@ -9,6 +9,7 @@ FORMATS = {
     "ebook": "ebook",
     "e-book": "ebook",
     "audible audio": "audiobook",
+    "audible audiobook": "audiobook",
     "audiobook": "audiobook",
     "audio cd": "audiobook",
     "mp3 cd": "audiobook",

@@ -3,7 +3,8 @@
 Matching across sources is not attempted here: each source's best guess is
 returned side by side so the results can be compared. Stores that cannot be
 searched by ISBN (Audible) run in a second round, on the title, author and
-ASINs the catalogue sources found.
+ASINs the catalogue sources found; Amazon, scraped only with the user's own
+cookie, runs in that round too.
 """
 
 import os
@@ -14,6 +15,10 @@ from libarrei import normalise
 from libarrei.cache import Cache, NoCache
 from libarrei.model import Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
+from libarrei.sources.amazon.client import DEFAULT_DOMAIN as AMAZON_DEFAULT_DOMAIN
+from libarrei.sources.amazon.client import Amazon, AmazonBlocked
+from libarrei.sources.amazon.mapping import to_work as amazon_work
+from libarrei.sources.amazon.scraper import parse_product, parse_search
 from libarrei.sources.audible.client import DEFAULT_REGION as AUDIBLE_DEFAULT_REGION
 from libarrei.sources.audible.client import Audible
 from libarrei.sources.audible.mapping import to_work as audible_work
@@ -31,6 +36,8 @@ from libarrei.sources.openlibrary.mapping import to_work as openlibrary_work
 
 # Each known ASIN costs one request, so a work with many audiobook editions is capped.
 MAX_KNOWN_ASINS = 10
+# Each Amazon page risks a block, so few are fetched however many editions exist.
+MAX_AMAZON_PAGES = 3
 # Catalogue sources, best first, for the title and author that later stores search by.
 CATALOGUE_ORDER = [Source.HARDCOVER, Source.GOODREADS, Source.OPENLIBRARY]
 
@@ -87,6 +94,20 @@ def from_audible(cache, region: str, found: Clues, all_editions: bool) -> Work |
     if not products:
         return None
     return audible_work(products if all_editions else products[:1], region)
+
+
+def from_amazon(client: Amazon, isbn: str | None, found: Clues, all_editions: bool, note) -> Work | None:
+    """Stops at the first sign of a block, keeping whatever was already read."""
+    products: list[tuple[str, dict]] = []
+    try:
+        query = isbn or " ".join(filter(None, [found.title, found.author]))
+        asins = parse_search(client.search(query) or "") if query else []
+        for asin in asins[:MAX_AMAZON_PAGES if all_editions else 1]:
+            if (html := client.product(asin)) and (product := parse_product(html)):
+                products.append((asin, product))
+    except AmazonBlocked as blocked:
+        note(str(blocked))
+    return amazon_work(products, client.domain) if products else None
 
 
 def from_openlibrary(
@@ -168,7 +189,7 @@ def run_parallel(jobs: dict, attempt) -> None:
 
 def lookup(
     isbn: str | None = None, title: str | None = None, author: str | None = None, use_cache: bool = True,
-    all_editions: bool = False, hardcover_token: str | None = None,
+    all_editions: bool = False, hardcover_token: str | None = None, amazon_cookie: str | None = None,
 ) -> LookupResult:
     """Without all_editions only the matched edition per source is fetched: a few
     requests, rather than minutes for a book with hundreds of editions."""
@@ -202,7 +223,17 @@ def lookup(
 
     found = clues(result.works, title, author)
     region = os.getenv("AUDIBLE_REGION") or AUDIBLE_DEFAULT_REGION
-    run_parallel({Source.AUDIBLE: lambda: from_audible(cache, region, found, all_editions)}, attempt)
+    later = {Source.AUDIBLE: lambda: from_audible(cache, region, found, all_editions)}
+    # Off unless someone supplies a cookie: scraping Amazon is opt-in.
+    if cookie := amazon_cookie or os.getenv("AMAZON_COOKIE"):
+        domain = os.getenv("AMAZON_DOMAIN") or AMAZON_DEFAULT_DOMAIN
+        # Built inside the job so a bad domain or cookie becomes a note, not a failed lookup.
+        later[Source.AMAZON] = lambda: from_amazon(
+            Amazon(cookie, domain, cache=cache), isbn, found, all_editions,
+            lambda note: result.notes.__setitem__(Source.AMAZON, note))
+    else:
+        result.notes[Source.AMAZON] = "AMAZON_COOKIE not set"
+    run_parallel(later, attempt)
 
     # Fixed source order keeps output stable whichever source finished first.
     result.works = {s: result.works[s] for s in Source if s in result.works}

@@ -1,28 +1,39 @@
-// The librarian's Hardcover token lives only in this browser. It is sent to the
+// A librarian's own credentials live only in this browser. They are sent to the
 // libarrei API per request and never stored server-side.
-const KEY = 'libarrei.hardcoverToken'
 
-export function getToken(): string | null {
-  try {
-    return localStorage.getItem(KEY)
-  } catch {
-    // Storage can be blocked (private windows, strict settings); fall back to none.
-    return null
+export type Secret = { get: () => string | null; set: (value: string) => void; forget: () => void }
+
+function secret(key: string): Secret {
+  return {
+    get() {
+      try {
+        return localStorage.getItem(key)
+      } catch {
+        // Storage can be blocked (private windows, strict settings); fall back to none.
+        return null
+      }
+    },
+    set(value) {
+      try {
+        localStorage.setItem(key, value.trim())
+      } catch {
+        // Nothing to do: the app still works with the server's own settings.
+      }
+    },
+    forget() {
+      try {
+        localStorage.removeItem(key)
+      } catch {
+        // As above.
+      }
+    },
   }
 }
 
-export function setToken(token: string): void {
-  try {
-    localStorage.setItem(KEY, token.trim())
-  } catch {
-    // Nothing to do: the app still works with the server's own token.
-  }
-}
+export const hardcoverToken = secret('libarrei.hardcoverToken')
+// Switches the Amazon source on for this browser's requests; off when unset.
+export const amazonCookie = secret('libarrei.amazonCookie')
 
-export function forgetToken(): void {
-  try {
-    localStorage.removeItem(KEY)
-  } catch {
-    // As above.
-  }
-}
+export const getToken = hardcoverToken.get
+export const setToken = hardcoverToken.set
+export const forgetToken = hardcoverToken.forget

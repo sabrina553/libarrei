@@ -260,7 +260,7 @@ export interface components {
          * Source
          * @enum {string}
          */
-        Source: "goodreads" | "hardcover" | "openlibrary" | "audible";
+        Source: "goodreads" | "hardcover" | "openlibrary" | "audible" | "amazon";
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -315,6 +315,7 @@ export interface operations {
             };
             header?: {
                 "X-Hardcover-Token"?: string | null;
+                "X-Amazon-Cookie"?: string | null;
             };
             path?: never;
             cookie?: never;
@@ -346,6 +347,7 @@ export interface operations {
             query?: never;
             header?: {
                 "X-Hardcover-Token"?: string | null;
+                "X-Amazon-Cookie"?: string | null;
             };
             path?: never;
             cookie?: never;
@@ -416,6 +418,7 @@ export interface operations {
             };
             header?: {
                 "X-Hardcover-Token"?: string | null;
+                "X-Amazon-Cookie"?: string | null;
             };
             path?: never;
             cookie?: never;

@@ -102,7 +102,7 @@ def _isbn13_check(stem: str) -> str:
 
 
 # Stores whose own product ids are ASINs, even when one looks like an ISBN-10.
-ASIN_STORES = {Source.AUDIBLE}
+ASIN_STORES = {Source.AUDIBLE, Source.AMAZON}
 
 
 def asin(raw: str | None) -> str | None:
