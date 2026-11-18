@@ -2,6 +2,7 @@ import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
 import { provides, type Level } from './capabilities'
+import { splitKey, titleSplits, type TitleSplit } from './titleSplit'
 
 export type Resolved = components['schemas']['Resolved']
 
@@ -31,6 +32,21 @@ type Props = {
 /** Fields down the side, sources across the top, like a side-by-side diff. */
 export function FieldGrid({ fields, order, level, staging }: Props) {
   const staged = useChangeset()
+  const splits = titleSplits(fields)
+  // Stages a value that no source holds verbatim, crediting the source whose title it came from.
+  const stageDerived = staging && ((field: string, from: SourceValue, value: string) => {
+    const current = staged.find((c) => c.id === `${staging.scope}::${field}`)
+    if (current?.chosenFrom === from.source && current.value === value) return changeset.unstage(current.id)
+    const values = fields[field]?.values ?? []
+    const change = buildChange(staging.book, staging.scope, field, { ...from, value }, values, staging.records)
+    // The source the split came from holds the unsplit value, so its own record needs correcting too.
+    const own = values.find((v) => v.source === from.source && v.source_id === from.source_id)
+    if (formatValue(own?.value ?? null) !== value)
+      change.corrections.unshift({ source: from.source, record: from.source_id, current: own?.value ?? null })
+    changeset.stage(change)
+  })
+  const isStaged = (field: string, value: string) =>
+    !!staging && staged.some((c) => c.id === `${staging.scope}::${field}` && c.value === value)
   return (
     <table className="grid">
       <thead>
@@ -57,10 +73,14 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
                 return (
                   <Cell
                     key={source} name={name} source={source} resolved={resolved}
-                    picked={pick?.chosenFrom === source}
+                    // A split title staged from this source is not this cell's own value.
+                    picked={pick?.chosenFrom === source && resolved.values.some((v) =>
+                      v.source === source && formatValue(v.value) === formatValue(pick.value))}
                     onPick={staging && ((value) => pick?.chosenFrom === source
                       ? changeset.unstage(pick.id)
                       : changeset.stage(buildChange(staging.book, staging.scope, name, value, resolved.values, staging.records)))}
+                    splitFor={name === 'title' ? (v) => splits.get(splitKey(v)) : undefined}
+                    onSplitPick={stageDerived} isStaged={isStaged}
                   />
                 )
               })}
@@ -72,15 +92,20 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
   )
 }
 
+type SourceValue = Resolved['values'][number]
+
 type CellProps = {
   name: string
   source: SourceName
   resolved: Resolved
   picked: boolean
-  onPick?: (value: Resolved['values'][number]) => void
+  onPick?: (value: SourceValue) => void
+  splitFor?: (value: SourceValue) => TitleSplit | undefined
+  onSplitPick?: (field: string, from: SourceValue, value: string) => void
+  isStaged: (field: string, value: string) => boolean
 }
 
-function Cell({ name, source, resolved, picked, onPick }: CellProps) {
+function Cell({ name, source, resolved, picked, onPick, splitFor, onSplitPick, isStaged }: CellProps) {
   const values = (resolved.values ?? []).filter((v) => v.source === source)
   if (!values.length) return <td className="empty" title="No value on this record">—</td>
   const chosen = resolved.source === source
@@ -90,6 +115,7 @@ function Cell({ name, source, resolved, picked, onPick }: CellProps) {
       {values.map((v, i) => (
         <div key={i} className={name === 'description' ? 'long' : undefined}>
           {name === 'cover_url' ? <img src={String(v.value)} alt="" loading="lazy" /> : formatValue(v.value)}
+          <SplitHint value={v} split={splitFor?.(v)} onPick={onSplitPick} isStaged={isStaged} />
         </div>
       ))}
       {name === 'description' && chosen && resolved.licence && <div className="licence">{resolved.licence}</div>}
@@ -99,5 +125,29 @@ function Cell({ name, source, resolved, picked, onPick }: CellProps) {
         </button>
       )}
     </td>
+  )
+}
+
+type SplitHintProps = {
+  value: SourceValue
+  split?: TitleSplit
+  onPick?: (field: string, from: SourceValue, value: string) => void
+  isStaged: (field: string, value: string) => boolean
+}
+
+function SplitHint({ value, split, onPick, isStaged }: SplitHintProps) {
+  if (!split) return null
+  const options = [['title', split.title], ['subtitle', split.subtitle]] as const
+  return (
+    <>
+      <span className="badge hint" title="Another source's title or subtitle suggests this title includes the subtitle">
+        subtitle may be in title
+      </span>
+      {onPick && options.map(([field, text]) => (
+        <button key={field} className="pick" onClick={() => onPick(field, value, text)} aria-pressed={isStaged(field, text)}>
+          {isStaged(field, text) ? 'Staged ✓' : `Use “${text}” as ${field}`}
+        </button>
+      ))}
+    </>
   )
 }
