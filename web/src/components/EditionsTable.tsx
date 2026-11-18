@@ -52,7 +52,7 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                   <td>{conflicts || ''}</td>
                 </tr>
                 {open === key && (
-                  <tr><td colSpan={8}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
+                  <tr><td colSpan={8}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" asinChecks={edition.asin_checks} staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
                 )}
               </Fragment>
             )

@@ -267,3 +267,22 @@ test('an empty cell can be picked to say no value is correct', async () => {
   act(() => gap.click())
   expect(changeset.all()).toEqual([])
 })
+
+test("audible's asin is suggested on an audiobook and the catalogue's is flagged", () => {
+  const asin: Resolved = {
+    value: 'B0DM64FRQW', source: 'hardcover', source_id: '32146161', conflict: true, alternatives: [],
+    values: [{ value: 'B0DM64FRQW', source: 'hardcover', source_id: '32146161' },
+      { value: 'B0DM68J1PP', source: 'audible', source_id: 'B0DM68J1PP' }],
+  }
+  const format: Resolved = {
+    value: 'audiobook', source: 'hardcover', source_id: '32146161', conflict: false, alternatives: [],
+    values: [{ value: 'audiobook', source: 'hardcover', source_id: '32146161' },
+      { value: 'audiobook', source: 'audible', source_id: 'B0DM68J1PP' }],
+  }
+  const { container } = render(
+    <FieldGrid fields={{ asin, format }} order={['asin']} level="edition" asinChecks={{ B0DM64FRQW: 'not_found' }} />)
+
+  expect(screen.getByText('not found on Audible')).toBeInTheDocument()
+  const suggested = container.querySelector('.tick.suggested')!.closest('td')!
+  expect(suggested).toHaveTextContent('B0DM68J1PP')
+})

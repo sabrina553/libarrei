@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from libarrei import normalise
+from libarrei.asin_check import check_all
 from libarrei.jobs import Job, JobStore
 from libarrei.lookup import LookupResult, lookup
 from libarrei.merge import MergedEdition, MergedWork, merge
@@ -76,7 +77,10 @@ def lookup_merged(
     """The full merged record: chosen values, alternatives and conflicts."""
     result = _lookup(isbn, title, author, all_editions=editions == "all", token=x_hardcover_token,
                      cookie=x_amazon_cookie)
-    return LookupResponse(work=merge(result.works), notes={s.value: n for s, n in result.notes.items()})
+    work = merge(result.works)
+    if result.probe:
+        check_all(work.editions, result.probe)
+    return LookupResponse(work=work, notes={s.value: n for s, n in result.notes.items()})
 
 
 class JobRequest(BaseModel):

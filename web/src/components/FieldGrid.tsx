@@ -3,6 +3,7 @@ import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, isReference, REFERENCE_SOURCES, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
 import { inlineDiff, missingColumns, rowStates, suggestion, type CellState } from '../lib/cellStates'
+import { asinNotes, editionFormat, storeAsin, type AsinNote } from '../lib/asin'
 import { columnProvides, type Level } from './capabilities'
 import { DescriptionValue } from './DescriptionValue'
 import { RecordLink } from './RecordLink'
@@ -33,10 +34,12 @@ type Props = {
   level: Level
   // When given, values can be picked to stage corrections.
   staging?: { book: string; scope: string; records: Partial<Record<SourceName, string[]>> }
+  // Catalogue ASINs checked against the store, from the API's per-edition asin_checks.
+  asinChecks?: Record<string, string>
 }
 
 /** Fields down the side, sources across the top, like a side-by-side diff. */
-export function FieldGrid({ fields, order, level, staging }: Props) {
+export function FieldGrid({ fields, order, level, staging, asinChecks = {} }: Props) {
   const staged = useChangeset()
   const [onlyProblems, setOnlyProblems] = useState(false)
   const splits = titleSplits(fields)
@@ -55,10 +58,18 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
   const isStaged = (field: string, value: string) =>
     !!staging && staged.some((c) => c.id === `${staging.scope}::${field}` && c.value === value)
   const hasRecord = recordCheck(fields, staging?.records)
+  // Each record's format, so values in the shared Amazon column can say which listing they came from.
+  const formats = new Map((fields.format?.values ?? []).map((v) => [`${v.source}:${v.source_id}`, v.value]))
+  const recordFormat = (v: SourceValue) => formats.get(`${v.source}:${v.source_id}`)
+  const tag = (v: SourceValue) => storeTag(v.source, recordFormat(v))
+  const format = editionFormat(fields.format?.values ?? [])
+  const suggest = (name: string, values: SourceValue[]) =>
+    (name === 'asin' ? storeAsin(values, format, recordFormat) : null) ?? suggestion(name, values)
+  const notesFor = (v: SourceValue) => asinNotes(String(v.value), fields.asin?.values ?? [], asinChecks, format)
   const rows = order.map((name) => {
     const resolved = fields[name]
     const values = resolved?.values ?? []
-    return { name, resolved, suggested: suggestion(name, values), ...rowStates(name, values, (c) => columnProvides(level, c, name), hasRecord) }
+    return { name, resolved, suggested: suggest(name, values), ...rowStates(name, values, (c) => columnProvides(level, c, name), hasRecord) }
   })
   const change = (name: string, pick: SourceValue) =>
     buildChange(staging!.book, staging!.scope, name, pick, fields[name]?.values ?? [], staging!.records)
@@ -73,9 +84,6 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
     const source = COLUMN_SOURCES[column].find((s) => staging?.records[s]?.length) ?? COLUMN_SOURCES[column][0]
     return { value: null, source, source_id: staging?.records[source]?.[0] ?? '' }
   }
-  // Each record's format, so values in the shared Amazon column can say which listing they came from.
-  const formats = new Map((fields.format?.values ?? []).map((v) => [`${v.source}:${v.source_id}`, v.value]))
-  const tag = (v: SourceValue) => storeTag(v.source, formats.get(`${v.source}:${v.source_id}`))
   const problems = rows.filter((r) => r.problem).length
   return (
     <>
@@ -147,6 +155,7 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
                         : changeset.stage(change(name, value)))}
                       splitFor={name === 'title' ? (v) => splits.get(splitKey(v)) : undefined}
                       onSplitPick={stageDerived} isStaged={isStaged} tag={tag}
+                      notes={name === 'asin' ? notesFor : undefined}
                     />
                   )
                 })}
@@ -214,9 +223,10 @@ type CellProps = {
   onSplitPick?: (field: string, from: SourceValue, value: string) => void
   isStaged: (field: string, value: string) => boolean
   tag: (value: SourceValue) => string | undefined
+  notes?: (value: SourceValue) => AsinNote[]
 }
 
-function Cell({ name, source, level, resolved, state, modal, suggested, picked, onPick, splitFor, onSplitPick, isStaged, tag }: CellProps) {
+function Cell({ name, source, level, resolved, state, modal, suggested, picked, onPick, splitFor, onSplitPick, isStaged, tag, notes }: CellProps) {
   const values = (resolved.values ?? []).filter((v) => columnOf(v.source) === source)
   const classes = [state, isReference(source) && 'reference', onPick && 'pickable', picked && 'picked'].filter(Boolean).join(' ')
   const pick = onPick && (() => onPick(values[0]))
@@ -239,6 +249,7 @@ function Cell({ name, source, level, resolved, state, modal, suggested, picked, 
             : <Value name={name} value={v.value} modal={state === 'differs' ? modal : null} />}
           {tag(v) && <span className="badge store">{tag(v)}</span>}
           <RecordLink level={level} value={v} />
+          {notes?.(v).map((n) => <span key={n.text} className={n.warning ? "badge" : "badge hint"} title={n.title}>{n.text}</span>)}
           <SplitHint value={v} split={splitFor?.(v)} onPick={onSplitPick} isStaged={isStaged} />
         </div>
       ))}

@@ -5,6 +5,7 @@ const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   ids: { hardcover: ['2'], goodreads: ['1'] },
   match_reason: 'isbn13',
   confidence: 1,
+  asin_checks: {},
   duplicates: [],
   duplicate_reasons: {},
   slugs: {},

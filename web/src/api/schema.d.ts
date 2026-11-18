@@ -189,6 +189,13 @@ export interface components {
                 [key: string]: components["schemas"]["Resolved"];
             };
             /**
+             * Asin Checks
+             * @default {}
+             */
+            asin_checks: {
+                [key: string]: string;
+            };
+            /**
              * Slugs
              * @default {}
              */
