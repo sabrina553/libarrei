@@ -44,8 +44,8 @@ two the first time and seconds afterwards.
 
 ## HTTP API
 ```sh
-uv run libarrei serve            # http://127.0.0.1:8000, docs at /docs
-uv run libarrei serve --host 0.0.0.0 --port 8000   # reachable from other machines
+uv run libarrei serve            # http://127.0.0.1:8765, docs at /docs
+uv run libarrei serve --host 0.0.0.0 --port 8765   # reachable from other machines
 ```
 
 | Endpoint | Returns |
@@ -64,9 +64,9 @@ correct value per field, and export the staged corrections. Needs Node and pnpm.
 
 ```sh
 cd web && pnpm install
-pnpm build                 # then `libarrei serve` serves it at http://127.0.0.1:8000
+pnpm build                 # then `libarrei serve` serves it at http://127.0.0.1:8765
 pnpm dev                   # or develop with live reload on :5173 (run `libarrei serve` too)
-LIBARREI_API=http://127.0.0.1:8765 pnpm dev   # if the API runs on another port
+LIBARREI_API=http://127.0.0.1:9000 pnpm dev   # if the API runs on another port
 pnpm types                 # regenerate API types after changing the Python API
 pnpm check                 # type check, lint and tests
 ```
