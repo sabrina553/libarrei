@@ -170,6 +170,32 @@ ROLE_NAMES = {
     "uppläsare": "narrator",
     "lecteur": "narrator",
     "revised by": "reviser",
+    # Stores append the role to the name in the listing's language ("Chloé Atangana - traducteur").
+    "traducteur": "translator",
+    "traductrice": "translator",
+    "traductor": "translator",
+    "traductora": "translator",
+    "traduttore": "translator",
+    "traduttrice": "translator",
+    "tradutor": "translator",
+    "tradutora": "translator",
+    "übersetzerin": "translator",
+    "narrateur": "narrator",
+    "narratrice": "narrator",
+    "narrador": "narrator",
+    "narradora": "narrator",
+    "narratore": "narrator",
+    "sprecherin": "narrator",
+    "illustrateur": "illustrator",
+    "illustratrice": "illustrator",
+    "ilustrador": "illustrator",
+    "ilustradora": "illustrator",
+    "illustratore": "illustrator",
+    "herausgeber": "editor",
+    "herausgeberin": "editor",
+    "auteur": "author",
+    "autor": "author",
+    "autore": "author",
 }
 # Display order after the authors; roles not listed follow, in source order.
 ROLE_ORDER = ["author", "editor", "translator", "illustrator", "cover artist", "cover designer",
@@ -181,9 +207,35 @@ def role(raw: str | None) -> str:
     return ROLE_NAMES.get(text, text) or "author"
 
 
+# "Name - role" with a spaced hyphen or dash, as Amazon and Audible list translators.
+_ROLE_SUFFIX = re.compile(r"^(?P<name>.+?)\s+[-–—]\s+(?P<role>[^-–—]+)$")
+
+
+def _known_role(text: str) -> str | None:
+    key = " ".join(text.split()).lower()
+    if key in ROLE_NAMES:
+        return ROLE_NAMES[key]
+    return key if key in ROLE_ORDER else None
+
+
+def split_role_suffix(person: Contributor) -> Contributor:
+    """"Chloé Atangana - traducteur" becomes Chloé Atangana, translator.
+
+    Only a recognised role word is split off, so hyphenated names ("Jean-Paul
+    Sartre", "Smith - Jones") are left alone.
+    """
+    if not (m := _ROLE_SUFFIX.match(person.name.strip())) or not (found := _known_role(m.group("role"))):
+        return person
+    # The suffix is more specific than a source's default "author".
+    current = role(person.role)
+    return person.model_copy(update={"name": m.group("name").strip(),
+                                     "role": found if current == "author" else current})
+
+
 def contributors(raw: list[Contributor] | None) -> list[Contributor] | None:
     """Canonical role names; authors first, then each role grouped, keeping source order within a group."""
-    people = [c.model_copy(update={"role": role(c.role)}) for c in raw or []]
+    people = [split_role_suffix(c) for c in raw or []]
+    people = [c.model_copy(update={"role": role(c.role)}) for c in people]
     rank = {r: i for i, r in enumerate(ROLE_ORDER)}
     # sorted() is stable, so the first-listed (primary) author stays first.
     return sorted(people, key=lambda c: rank.get(c.role, len(rank))) or None
@@ -232,6 +284,34 @@ def _drop_audiobook_pages(edition: Edition) -> None:
     # means nothing reliable once every source agrees the edition is audio.
     if edition.format and all(c.value == "audiobook" for c in edition.format):
         edition.pages = []
+
+
+# Stores label translated listings in the title: "(French Edition)", "[Spanish Edition]",
+# "(Narración en Español Neutro)". The language field already carries this.
+_BRACKETED = re.compile(r"\s*[(\[]([^()\[\]]+)[)\]]")
+_NARRATION = re.compile(r"(?i)^(narraci[oó]n|narrado|narrated|narrazione|narration|lu|gelesen|edici[oó]n|[eé]dition|edizione|ausgabe)\b")
+
+
+def _is_language_label(text: str) -> bool:
+    words = text.split()
+    if len(words) >= 2 and words[-1].lower() == "edition":
+        name = " ".join(words[:-1])
+        return pycountry.languages.get(name=name) is not None
+    # Only label phrases that name a language, so "(Edition of 500)" stays.
+    return bool(_NARRATION.match(text)) and any(
+        pycountry.languages.get(name=w.strip(",")) is not None or w.lower() in _LANGUAGE_WORDS for w in words[1:])
+
+
+_LANGUAGE_WORDS = {"español", "espanol", "français", "francais", "italiano", "deutsch", "deutscher", "português",
+                   "castellano", "neutro", "latino"}
+
+
+def strip_language_label(text: str | None) -> str | None:
+    """"Le Hobbit (French Edition)" -> "Le Hobbit"; real bracketed subtitles are kept."""
+    if not text:
+        return text
+    cleaned = _BRACKETED.sub(lambda m: "" if _is_language_label(m.group(1).strip()) else m.group(0), text).strip()
+    return cleaned or text
 
 
 # Only these words may qualify "edition", so a real subtitle such as "The Last Edition" stays a subtitle.

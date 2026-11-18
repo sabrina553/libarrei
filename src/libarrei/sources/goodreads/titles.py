@@ -2,6 +2,16 @@
 
 import re
 
+from libarrei.sources.formats import FORMATS
+
+# Some edition listings append the binding: "Dungeon Crawler Carl (Dungeon Crawler Carl, #1) - Paperback".
+_FORMAT_SUFFIX = re.compile(r"\s+[-–—]\s+([^-–—]+)$")
+
+
+def _strip_format_suffix(title: str) -> str:
+    m = _FORMAT_SUFFIX.search(title)
+    return title[: m.start()] if m and m.group(1).strip().lower() in FORMATS else title
+
 
 def parse_title_and_series(raw_title):
     """
@@ -18,7 +28,7 @@ def parse_title_and_series(raw_title):
     when it ends in "#<number>"; otherwise we discard it (both series_name
     and series_position come back None) and just strip it off the title.
     """
-    raw_title = " ".join(raw_title.split())
+    raw_title = _strip_format_suffix(" ".join(raw_title.split()))
     series_name = None
     series_position = None
 

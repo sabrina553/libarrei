@@ -6,6 +6,7 @@ Descriptions stay as Amazon's HTML; the merger parses them like Goodreads'.
 """
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
+from libarrei.normalise import strip_language_label
 from libarrei.sources.formats import detail, normalise_format
 from libarrei.sources.goodreads.titles import split_title
 
@@ -20,12 +21,12 @@ def series(product: dict) -> list[SeriesEntry]:
     if not product.get("series"):
         return []
     name, position = product["series"]
-    return [SeriesEntry(name=name, position=position)]
+    return [SeriesEntry(name=strip_language_label(name), position=position)]
 
 
 def to_edition(asin: str, product: dict, domain: str) -> Edition:
     edition = Edition()
-    title, subtitle = split_title(product.get("title"))
+    title, subtitle = split_title(strip_language_label(product.get("title")))
     edition.add("title", title, AZ, asin)
     edition.add("subtitle", subtitle, AZ, asin)
     edition.add("contributors", contributors(product), AZ, asin)
@@ -49,7 +50,7 @@ def to_work(products: list[tuple[str, dict]], domain: str) -> Work:
     """The first (asin, product) pair is the best match and speaks for the work."""
     work = Work()
     asin, first = products[0]
-    title, subtitle = split_title(first.get("title"))
+    title, subtitle = split_title(strip_language_label(first.get("title")))
     work.add("title", title, AZ, asin)
     work.add("subtitle", subtitle, AZ, asin)
     work.add("contributors", [c for c in contributors(first) if c.role == "author"], AZ, asin)
