@@ -5,10 +5,13 @@ Source tokens come from the server's environment for now.
 """
 
 import os
+from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from libarrei import normalise
@@ -194,3 +197,20 @@ def _float(position: str | None) -> float | None:
         return float(position) if position else None
     except ValueError:
         return None
+
+
+# The built GUI (`pnpm build` in web/) is served from the same origin as the API.
+# Registered last so API routes always win over the catch-all below.
+WEB_DIR = Path(os.getenv("LIBARREI_WEB_DIR", Path(__file__).resolve().parents[2] / "web" / "dist"))
+
+if (WEB_DIR / "index.html").exists():
+    app.mount("/assets", StaticFiles(directory=WEB_DIR / "assets"), name="assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def gui(path: str) -> FileResponse:
+        # Real files (favicon) are served as-is; anything else is a GUI route
+        # such as /book, which React's router handles once index.html loads.
+        file = (WEB_DIR / path).resolve()
+        if path and file.is_file() and file.is_relative_to(WEB_DIR.resolve()):
+            return FileResponse(file)
+        return FileResponse(WEB_DIR / "index.html")

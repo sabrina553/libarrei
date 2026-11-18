@@ -57,6 +57,23 @@ uv run libarrei serve --host 0.0.0.0 --port 8000   # reachable from other machin
 `publishedDate` keeps the source's precision, so it may be `1976` or `1976-08`
 rather than a full date.
 
+## Review GUI
+A web app in `web/` for librarians: search a book, compare every source side by
+side, filter editions (conflicts, missing, duplicates, fuzzy matches), pick the
+correct value per field, and export the staged corrections. Needs Node and pnpm.
+
+```sh
+cd web && pnpm install
+pnpm build                 # then `libarrei serve` serves it at http://127.0.0.1:8000
+pnpm dev                   # or develop with live reload on :5173 (run `libarrei serve` too)
+LIBARREI_API=http://127.0.0.1:8765 pnpm dev   # if the API runs on another port
+pnpm types                 # regenerate API types after changing the Python API
+pnpm check                 # type check, lint and tests
+```
+
+Your Hardcover token can be saved under Settings; it stays in your browser and
+is sent to the API in an `X-Hardcover-Token` header.
+
 ## Tests
 ```sh
 uv run pytest -q
