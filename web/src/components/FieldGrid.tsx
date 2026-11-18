@@ -141,15 +141,16 @@ type SplitHintProps = {
 
 function SplitHint({ value, split, onPick, isStaged }: SplitHintProps) {
   if (!split) return null
-  const options = [['title', split.title], ['subtitle', split.subtitle]] as const
+  const statement = split.field === 'edition_statement'
+  const options = [['title', split.title], [split.field, split.subtitle]] as const
   return (
     <>
-      <span className="badge hint" title="Another source's title or subtitle suggests this title includes the subtitle">
-        subtitle may be in title
-      </span>
+      {statement
+        ? <span className="badge hint" title="The part after the colon reads like an edition statement">edition may be in title</span>
+        : <span className="badge hint" title="Another source's title or subtitle suggests this title includes the subtitle">subtitle may be in title</span>}
       {onPick && options.map(([field, text]) => (
         <button key={field} className="pick" onClick={() => onPick(field, value, text)} aria-pressed={isStaged(field, text)}>
-          {isStaged(field, text) ? 'Staged ✓' : `Use “${text}” as ${field}`}
+          {isStaged(field, text) ? 'Staged ✓' : `Use “${text}” as ${fieldLabel(field).toLowerCase()}`}
         </button>
       ))}
     </>

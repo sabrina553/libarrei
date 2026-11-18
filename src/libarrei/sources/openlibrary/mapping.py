@@ -94,6 +94,7 @@ def to_edition(doc: dict, names: dict[str, str]) -> Edition:
     sid = short_key(doc["key"])
     edition.add("title", doc.get("title"), OL, sid)
     edition.add("subtitle", doc.get("subtitle"), OL, sid)
+    edition.add("edition_statement", doc.get("edition_name"), OL, sid)
     edition.add("contributors", contributors(doc, names) + other_contributors(doc), OL, sid)
     for isbn in doc.get("isbn_13") or []:
         edition.add("isbn13", isbn, OL, sid)

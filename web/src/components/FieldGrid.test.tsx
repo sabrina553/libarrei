@@ -70,7 +70,7 @@ test('flags a title holding the subtitle and stages the split parts', async () =
   const title: Resolved = {
     value: 'Dungeon Crawler Carl', source: 'goodreads', source_id: '9', conflict: true, alternatives: [],
     values: [
-      { value: 'Dungeon Crawler Carl: Deluxe Edition', source: 'hardcover', source_id: '1' },
+      { value: 'Dungeon Crawler Carl: A LitRPG Adventure', source: 'hardcover', source_id: '1' },
       { value: 'Dungeon Crawler Carl', source: 'goodreads', source_id: '9' },
     ],
   }
@@ -79,14 +79,30 @@ test('flags a title holding the subtitle and stages the split parts', async () =
 
   expect(screen.getAllByText('subtitle may be in title')).toHaveLength(1)
   act(() => screen.getByText('Use “Dungeon Crawler Carl” as title').click())
-  act(() => screen.getByText('Use “Deluxe Edition” as subtitle').click())
+  act(() => screen.getByText('Use “A LitRPG Adventure” as subtitle').click())
 
   const [titleChange, subtitleChange] = changeset.all()
   expect(titleChange).toMatchObject({ field: 'title', value: 'Dungeon Crawler Carl', chosenFrom: 'hardcover' })
-  expect(titleChange.corrections).toEqual([{ source: 'hardcover', record: '1', current: 'Dungeon Crawler Carl: Deluxe Edition' }])
-  expect(subtitleChange).toMatchObject({ field: 'subtitle', value: 'Deluxe Edition' })
+  expect(titleChange.corrections).toEqual([{ source: 'hardcover', record: '1', current: 'Dungeon Crawler Carl: A LitRPG Adventure' }])
+  expect(subtitleChange).toMatchObject({ field: 'subtitle', value: 'A LitRPG Adventure' })
   expect(subtitleChange.corrections).toEqual([
     { source: 'hardcover', record: '1', current: null },
     { source: 'goodreads', record: '9', current: null },
   ])
+})
+
+test('offers an edition statement split off a title as an edition statement', async () => {
+  const { changeset } = await import('../lib/changeset')
+  changeset.clear()
+  const title: Resolved = {
+    value: 'Dungeon Crawler Carl: Deluxe Edition', source: 'hardcover', source_id: '1', conflict: false, alternatives: [],
+    values: [{ value: 'Dungeon Crawler Carl: Deluxe Edition', source: 'hardcover', source_id: '1' }],
+  }
+  render(<FieldGrid fields={{ title }} order={['title']} level="edition"
+    staging={{ book: 'B', scope: 'ed', records: { hardcover: ['1'] } }} />)
+
+  expect(screen.getByText('edition may be in title')).toBeInTheDocument()
+  expect(screen.queryByText('Use “Deluxe Edition” as subtitle')).toBeNull()
+  act(() => screen.getByText('Use “Deluxe Edition” as edition statement').click())
+  expect(changeset.all()[0]).toMatchObject({ field: 'edition_statement', value: 'Deluxe Edition' })
 })
