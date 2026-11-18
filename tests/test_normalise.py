@@ -57,3 +57,7 @@ def test_work_normalises_editions_and_derives_isbn13():
     assert [c.value for c in edition.isbn13] == ["9780547951966"]
     assert edition.asin == [] and edition.release_date == []
     assert edition.language[0].value == "en"
+
+
+def test_zero_pages_count_as_unknown():
+    assert normalise.pages(0) is None and normalise.pages(310) == 310
