@@ -4,9 +4,9 @@ import pytest
 
 from libarrei import normalise
 from libarrei.cache import Cache
-from libarrei.lookup import Clues, from_amazon, lookup
+from libarrei.lookup import Clues, clues, from_amazon, lookup, stores_for
 from libarrei.merge import merge
-from libarrei.model import Source, Work
+from libarrei.model import Candidate, Edition, Source, Work
 from libarrei.ratelimit import RateLimiter
 from libarrei.sources.amazon.client import BLOCKED_NOTE, Amazon, AmazonBlocked
 from libarrei.sources.amazon.mapping import to_edition, to_work
@@ -165,3 +165,27 @@ def test_amazon_is_off_without_a_cookie(monkeypatch):
     monkeypatch.setattr("libarrei.lookup.from_audible", lambda *a: None)
     result = lookup(title="mistborn", use_cache=False)
     assert result.notes[AZ] == "AMAZON_COOKIE not set"
+
+
+def formatted(asin, *formats):
+    e = Edition(asin=[Candidate(value=asin, source=Source.HARDCOVER, source_id=asin)])
+    e.format = [Candidate(value=f, source=Source.HARDCOVER, source_id=asin) for f in formats]
+    return e
+
+
+def test_asins_are_routed_by_format():
+    assert stores_for(formatted("A", "audiobook")) == {Source.AUDIBLE}
+    assert stores_for(formatted("A", "physical")) == {AZ}
+    assert stores_for(formatted("A", "ebook")) == {AZ}
+    assert stores_for(formatted("A")) == {Source.AUDIBLE, AZ}
+    work = Work(editions=[formatted("AUDIO", "audiobook"), formatted("KINDLE", "ebook"), formatted("ODD")])
+    found = clues({Source.HARDCOVER: work}, "t", None)
+    assert found.asins == {Source.AUDIBLE: ["AUDIO", "ODD"], AZ: ["KINDLE", "ODD"]}
+
+
+def test_known_amazon_asins_skip_the_search():
+    session = FakeSession(PAGES)
+    found = Clues("mistborn", "sanderson", {Source.AUDIBLE: [], AZ: ["B002GYI9C4"]})
+    work = from_amazon(client(session), None, found, False, lambda n: None)
+    assert [e.ids[AZ] for e in work.editions] == ["B002GYI9C4"]
+    assert session.urls == ["https://www.amazon.co.uk/dp/B002GYI9C4"]

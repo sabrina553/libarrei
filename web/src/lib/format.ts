@@ -36,3 +36,38 @@ export const SOURCE_LABELS: Record<SourceName, string> = {
   audible: 'Audible',
   amazon: 'Amazon',
 }
+
+// The grid's columns. Audible is Amazon's audiobook store, so both share one column
+// while staying separate sources, so corrections still say which store to fix.
+export const COLUMNS = ['hardcover', 'goodreads', 'openlibrary', 'amazon'] as const
+export type ColumnName = (typeof COLUMNS)[number]
+
+export const COLUMN_SOURCES: Record<ColumnName, readonly SourceName[]> = {
+  hardcover: ['hardcover'],
+  goodreads: ['goodreads'],
+  openlibrary: ['openlibrary'],
+  amazon: ['amazon', 'audible'],
+}
+
+export const COLUMN_LABELS: Record<ColumnName, string> = {
+  hardcover: 'Hardcover',
+  goodreads: 'Goodreads',
+  openlibrary: 'Open Library',
+  amazon: 'Amazon',
+}
+
+export function columnOf(source: SourceName): ColumnName {
+  return COLUMNS.find((c) => COLUMN_SOURCES[c].includes(source))!
+}
+
+/**
+ * Which store a value in a shared column came from: Audible, or Amazon's Kindle or
+ * print listing, judged from that record's format. Undefined in single-source columns.
+ */
+export function storeTag(source: SourceName, format: unknown): string | undefined {
+  if (source === 'audible') return 'Audible'
+  if (source !== 'amazon') return undefined
+  if (format === 'ebook') return 'Kindle'
+  if (format === 'physical') return 'Print'
+  return undefined
+}

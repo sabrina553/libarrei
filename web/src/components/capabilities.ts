@@ -1,4 +1,4 @@
-import type { SourceName } from '../lib/format'
+import { COLUMN_SOURCES, type ColumnName, type SourceName } from '../lib/format'
 
 export type Level = 'work' | 'edition'
 
@@ -30,4 +30,9 @@ const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
 
 export function provides(level: Level, source: SourceName, field: string): boolean {
   return CAPABILITIES[level][source].has(field)
+}
+
+/** A shared column provides a field when any of its sources does. */
+export function columnProvides(level: Level, column: ColumnName, field: string): boolean {
+  return COLUMN_SOURCES[column].some((source) => provides(level, source, field))
 }

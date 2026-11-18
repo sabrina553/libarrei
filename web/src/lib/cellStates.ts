@@ -1,7 +1,8 @@
-import { formatValue, SOURCES, type SourceName } from './format'
+import { columnOf, COLUMNS, formatValue, type ColumnName, type SourceName } from './format'
 
 /**
- * How one source's cell compares with the other sources in the same row.
+ * How one column's cell compares with the other columns in the same row.
+ * Sources sharing a column (Amazon and Audible) count as one.
  * - agrees: holds the most common value (or is the only value)
  * - differs: holds a value, but not the most common one
  * - missing: holds nothing although another source has a value
@@ -11,7 +12,7 @@ import { formatValue, SOURCES, type SourceName } from './format'
 export type CellState = 'agrees' | 'differs' | 'missing' | 'empty' | 'unsupported'
 
 export type RowStates = {
-  states: Record<SourceName, CellState>
+  states: Record<ColumnName, CellState>
   // The value most sources hold, which differing cells are compared against.
   modal: string | null
   problem: boolean
@@ -26,16 +27,17 @@ export function compareKey(value: unknown): string {
   return formatValue(value).replace(/\s+/g, ' ').trim().toLowerCase()
 }
 
-export function rowStates(field: string, values: Value[], provides: (source: SourceName) => boolean): RowStates {
-  const bySource = new Map<SourceName, Set<string>>()
+export function rowStates(field: string, values: Value[], provides: (column: ColumnName) => boolean): RowStates {
+  const bySource = new Map<ColumnName, Set<string>>()
   for (const v of values) {
     if (v.value === null || v.value === undefined || v.value === '') continue
-    if (!bySource.has(v.source)) bySource.set(v.source, new Set())
-    bySource.get(v.source)!.add(compareKey(v.value))
+    const column = columnOf(v.source)
+    if (!bySource.has(column)) bySource.set(column, new Set())
+    bySource.get(column)!.add(compareKey(v.value))
   }
   const modal = NOT_COMPARED.has(field) ? null : mostCommon(bySource)
-  const states = {} as Record<SourceName, CellState>
-  for (const source of SOURCES) {
+  const states = {} as Record<ColumnName, CellState>
+  for (const source of COLUMNS) {
     const keys = bySource.get(source)
     if (!provides(source)) states[source] = 'unsupported'
     else if (!keys) states[source] = bySource.size ? 'missing' : 'empty'
@@ -48,7 +50,7 @@ export function rowStates(field: string, values: Value[], provides: (source: Sou
 }
 
 // Counted once per source, so duplicate records cannot outvote the other sources. A tie means no majority.
-function mostCommon(bySource: Map<SourceName, Set<string>>): string | null {
+function mostCommon(bySource: Map<ColumnName, Set<string>>): string | null {
   const counts = new Map<string, number>()
   for (const keys of bySource.values()) for (const k of keys) counts.set(k, (counts.get(k) ?? 0) + 1)
   const ranked = [...counts].sort((a, b) => b[1] - a[1])

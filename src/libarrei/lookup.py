@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 
 from libarrei import normalise
 from libarrei.cache import Cache, NoCache
-from libarrei.model import Source, Work
+from libarrei.model import Edition, Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
 from libarrei.sources.amazon.client import DEFAULT_DOMAIN as AMAZON_DEFAULT_DOMAIN
 from libarrei.sources.amazon.client import Amazon, AmazonBlocked
@@ -54,7 +54,18 @@ class Clues:
     """What the first round of sources learnt, for stores that search by title or ASIN."""
     title: str | None = None
     author: str | None = None
-    audiobook_asins: list[str] = field(default_factory=list)
+    # Known ASINs, routed to the store that sells that format.
+    asins: dict[Source, list[str]] = field(default_factory=lambda: {Source.AUDIBLE: [], Source.AMAZON: []})
+
+
+def stores_for(edition: Edition) -> set[Source]:
+    """Audiobooks are Audible's, print and ebooks Amazon's; an unknown or mixed format asks both."""
+    formats = {c.value for c in edition.format}
+    if formats == {"audiobook"}:
+        return {Source.AUDIBLE}
+    if formats and "audiobook" not in formats:
+        return {Source.AMAZON}
+    return {Source.AUDIBLE, Source.AMAZON}
 
 
 def clues(works: dict[Source, Work], title: str | None, author: str | None) -> Clues:
@@ -67,9 +78,9 @@ def clues(works: dict[Source, Work], title: str | None, author: str | None) -> C
         if not found.author and work.contributors:
             found.author = next((c.name for c in work.contributors[0].value if c.role == "author"), None)
         for edition in work.editions:
-            if any(c.value == "audiobook" for c in edition.format):
-                found.audiobook_asins += [c.value for c in edition.asin if c.value not in found.audiobook_asins]
-    found.audiobook_asins = found.audiobook_asins[:MAX_KNOWN_ASINS]
+            for store in stores_for(edition):
+                found.asins[store] += [c.value for c in edition.asin if c.value not in found.asins[store]]
+    found.asins = {store: asins[:MAX_KNOWN_ASINS] for store, asins in found.asins.items()}
     return found
 
 
@@ -86,7 +97,7 @@ def same_author(product: dict, author: str | None) -> bool:
 
 def from_audible(cache, region: str, found: Clues, all_editions: bool) -> Work | None:
     client = Audible(region, cache=cache)
-    products = [p for asin in found.audiobook_asins if (p := client.product(asin))]
+    products = [p for asin in found.asins[Source.AUDIBLE] if (p := client.product(asin))]
     if found.title and (all_editions or not products):
         seen = {p["asin"] for p in products}
         hits = client.search(found.title, found.author, limit=20 if all_editions else 5)
@@ -99,10 +110,14 @@ def from_audible(cache, region: str, found: Clues, all_editions: bool) -> Work |
 def from_amazon(client: Amazon, isbn: str | None, found: Clues, all_editions: bool, note) -> Work | None:
     """Stops at the first sign of a block, keeping whatever was already read."""
     products: list[tuple[str, dict]] = []
+    wanted = MAX_AMAZON_PAGES if all_editions else 1
     try:
+        # Known ASINs come first and may save the search altogether.
+        asins = found.asins[Source.AMAZON][:wanted]
         query = isbn or " ".join(filter(None, [found.title, found.author]))
-        asins = parse_search(client.search(query) or "") if query else []
-        for asin in asins[:MAX_AMAZON_PAGES if all_editions else 1]:
+        if query and len(asins) < wanted:
+            asins += [a for a in parse_search(client.search(query) or "") if a not in asins]
+        for asin in asins[:wanted]:
             if (html := client.product(asin)) and (product := parse_product(html)):
                 products.append((asin, product))
     except AmazonBlocked as blocked:

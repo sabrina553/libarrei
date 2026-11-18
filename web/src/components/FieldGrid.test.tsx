@@ -60,12 +60,12 @@ test('shows every field and tells unsupported fields apart from empty ones', () 
   render(<FieldGrid fields={{ pages }} order={['title', 'duration_seconds', 'pages']} level="edition" />)
 
   expect(screen.getByText('Title')).toBeInTheDocument()
-  // Only Hardcover and Audible give an audiobook length, and Audible gives no page count.
+  // Only Hardcover and Audible (in the Amazon column) give an audiobook length.
   const unsupported = screen.getAllByText('not provided')
-  expect(unsupported).toHaveLength(4)
+  expect(unsupported).toHaveLength(2)
   expect(unsupported[0]).toHaveAttribute('title', 'Goodreads does not provide this field')
-  // Empty: title on all five sources, duration on Hardcover and Audible, pages on Goodreads and Amazon.
-  expect(screen.getAllByText('—')).toHaveLength(9)
+  // Empty: title in all four columns, duration on Hardcover and Amazon, pages on Goodreads and Amazon.
+  expect(screen.getAllByText('—')).toHaveLength(8)
 })
 
 test('picking a value stages a correction for the source that disagrees', async () => {
@@ -151,4 +151,34 @@ test('offers an edition statement split off a title as an edition statement', as
   expect(screen.queryByText('Use “Deluxe Edition” as subtitle')).toBeNull()
   act(() => screen.getByText('Use “Deluxe Edition” as edition statement').click())
   expect(changeset.all()[0]).toMatchObject({ field: 'edition_statement', value: 'Deluxe Edition' })
+})
+
+test('the amazon column tags each value with the listing it came from', () => {
+  const asin: Resolved = {
+    value: 'B002GYI9C4', source: 'amazon', source_id: 'B002GYI9C4', conflict: false, alternatives: [],
+    values: [
+      { value: 'B002GYI9C4', source: 'amazon', source_id: 'B002GYI9C4' },
+      { value: 'B004EW5KKU', source: 'audible', source_id: 'B004EW5KKU' },
+    ],
+  }
+  const format: Resolved = {
+    value: 'ebook', source: 'amazon', source_id: 'B002GYI9C4', conflict: false, alternatives: [],
+    values: [
+      { value: 'ebook', source: 'amazon', source_id: 'B002GYI9C4' },
+      { value: 'audiobook', source: 'audible', source_id: 'B004EW5KKU' },
+    ],
+  }
+  render(
+    <SlugsContext value={{ amazon: 'co.uk', audible: 'co.uk' }}>
+      <FieldGrid fields={{ asin, format }} order={['asin']} level="edition" />
+    </SlugsContext>,
+  )
+
+  expect(screen.getByText('Amazon')).toBeInTheDocument()
+  expect(screen.queryByText('Audible')).toBeInTheDocument()
+  expect(screen.getByText('Kindle')).toBeInTheDocument()
+  expect(screen.getAllByText('B002GYI9C4').find((e) => e.tagName === 'A'))
+    .toHaveAttribute('href', 'https://www.amazon.co.uk/dp/B002GYI9C4')
+  expect(screen.getAllByText('B004EW5KKU').find((e) => e.tagName === 'A'))
+    .toHaveAttribute('href', 'https://www.audible.co.uk/pd/B004EW5KKU')
 })

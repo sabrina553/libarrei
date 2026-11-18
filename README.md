@@ -18,13 +18,18 @@ cp .env.example .env   # then add your tokens
 
 - `HARDCOVER_TOKEN`: from Settings → API on hardcover.app.
 - `GOODREADS_TOKEN`: the public AppSync key used by the Goodreads web app.
-
 - `AUDIBLE_REGION`: which Audible store to search, as its domain (`co.uk` by default;
   also `com`, `de`, `fr`, `it`, `es`, `ca`, `com.au`, `co.jp`, `in`).
 
-A source without a token is skipped; Open Library and Audible need none. Audible
-is searched after the others, by the title and author they found (so ISBN-only
-lookups work too), and by the ASINs of any audiobook editions they listed.
+A source without a token is skipped; Open Library and Audible need none.
+
+Audible and Amazon are searched after the catalogues (Hardcover, Goodreads, Open
+Library), by the title and author those found, so ISBN-only lookups work too.
+ASINs the catalogues list are looked up directly, routed by the edition's format:
+audiobooks to Audible, print and ebooks to Amazon, and unknown formats to both.
+An ASIN that Amazon or Audible itself confirms is treated as firm as an ISBN when
+aligning editions; one only a catalogue cites (Goodreads often puts the Kindle
+ASIN on a paperback) is weaker, and never joins editions whose formats clash.
 
 ### Amazon (optional, off by default)
 Amazon has no public book API, so libarrei reads its search and product pages.
@@ -92,8 +97,13 @@ pnpm types                 # regenerate API types after changing the Python API
 pnpm check                 # type check, lint and tests
 ```
 
-Your Hardcover token can be saved under Settings; it stays in your browser and
-is sent to the API in an `X-Hardcover-Token` header.
+Your Hardcover token and (optionally) Amazon cookie can be saved under Settings;
+they stay in your browser and are sent to the API in `X-Hardcover-Token` and
+`X-Amazon-Cookie` headers.
+
+Amazon and Audible share one "Amazon" column; each value is tagged Audible,
+Kindle or Print and links to its own store page. They remain separate sources
+underneath, so staged corrections still say which store's record to fix.
 
 ## Tests
 ```sh

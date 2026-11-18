@@ -1,9 +1,9 @@
 import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
-import { formatDuration, formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
+import { columnOf, COLUMN_LABELS, COLUMNS, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
 import { inlineDiff, rowStates, type CellState } from '../lib/cellStates'
-import { provides, type Level } from './capabilities'
+import { columnProvides, type Level } from './capabilities'
 import { DescriptionValue } from './DescriptionValue'
 import { RecordLink } from './RecordLink'
 import { splitKey, titleSplits, type TitleSplit } from './titleSplit'
@@ -56,8 +56,11 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
     !!staging && staged.some((c) => c.id === `${staging.scope}::${field}` && c.value === value)
   const rows = order.map((name) => {
     const resolved = fields[name]
-    return { name, resolved, ...rowStates(name, resolved?.values ?? [], (s) => provides(level, s, name)) }
+    return { name, resolved, ...rowStates(name, resolved?.values ?? [], (c) => columnProvides(level, c, name)) }
   })
+  // Each record's format, so values in the shared Amazon column can say which listing they came from.
+  const formats = new Map((fields.format?.values ?? []).map((v) => [`${v.source}:${v.source_id}`, v.value]))
+  const tag = (v: SourceValue) => storeTag(v.source, formats.get(`${v.source}:${v.source_id}`))
   const problems = rows.filter((r) => r.problem).length
   return (
     <>
@@ -69,7 +72,7 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
         <thead>
           <tr>
             <th>Field</th>
-            {SOURCES.map((s) => <th key={s}>{SOURCE_LABELS[s]}</th>)}
+            {COLUMNS.map((c) => <th key={c}>{COLUMN_LABELS[c]}</th>)}
           </tr>
         </thead>
         <tbody>
@@ -86,23 +89,23 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
                   {differs && <span className="badge differs" title="Sources disagree">differs</span>}
                   {missing && <span className="badge missing" title="Some sources have no value">missing</span>}
                 </th>
-                {SOURCES.map((source) => {
+                {COLUMNS.map((source) => {
                   const state = states[source]
                   if (state === 'unsupported')
-                    return <td key={source} className="unsupported" title={`${SOURCE_LABELS[source]} does not provide this field`}>not provided</td>
+                    return <td key={source} className="unsupported" title={`${COLUMN_LABELS[source]} does not provide this field`}>not provided</td>
                   if (state === 'missing' || state === 'empty' || !resolved)
                     return <td key={source} className={state} title={state === 'missing' ? 'No value here, though another source has one' : 'No source has a value'}>—</td>
                   return (
                     <Cell
                       key={source} name={name} source={source} level={level} resolved={resolved} state={state} modal={modal}
                       // A split title staged from this source is not this cell's own value.
-                      picked={pick?.chosenFrom === source && resolved.values.some((v) =>
-                        v.source === source && formatValue(v.value) === formatValue(pick.value))}
-                      onPick={staging && ((value) => pick?.chosenFrom === source
+                      picked={!!pick && columnOf(pick.chosenFrom) === source && resolved.values.some((v) =>
+                        v.source === pick.chosenFrom && formatValue(v.value) === formatValue(pick.value))}
+                      onPick={staging && ((value) => pick && columnOf(pick.chosenFrom) === source
                         ? changeset.unstage(pick.id)
                         : changeset.stage(buildChange(staging.book, staging.scope, name, value, resolved.values, staging.records)))}
                       splitFor={name === 'title' ? (v) => splits.get(splitKey(v)) : undefined}
-                      onSplitPick={stageDerived} isStaged={isStaged}
+                      onSplitPick={stageDerived} isStaged={isStaged} tag={tag}
                     />
                   )
                 })}
@@ -119,7 +122,7 @@ type SourceValue = Resolved['values'][number]
 
 type CellProps = {
   name: string
-  source: SourceName
+  source: ColumnName
   level: Level
   resolved: Resolved
   state: CellState
@@ -129,10 +132,11 @@ type CellProps = {
   splitFor?: (value: SourceValue) => TitleSplit | undefined
   onSplitPick?: (field: string, from: SourceValue, value: string) => void
   isStaged: (field: string, value: string) => boolean
+  tag: (value: SourceValue) => string | undefined
 }
 
-function Cell({ name, source, level, resolved, state, modal, picked, onPick, splitFor, onSplitPick, isStaged }: CellProps) {
-  const values = (resolved.values ?? []).filter((v) => v.source === source)
+function Cell({ name, source, level, resolved, state, modal, picked, onPick, splitFor, onSplitPick, isStaged, tag }: CellProps) {
+  const values = (resolved.values ?? []).filter((v) => columnOf(v.source) === source)
   const classes = [state, onPick && 'pickable', picked && 'picked'].filter(Boolean).join(' ')
   const pick = onPick && (() => onPick(values[0]))
   return (
@@ -152,11 +156,12 @@ function Cell({ name, source, level, resolved, state, modal, picked, onPick, spl
         <div key={i} className={name === 'description' ? 'long' : undefined}>
           {name === 'description' ? <DescriptionValue value={v} values={resolved.values} />
             : <Value name={name} value={v.value} modal={state === 'differs' ? modal : null} />}
+          {tag(v) && <span className="badge store">{tag(v)}</span>}
           <RecordLink level={level} value={v} />
           <SplitHint value={v} split={splitFor?.(v)} onPick={onSplitPick} isStaged={isStaged} />
         </div>
       ))}
-      {name === 'description' && resolved.source === source && resolved.licence && <div className="licence">{resolved.licence}</div>}
+      {name === 'description' && columnOf(resolved.source) === source && resolved.licence && <div className="licence">{resolved.licence}</div>}
       {picked && <span className="tick" aria-hidden>✓</span>}
     </td>
   )

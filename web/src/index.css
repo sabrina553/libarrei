@@ -71,6 +71,8 @@ button:disabled { opacity: 0.5; cursor: default; }
 button.link { padding: 0; border: 0; background: none; color: var(--accent); font-size: 0.75rem; cursor: pointer; }
 .badge { margin-left: 0.4rem; padding: 0 0.35rem; border-radius: 3px; font-size: 0.7rem; font-weight: 500; background: var(--bad); color: white; }
 .badge.hint { background: var(--accent); }
+/* Which Amazon listing (Audible, Kindle, Print) a value in the shared column came from. */
+.badge.store { margin-left: 0; margin-right: 0.4rem; background: none; color: var(--muted); border: 1px solid currentColor; }
 .record { margin-left: 0.4rem; font-family: monospace; font-size: 0.7rem; color: var(--muted); }
 .licence { margin-top: 0.3rem; font-size: 0.75rem; color: var(--muted); }
 
