@@ -87,6 +87,9 @@ button.active { background: var(--accent); }
 .mono { font-family: var(--mono); }
 .src { display: inline-block; width: 1.3rem; text-align: center; margin-right: 2px; border-radius: 3px; font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border); }
 .src.on { background: var(--good); color: white; border-color: var(--good); }
+/* Record completeness: small, and only coloured when it is low. */
+.quality { font-size: 0.7rem; font-weight: 400; color: var(--muted); }
+.quality.low { color: var(--bad); font-weight: 600; }
 
 /* Staging */
 

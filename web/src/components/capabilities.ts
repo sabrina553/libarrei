@@ -12,7 +12,7 @@ const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
       'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url']),
     openlibrary: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin',
       'identifiers', 'publisher', 'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url', 'series']),
-    audible: new Set(['title', 'subtitle', 'contributors', 'asin', 'publisher', 'release_date', 'format', 'format_detail',
+    audible: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'asin', 'publisher', 'release_date', 'format', 'format_detail',
       'duration_seconds', 'language', 'cover_url', 'series']),
     amazon: new Set(['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher', 'release_date',
       'pages', 'format', 'format_detail', 'language', 'cover_url', 'series']),

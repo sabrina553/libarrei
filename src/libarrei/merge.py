@@ -65,6 +65,10 @@ class MergedEdition(BaseModel):
     fields: dict[str, Resolved]
     # Catalogue ASINs checked against the store: same_product, other_product or not_found.
     asin_checks: dict[str, str] = {}
+    # Each source's record completeness, 0 to 100 (see quality.py).
+    quality: dict[Source, int] = {}
+    # The ids of a fuller edition this sparse, identifier-less one probably duplicates.
+    stub_of: dict[Source, list[str]] | None = None
     # Page slugs for sources that address records by slug, such as Hardcover's book slug.
     slugs: dict[Source, str] = {}
 
@@ -73,6 +77,8 @@ class MergedWork(BaseModel):
     ids: dict[Source, str]
     fields: dict[str, Resolved]
     editions: list[MergedEdition]
+    # Each source's mean edition completeness.
+    quality: dict[Source, int] = {}
     slugs: dict[Source, str] = {}
 
 
@@ -82,12 +88,14 @@ def merge(works: dict[Source, Work]) -> MergedWork:
         candidates = work_candidates(name, [c for w in works.values() for c in getattr(w, name)])
         if resolved := resolve(name, candidates):
             work_fields[name] = resolved
-    return MergedWork(
+    # Imported here because scoring reads the merged models defined in this module.
+    from libarrei.quality import score_work
+    return score_work(MergedWork(
         ids={s: w.ids[s] for s, w in works.items() if s in w.ids},
         fields=work_fields,
         editions=[merge_group(g) for g in align(works)],
         slugs={s: w.slugs[s] for s, w in works.items() if s in w.slugs},
-    )
+    ))
 
 
 def work_candidates(name: str, candidates: list[Candidate]) -> list[Candidate]:

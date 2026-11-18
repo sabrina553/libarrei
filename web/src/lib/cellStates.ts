@@ -1,4 +1,4 @@
-import { columnOf, COLUMNS, formatValue, isReference, REFERENCE_SOURCES, type ColumnName, type SourceName } from './format'
+import { columnOf, COLUMN_SOURCES, COLUMNS, formatValue, isReference, REFERENCE_SOURCES, type ColumnName, type SourceName } from './format'
 
 /**
  * How one column's cell compares with the other columns in the same row.
@@ -76,7 +76,7 @@ function suggestionKey(field: string, value: unknown): string {
  * is no clear majority. Each column votes once, reference stores included, and at
  * least two must agree. An editable source is credited over a reference store.
  */
-export function suggestion<T extends Value>(field: string, values: T[]): T | null {
+export function suggestion<T extends Value>(field: string, values: T[], quality: Quality = {}): T | null {
   if (NOT_COMPARED.has(field)) return null
   const byColumn = new Map<ColumnName, Set<string>>()
   for (const v of values) {
@@ -87,9 +87,32 @@ export function suggestion<T extends Value>(field: string, values: T[]): T | nul
     byColumn.get(column)!.add(key)
   }
   const top = mostCommon(byColumn)
-  if (top === null || [...byColumn.values()].filter((keys) => keys.has(top)).length < 2) return null
-  const holders = values.filter((v) => v.value !== null && v.value !== undefined && v.value !== '' && suggestionKey(field, v.value) === top)
+  const agreed = top !== null && [...byColumn.values()].filter((keys) => keys.has(top)).length >= 2
+  const chosen = agreed ? top : qualityTieBreak(byColumn, quality)
+  if (chosen === null) return null
+  const holders = values.filter((v) => v.value !== null && v.value !== undefined && v.value !== '' && suggestionKey(field, v.value) === chosen)
   return holders.find((v) => !REFERENCE_SOURCES.has(v.source)) ?? holders[0] ?? null
+}
+
+export type Quality = Partial<Record<SourceName, number>>
+// How far ahead the fullest record must be before its value is offered without a majority.
+export const QUALITY_GAP = 30
+
+/** A column's completeness: its best source's record. */
+export function columnQuality(column: ColumnName, quality: Quality): number | undefined {
+  const scores = COLUMN_SOURCES[column].map((s) => quality[s]).filter((q): q is number => q !== undefined)
+  return scores.length ? Math.max(...scores) : undefined
+}
+
+// Only without a majority: a fuller record breaks a tie, it never outvotes agreement.
+function qualityTieBreak(byColumn: Map<ColumnName, Set<string>>, quality: Quality): string | null {
+  const ranked = [...byColumn].map(([column, keys]) => ({ keys, score: columnQuality(column, quality) ?? 0 }))
+    .sort((a, b) => b.score - a.score)
+  const [best] = ranked
+  if (!best || best.keys.size !== 1) return null
+  const key = [...best.keys][0]
+  const rival = ranked.find((r) => !r.keys.has(key))
+  return rival && best.score - rival.score >= QUALITY_GAP ? key : null
 }
 
 /** Splits `text` into the part shared with `reference` at each end and the differing middle. */
