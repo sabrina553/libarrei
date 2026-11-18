@@ -9,7 +9,6 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/121.0",
 ]
 
-
 def parse_title_and_series(raw_title):
     """
     Splits a Goodreads edition title into (title, subtitle, series_name, series_position).
