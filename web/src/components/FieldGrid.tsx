@@ -1,6 +1,6 @@
 import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
-import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMNS, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
+import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMNS, isReference, REFERENCE_SOURCES, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
 import { inlineDiff, missingColumns, rowStates, type CellState } from '../lib/cellStates'
 import { columnProvides, type Level } from './capabilities'
@@ -48,7 +48,7 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
     const change = buildChange(staging.book, staging.scope, field, { ...from, value }, values, staging.records)
     // The source the split came from holds the unsplit value, so its own record needs correcting too.
     const own = values.find((v) => v.source === from.source && v.source_id === from.source_id)
-    if (formatValue(own?.value ?? null) !== value)
+    if (formatValue(own?.value ?? null) !== value && !REFERENCE_SOURCES.has(from.source))
       change.corrections.unshift({ source: from.source, record: from.source_id, current: own?.value ?? null })
     changeset.stage(change)
   })
@@ -73,9 +73,13 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
         <thead>
           <tr>
             <th>Field</th>
-            {COLUMNS.map((c) => hasRecord(c)
-              ? <th key={c}>{COLUMN_LABELS[c]}</th>
-              : <th key={c} className="norecord">{COLUMN_LABELS[c]} <span className="note">no record</span></th>)}
+            {COLUMNS.map((c) => !hasRecord(c)
+              ? <th key={c} className="norecord">{COLUMN_LABELS[c]} <span className="note">no record</span></th>
+              : isReference(c)
+                ? <th key={c} className="reference" title="A store listing, read for reference: it votes but is never corrected">
+                    {COLUMN_LABELS[c]} <span className="note">reference</span>
+                  </th>
+                : <th key={c}>{COLUMN_LABELS[c]}</th>)}
           </tr>
         </thead>
         <tbody>
@@ -102,7 +106,7 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
                   if (state === 'unsupported')
                     return <td key={source} className="unsupported" title={`${COLUMN_LABELS[source]} does not provide this field`}>not provided</td>
                   if (state === 'missing' || state === 'empty' || !resolved)
-                    return <td key={source} className={state} title={state === 'missing' ? 'No value here, though another source has one' : 'No source has a value'}>—</td>
+                    return <td key={source} className={[state, isReference(source) && 'reference'].filter(Boolean).join(' ')} title={gapTitle(state, source)}>—</td>
                   return (
                     <Cell
                       key={source} name={name} source={source} level={level} resolved={resolved} state={state} modal={modal}
@@ -127,6 +131,12 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
 }
 
 type SourceValue = Resolved['values'][number]
+
+function gapTitle(state: CellState, column: ColumnName): string {
+  if (state === 'missing') return 'No value here, though another source has one'
+  if (isReference(column)) return 'No value in this reference store'
+  return 'No source has a value'
+}
 
 /**
  * Whether a column has a record here: from the staging records when known,
@@ -158,7 +168,7 @@ type CellProps = {
 
 function Cell({ name, source, level, resolved, state, modal, picked, onPick, splitFor, onSplitPick, isStaged, tag }: CellProps) {
   const values = (resolved.values ?? []).filter((v) => columnOf(v.source) === source)
-  const classes = [state, onPick && 'pickable', picked && 'picked'].filter(Boolean).join(' ')
+  const classes = [state, isReference(source) && 'reference', onPick && 'pickable', picked && 'picked'].filter(Boolean).join(' ')
   const pick = onPick && (() => onPick(values[0]))
   return (
     <td

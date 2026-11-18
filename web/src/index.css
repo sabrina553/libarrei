@@ -95,6 +95,10 @@ button.active { background: var(--accent); }
 .grid td.empty { color: var(--muted); }
 /* A source with no record for this work or edition: one note in the header, plain dimmed cells. */
 .grid th.norecord, .grid td.norecord { color: var(--muted); opacity: 0.55; }
+/* Store listings are read for reference only, so their column sits back a little. */
+.grid th.reference { font-style: italic; }
+.grid th.reference .note { display: block; font-size: 0.7rem; font-weight: 400; }
+.grid td.reference { border-left-style: dashed; }
 .grid th.norecord .note { display: block; font-size: 0.7rem; font-weight: 400; font-style: italic; }
 .grid td.missing { color: var(--bad); background: var(--missing-bg); }
 .grid td.differs { background: var(--differs-bg); }
