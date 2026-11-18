@@ -41,9 +41,12 @@ def series(featured: dict | None, every: list[dict] | None = None) -> list[Serie
     return entries
 
 
-def to_edition(raw: dict) -> Edition:
+def to_edition(raw: dict, book_slug: str | None = None) -> Edition:
+    """book_slug comes from the parent book, which edition pages are addressed under."""
     edition = Edition()
     sid = str(raw["id"])
+    if book_slug:
+        edition.slugs[HC] = book_slug
     edition.add("title", raw.get("title"), HC, sid)
     edition.add("subtitle", raw.get("subtitle"), HC, sid)
     edition.add("edition_statement", raw.get("edition_information"), HC, sid)
@@ -67,6 +70,8 @@ def to_edition(raw: dict) -> Edition:
 def to_work(raw: dict) -> Work:
     work = Work()
     sid = str(raw["id"])
+    if slug := raw.get("slug"):
+        work.slugs[HC] = slug
     work.add("title", raw.get("title"), HC, sid)
     work.add("subtitle", raw.get("subtitle"), HC, sid)
     work.add("contributors", contributors(raw.get("cached_contributors")), HC, sid)
@@ -74,5 +79,5 @@ def to_work(raw: dict) -> Work:
     work.add("series", series(raw.get("featured_book_series"), raw.get("book_series")), HC, sid)
     work.add("genres", genres(raw.get("cached_tags")), HC, sid)
     work.add("original_release_date", raw.get("release_date"), HC, sid)
-    work.editions = [to_edition(e) for e in raw.get("editions") or []]
+    work.editions = [to_edition(e, slug) for e in raw.get("editions") or []]
     return work

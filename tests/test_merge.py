@@ -75,3 +75,11 @@ def test_merged_edition_carries_duplicate_reasons():
     b.add("asin", "B007978NPG", OL, "OL2M")
     [edition] = merge({OL: Work(editions=[a, b])}).editions
     assert edition.duplicates == [OL] and edition.duplicate_reasons == {OL: ["asin"]}
+
+
+def test_merge_carries_hardcover_slugs():
+    edition = Edition(slugs={HC: "the-hobbit"})
+    edition.add("isbn13", "9780547951966", HC, "2")
+    work = Work(editions=[edition], slugs={HC: "the-hobbit"})
+    merged = merge({HC: work})
+    assert merged.slugs == {HC: "the-hobbit"} and merged.editions[0].slugs == {HC: "the-hobbit"}

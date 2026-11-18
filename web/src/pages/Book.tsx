@@ -5,6 +5,7 @@ import { api, type LookupResponse } from '../api/client'
 import { EditionsTable } from '../components/EditionsTable'
 import { FieldGrid } from '../components/FieldGrid'
 import { formatValue, type SourceName } from '../lib/format'
+import { SlugsContext } from '../lib/links'
 import { queryFromParams } from '../lib/query'
 
 // How often to ask whether a background fetch has finished.
@@ -44,10 +45,12 @@ export function Book() {
       <h1>{formatValue(shown.work.fields.title?.value)}</h1>
       <p className="muted">{formatValue(shown.work.fields.contributors?.value)}</p>
       <Notes notes={shown.notes} />
-      <FieldGrid
-        fields={shown.work.fields} order={WORK_FIELDS} level="work"
-        staging={{ book, scope: 'work', records: workRecords(shown.work.ids) }}
-      />
+      <SlugsContext value={shown.work.slugs ?? {}}>
+        <FieldGrid
+          fields={shown.work.fields} order={WORK_FIELDS} level="work"
+          staging={{ book, scope: 'work', records: workRecords(shown.work.ids) }}
+        />
+      </SlugsContext>
       <p>
         {shown.work.editions.length} edition{shown.work.editions.length === 1 ? '' : 's'}{' '}
         {full ? '(every edition)' : '(matched editions only)'}

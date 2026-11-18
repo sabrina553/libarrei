@@ -3,6 +3,7 @@ import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { formatDuration, formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
 import { provides, type Level } from './capabilities'
 import { DescriptionValue } from './DescriptionValue'
+import { RecordLink } from './RecordLink'
 import { splitKey, titleSplits, type TitleSplit } from './titleSplit'
 
 export type Resolved = components['schemas']['Resolved']
@@ -113,8 +114,6 @@ function Cell({ name, source, level, resolved, picked, onPick, splitFor, onSplit
   const values = (resolved.values ?? []).filter((v) => v.source === source)
   if (!values.length) return <td className="empty" title="No value on this record">—</td>
   const chosen = resolved.source === source
-  // Several records from one source would otherwise look like the same value repeated.
-  const duplicated = new Set(values.map((v) => v.source_id)).size > 1
   const classes = [chosen && 'chosen', picked && 'picked'].filter(Boolean).join(' ') || undefined
   return (
     <td className={classes} title={chosen ? 'Chosen value' : undefined}>
@@ -123,7 +122,7 @@ function Cell({ name, source, level, resolved, picked, onPick, splitFor, onSplit
           {name === 'cover_url' ? <img src={String(v.value)} alt="" loading="lazy" />
             : name === 'description' ? <DescriptionValue value={v} values={resolved.values} />
             : name === 'duration_seconds' ? formatDuration(Number(v.value)) : formatValue(v.value)}
-          {duplicated && <RecordLink level={level} value={v} />}
+          <RecordLink level={level} value={v} />
           <SplitHint value={v} split={splitFor?.(v)} onPick={onSplitPick} isStaged={isStaged} />
         </div>
       ))}
@@ -160,19 +159,4 @@ function SplitHint({ value, split, onPick, isStaged }: SplitHintProps) {
       ))}
     </>
   )
-}
-
-// Hardcover pages are addressed by slug, which the API does not send, so its ids stay unlinked.
-function recordUrl(level: Level, source: SourceName, id: string): string | undefined {
-  if (source === 'openlibrary') return `https://openlibrary.org/${level === 'work' ? 'works' : 'books'}/${id}`
-  if (source === 'goodreads') return `https://www.goodreads.com/${level === 'work' ? 'work/editions' : 'book/show'}/${id}`
-  return undefined
-}
-
-function RecordLink({ level, value }: { level: Level; value: SourceValue }) {
-  const url = recordUrl(level, value.source, value.source_id)
-  const title = `From ${SOURCE_LABELS[value.source]} record ${value.source_id}`
-  return url
-    ? <a className="record" href={url} target="_blank" rel="noreferrer" title={title}>{value.source_id}</a>
-    : <span className="record" title={title}>{value.source_id}</span>
 }

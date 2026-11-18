@@ -77,7 +77,7 @@ def from_hardcover(
     # The searched edition stays first so it remains the best match.
     seen = {e.ids[Source.HARDCOVER] for e in work.editions}
     work.editions += [
-        hardcover_edition(e) for e in client.all_editions(books[0]["id"]) if str(e["id"]) not in seen
+        hardcover_edition(e, books[0].get("slug")) for e in client.all_editions(books[0]["id"]) if str(e["id"]) not in seen
     ]
     return work
 

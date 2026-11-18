@@ -7,6 +7,7 @@ const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   confidence: 1,
   duplicates: [],
   duplicate_reasons: {},
+  slugs: {},
   fields: {},
   ...over,
 })

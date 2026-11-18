@@ -45,6 +45,8 @@ class Identifier(BaseModel):
 
 class Record(BaseModel):
     ids: dict[Source, str] = {}
+    # For sources whose pages are addressed by slug rather than id: Hardcover's book slug.
+    slugs: dict[Source, str] = {}
 
     def add(self, field: str, value, source: Source, source_id: str) -> None:
         """Records one source's value for a field; empty values are skipped."""

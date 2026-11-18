@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
 import { conflictCount, duplicateLabel, editionKey, FILTERS, type FilterName, type MergedEdition } from '../lib/editions'
 import { formatValue, SOURCE_LABELS, SOURCES } from '../lib/format'
+import { SlugsContext } from '../lib/links'
 import { FieldGrid } from './FieldGrid'
 
 // Rendering thousands of rows at once is slow; show a page and let the librarian ask for more.
@@ -51,7 +52,7 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                   <td>{conflicts || ''}</td>
                 </tr>
                 {open === key && (
-                  <tr><td colSpan={8}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" staging={{ book, scope: key, records: edition.ids }} /></td></tr>
+                  <tr><td colSpan={8}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
                 )}
               </Fragment>
             )
