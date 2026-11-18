@@ -2,11 +2,14 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { api, type LookupResponse } from '../api/client'
+import { FieldGrid } from '../components/FieldGrid'
 import { formatValue } from '../lib/format'
 import { queryFromParams } from '../lib/query'
 
 // How often to ask whether a background fetch has finished.
 const POLL_MS = 2000
+
+const WORK_FIELDS = ['title', 'subtitle', 'contributors', 'series', 'original_release_date', 'genres', 'description']
 
 export function Book() {
   const [params] = useSearchParams()
@@ -39,6 +42,7 @@ export function Book() {
       <h1>{formatValue(shown.work.fields.title?.value)}</h1>
       <p className="muted">{formatValue(shown.work.fields.contributors?.value)}</p>
       <Notes notes={shown.notes} />
+      <FieldGrid fields={shown.work.fields} order={WORK_FIELDS} />
       <p>
         {shown.work.editions.length} edition{shown.work.editions.length === 1 ? '' : 's'}{' '}
         {full ? '(every edition)' : '(matched editions only)'}

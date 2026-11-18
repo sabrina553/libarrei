@@ -48,3 +48,18 @@ button, input { font: inherit; }
 button { padding: 0.4rem 0.9rem; border: 1px solid var(--accent); border-radius: 4px; background: var(--accent); color: white; cursor: pointer; }
 button:disabled { opacity: 0.5; cursor: default; }
 .notes { color: var(--muted); font-size: 0.875rem; }
+
+/* Field × source grid */
+.grid { width: 100%; border-collapse: collapse; margin: 1rem 0; background: var(--surface); }
+.grid th, .grid td { border: 1px solid var(--border); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.grid thead th { font-size: 0.875rem; color: var(--muted); }
+.grid tbody th { width: 10rem; font-weight: 600; white-space: nowrap; }
+.grid td { width: 30%; }
+.grid td.chosen { outline: 2px solid var(--accent); outline-offset: -2px; }
+.grid td.empty { color: var(--muted); }
+.grid tr.conflict th, .grid tr.conflict td { background: var(--conflict-bg); }
+.grid img { max-height: 8rem; }
+/* Descriptions are long; cap them and let the cell scroll. */
+.grid .long { max-height: 9rem; overflow: auto; white-space: pre-line; font-size: 0.9rem; }
+.badge { margin-left: 0.4rem; padding: 0 0.35rem; border-radius: 3px; font-size: 0.7rem; font-weight: 500; background: var(--bad); color: white; }
+.licence { margin-top: 0.3rem; font-size: 0.75rem; color: var(--muted); }
