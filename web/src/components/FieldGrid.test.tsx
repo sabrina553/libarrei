@@ -15,13 +15,45 @@ const pages: Resolved = {
   ],
 }
 
-test('shows each source value, marks the chosen one and the conflict', () => {
+test('colours cells that differ or are missing, with no majority to pick from', () => {
   render(<FieldGrid fields={{ pages }} order={['pages']} level="edition" />)
 
-  expect(screen.getByText('310').closest('td')).toHaveClass('chosen')
-  expect(screen.getByText('320').closest('td')).not.toHaveClass('chosen')
-  expect(screen.getByText('conflict')).toBeInTheDocument()
-  expect(screen.getAllByText('—')).toHaveLength(1)
+  // One source each for 310 and 320, so neither is the majority and both differ.
+  expect(screen.getByText('310').closest('td')).toHaveClass('differs')
+  expect(screen.getByText('320').closest('td')).toHaveClass('differs')
+  // Goodreads gives page counts but has none here.
+  expect(screen.getByText('—').closest('td')).toHaveClass('missing')
+  expect(screen.getByText('differs')).toBeInTheDocument()
+  expect(screen.getByText('missing')).toBeInTheDocument()
+})
+
+test('highlights where a value departs from the majority', () => {
+  const release: Resolved = {
+    value: 468, source: 'hardcover', source_id: '1', conflict: true, alternatives: [],
+    values: [
+      { value: 468, source: 'hardcover', source_id: '1' },
+      { value: 450, source: 'goodreads', source_id: '2' },
+      { value: 468, source: 'openlibrary', source_id: 'OL1M' },
+    ],
+  }
+  const { container } = render(<FieldGrid fields={{ pages: release }} order={['pages']} level="edition" />)
+
+  const cells = container.querySelectorAll('tbody td')
+  expect(cells[0]).toHaveClass('agrees')
+  expect(cells[1]).toHaveClass('differs')
+  expect(cells[1].querySelector('mark')).toHaveTextContent('5')
+})
+
+test('only problems hides rows where every source agrees', () => {
+  const language: Resolved = {
+    value: 'en', source: 'hardcover', source_id: '1', conflict: false, alternatives: [],
+    values: (['hardcover', 'goodreads', 'openlibrary'] as const).map((source) => ({ value: 'en', source, source_id: '1' })),
+  }
+  render(<FieldGrid fields={{ pages, language }} order={['pages', 'language']} level="edition" />)
+
+  act(() => screen.getByLabelText(/Only problems/).click())
+  expect(screen.queryByText('Language')).toBeNull()
+  expect(screen.getByText('Pages')).toBeInTheDocument()
 })
 
 test('shows every field and tells unsupported fields apart from empty ones', () => {
@@ -41,7 +73,7 @@ test('picking a value stages a correction for the source that disagrees', async 
   changeset.clear()
   render(<FieldGrid fields={{ pages }} order={['pages']} level="edition" staging={{ book: 'B', scope: 'ed', records: { hardcover: ['1'], openlibrary: ['OL1M'] } }} />)
 
-  screen.getAllByText('Use this')[0].click()
+  act(() => screen.getByText('310').closest('td')!.click())
 
   const [change] = changeset.all()
   expect(change.value).toBe(310)
