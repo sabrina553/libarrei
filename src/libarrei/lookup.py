@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 
 from libarrei import normalise
 from libarrei.cache import Cache, NoCache
+from libarrei.merge import text_key
 from libarrei.model import Edition, Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
 from libarrei.sources.amazon.client import DEFAULT_DOMAIN as AMAZON_DEFAULT_DOMAIN
@@ -56,6 +57,8 @@ class Clues:
     author: str | None = None
     # Known ASINs, routed to the store that sells that format.
     asins: dict[Source, list[str]] = field(default_factory=lambda: {Source.AUDIBLE: [], Source.AMAZON: []})
+    # The work's place in its series, which tells it apart from sequels that share the series name.
+    series_position: str | None = None
 
 
 def stores_for(edition: Edition) -> set[Source]:
@@ -77,6 +80,8 @@ def clues(works: dict[Source, Work], title: str | None, author: str | None) -> C
             found.title = work.title[0].value
         if not found.author and work.contributors:
             found.author = next((c.name for c in work.contributors[0].value if c.role == "author"), None)
+        if not found.series_position and work.series:
+            found.series_position = next((s.position for s in work.series[0].value if s.position), None)
         for edition in work.editions:
             for store in stores_for(edition):
                 found.asins[store] += [c.value for c in edition.asin if c.value not in found.asins[store]]
@@ -95,13 +100,34 @@ def same_author(product: dict, author: str | None) -> bool:
     return any(_name_words(author) & _name_words(a.get("name") or "") for a in product.get("authors") or [])
 
 
+def same_work(title: str | None, positions: set[str], found: Clues) -> bool:
+    """Keyword search also returns sequels and other books by the author, so a hit must be this work.
+
+    A series number decides when both sides have one, which also keeps translated editions whose
+    titles differ. Otherwise the hit's title must start with the work's title.
+    """
+    if found.series_position and positions:
+        return found.series_position in positions
+    return bool(found.title) and text_key(title or "").startswith(text_key(found.title))
+
+
+def audible_is_work(product: dict, found: Clues) -> bool:
+    positions = {s["sequence"] for s in product.get("series") or [] if s.get("sequence")}
+    return same_work(product.get("title"), positions, found)
+
+
+def amazon_is_work(product: dict, found: Clues) -> bool:
+    series = product.get("series")
+    return same_work(product.get("title"), {series[1]} if series and series[1] else set(), found)
+
+
 def from_audible(cache, region: str, found: Clues, all_editions: bool) -> Work | None:
     client = Audible(region, cache=cache)
     products = [p for asin in found.asins[Source.AUDIBLE] if (p := client.product(asin))]
     if found.title and (all_editions or not products):
         seen = {p["asin"] for p in products}
         hits = client.search(found.title, found.author, limit=20 if all_editions else 5)
-        products += [p for p in hits if p["asin"] not in seen and same_author(p, found.author)]
+        products += [p for p in hits if p["asin"] not in seen and same_author(p, found.author) and audible_is_work(p, found)]
     if not products:
         return None
     return audible_work(products if all_editions else products[:1], region)
@@ -113,13 +139,16 @@ def from_amazon(client: Amazon, isbn: str | None, found: Clues, all_editions: bo
     wanted = MAX_AMAZON_PAGES if all_editions else 1
     try:
         # Known ASINs come first and may save the search altogether.
-        asins = found.asins[Source.AMAZON][:wanted]
+        known = found.asins[Source.AMAZON][:wanted]
+        asins = list(known)
         query = isbn or " ".join(filter(None, [found.title, found.author]))
         if query and len(asins) < wanted:
             asins += [a for a in parse_search(client.search(query) or "") if a not in asins]
         for asin in asins[:wanted]:
             if (html := client.product(asin)) and (product := parse_product(html)):
-                products.append((asin, product))
+                # An ISBN or a known ASIN names this edition; a title search can land on a sequel.
+                if isbn or asin in known or amazon_is_work(product, found):
+                    products.append((asin, product))
     except AmazonBlocked as blocked:
         note(str(blocked))
     return amazon_work(products, client.domain) if products else None

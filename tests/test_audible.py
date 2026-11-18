@@ -152,3 +152,18 @@ def test_search_hits_by_other_authors_are_dropped():
 
 def test_page_url():
     assert page_url("co.uk", "B004EW5KKU") == "https://www.audible.co.uk/pd/B004EW5KKU"
+
+
+def test_search_hits_must_be_the_same_work_not_a_sequel():
+    from libarrei.lookup import Clues, audible_is_work
+
+    found = Clues(title="Dungeon Crawler Carl", author="Matt Dinniman", series_position="1")
+    book = {"title": "Dungeon Crawler Carl", "series": [{"title": "Dungeon Crawler Carl", "sequence": "1"}]}
+    sequel = {"title": "Carl's Doomsday Scenario", "series": [{"title": "Dungeon Crawler Carl", "sequence": "2"}]}
+    translated = {"title": "Carl, o explorador de masmorras",
+                  "series": [{"title": "Dungeon Crawler Carl (Portuguese Edition)", "sequence": "1"}]}
+    novella = {"title": "Operation Bounce House", "series": []}
+    assert audible_is_work(book, found)
+    assert audible_is_work(translated, found)
+    assert not audible_is_work(sequel, found)
+    assert not audible_is_work(novella, found)
