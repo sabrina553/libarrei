@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
 import { Book } from './pages/Book'
+import { Changes } from './pages/Changes'
+import { useChangeset } from './lib/changeset'
 import { Search } from './pages/Search'
 import { Settings } from './pages/Settings'
 
@@ -16,6 +18,7 @@ export default function App() {
         <header>
           <nav>
             <NavLink to="/" end>Search</NavLink>
+            <ChangesLink />
             <NavLink to="/settings">Settings</NavLink>
           </nav>
         </header>
@@ -23,10 +26,16 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Search />} />
             <Route path="/book" element={<Book />} />
+            <Route path="/changes" element={<Changes />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </main>
       </BrowserRouter>
     </QueryClientProvider>
   )
+}
+
+function ChangesLink() {
+  const count = useChangeset().length
+  return <NavLink to="/changes">Changes{count ? ` (${count})` : ''}</NavLink>
 }

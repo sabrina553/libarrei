@@ -8,7 +8,7 @@ const PAGE = 100
 const EDITION_FIELDS = ['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher',
   'release_date', 'pages', 'format', 'language', 'cover_url']
 
-export function EditionsTable({ editions }: { editions: MergedEdition[] }) {
+export function EditionsTable({ editions, book }: { editions: MergedEdition[]; book: string }) {
   const [filter, setFilter] = useState<FilterName>('all')
   const [open, setOpen] = useState<string | null>(null)
   const [limit, setLimit] = useState(PAGE)
@@ -50,7 +50,7 @@ export function EditionsTable({ editions }: { editions: MergedEdition[] }) {
                   <td>{conflicts || ''}</td>
                 </tr>
                 {open === key && (
-                  <tr><td colSpan={8}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} /></td></tr>
+                  <tr><td colSpan={8}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} staging={{ book, scope: key, records: edition.ids }} /></td></tr>
                 )}
               </Fragment>
             )
