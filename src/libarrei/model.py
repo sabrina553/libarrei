@@ -17,6 +17,7 @@ class Source(StrEnum):
     HARDCOVER = "hardcover"
     OPENLIBRARY = "openlibrary"
     AUDIBLE = "audible"
+    AMAZON = "amazon"
 
 
 class Candidate[T](BaseModel):

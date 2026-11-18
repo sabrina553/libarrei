@@ -3,8 +3,9 @@
 import time
 
 # Seconds between requests per source. Hardcover allows 60 a minute; Open Library
-# asks for about one a second; Goodreads is scraped, so it gets more breathing room.
-INTERVALS = {"hardcover": 1.0, "openlibrary": 1.0, "goodreads": 2.0, "audible": 1.0}
+# asks for about one a second; Goodreads is scraped, so it gets more breathing room,
+# and Amazon, which blocks eagerly, the most (plus random jitter in its client).
+INTERVALS = {"hardcover": 1.0, "openlibrary": 1.0, "goodreads": 2.0, "audible": 1.0, "amazon": 3.0}
 
 
 class RateLimiter:

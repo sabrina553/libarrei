@@ -2,7 +2,7 @@
 /ˈlaɪ.bə.ræɪ/
 
 A book metadata engine. It fetches every edition of a book from Goodreads,
-Hardcover, Open Library and Audible, aligns the editions across sources, and merges them
+Hardcover, Open Library, Audible and (optionally) Amazon, aligns the editions across sources, and merges them
 into one record per field while keeping every alternative and flagging conflicts.
 
 Planned front-ends: an HTTP API for apps such as Grimmory, and a review GUI for
@@ -25,6 +25,22 @@ cp .env.example .env   # then add your tokens
 A source without a token is skipped; Open Library and Audible need none. Audible
 is searched after the others, by the title and author they found (so ISBN-only
 lookups work too), and by the ASINs of any audiobook editions they listed.
+
+### Amazon (optional, off by default)
+Amazon has no public book API, so libarrei reads its search and product pages.
+That may breach Amazon's conditions of use, so it only runs when you supply a cookie:
+
+- `AMAZON_COOKIE`: the `Cookie` header of your signed-in browser session on
+  Amazon (DevTools → Network → any amazon request). Treat it like a password: it
+  stays in `.env`, and is never logged, cached or shown in errors.
+- `AMAZON_DOMAIN`: the store to read (`co.uk` by default).
+
+Librarians can instead save their own cookie under Settings in the GUI; it stays
+in their browser and is sent per request as `X-Amazon-Cookie`. Requests are
+slow on purpose (a few seconds apart, with random jitter, and at most three
+product pages per lookup). If Amazon answers with a robot check or a 500/503,
+Amazon is skipped for the rest of that lookup with the note "Amazon blocked the
+request; update your cookie".
 
 ## Usage
 ```sh

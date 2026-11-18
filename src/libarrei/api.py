@@ -27,11 +27,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=os.getenv("LIBARREI_CORS_ORIGINS", "http://localhost:5173").split(","),
     allow_methods=["GET", "POST"],
-    allow_headers=["X-Hardcover-Token", "Content-Type"],
+    allow_headers=["X-Hardcover-Token", "X-Amazon-Cookie", "Content-Type"],
 )
 
 # A librarian's own Hardcover token, sent per request and never stored or logged.
 TokenHeader = Header(None, alias="X-Hardcover-Token")
+# Likewise a librarian's own Amazon cookie, which switches the Amazon source on for their requests.
+CookieHeader = Header(None, alias="X-Amazon-Cookie")
 
 # Which source's first edition is "the" matched edition for a title search:
 # Hardcover's search re-ranks by title and author, so it is the most reliable.
@@ -44,11 +46,13 @@ def health() -> dict:
 
 
 def _lookup(
-    isbn: str | None, title: str | None, author: str | None, all_editions: bool, token: str | None = None
+    isbn: str | None, title: str | None, author: str | None, all_editions: bool, token: str | None = None,
+    cookie: str | None = None,
 ) -> LookupResult:
     if not isbn and not title:
         raise HTTPException(422, "give isbn or title")
-    result = lookup(isbn=isbn, title=title, author=author, all_editions=all_editions, hardcover_token=token)
+    result = lookup(isbn=isbn, title=title, author=author, all_editions=all_editions, hardcover_token=token,
+                    amazon_cookie=cookie)
     if not result.works:
         raise HTTPException(404, {"message": "not found in any source", "notes": result.notes})
     return result
@@ -67,9 +71,11 @@ def lookup_merged(
     author: str | None = None,
     editions: str = Query("matched", pattern="^(matched|all)$"),
     x_hardcover_token: str | None = TokenHeader,
+    x_amazon_cookie: str | None = CookieHeader,
 ) -> LookupResponse:
     """The full merged record: chosen values, alternatives and conflicts."""
-    result = _lookup(isbn, title, author, all_editions=editions == "all", token=x_hardcover_token)
+    result = _lookup(isbn, title, author, all_editions=editions == "all", token=x_hardcover_token,
+                     cookie=x_amazon_cookie)
     return LookupResponse(work=merge(result.works), notes={s.value: n for s, n in result.notes.items()})
 
 
@@ -79,8 +85,10 @@ class JobRequest(BaseModel):
     author: str | None = None
 
 
-def _full_lookup(isbn: str | None, title: str | None, author: str | None, token: str | None = None) -> dict:
-    response = lookup_merged(isbn=isbn, title=title, author=author, editions="all", x_hardcover_token=token)
+def _full_lookup(isbn: str | None, title: str | None, author: str | None, token: str | None = None,
+                 cookie: str | None = None) -> dict:
+    response = lookup_merged(isbn=isbn, title=title, author=author, editions="all", x_hardcover_token=token,
+                             x_amazon_cookie=cookie)
     return response.model_dump(mode="json")
 
 
@@ -102,11 +110,12 @@ def _job_view(job: Job) -> JobView:
 
 
 @app.post("/v1/jobs", status_code=202, response_model=JobView)
-def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) -> JobView:
+def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader,
+              x_amazon_cookie: str | None = CookieHeader) -> JobView:
     """Fetches every edition in the background; poll GET /v1/jobs/{id} for the result."""
     if not request.isbn and not request.title:
         raise HTTPException(422, "give isbn or title")
-    secrets = {"token": x_hardcover_token} if x_hardcover_token else {}
+    secrets = {k: v for k, v in (("token", x_hardcover_token), ("cookie", x_amazon_cookie)) if v}
     return _job_view(jobs.submit(request.model_dump(), secrets))
 
 
@@ -120,10 +129,10 @@ def job_status(job_id: str) -> JobView:
 @app.get("/v1/metadata")
 def metadata(
     isbn: str | None = None, title: str | None = None, author: str | None = None,
-    x_hardcover_token: str | None = TokenHeader,
+    x_hardcover_token: str | None = TokenHeader, x_amazon_cookie: str | None = CookieHeader,
 ) -> dict:
     """One flat record in Grimmory's BookMetadata field names."""
-    result = _lookup(isbn, title, author, all_editions=False, token=x_hardcover_token)
+    result = _lookup(isbn, title, author, all_editions=False, token=x_hardcover_token, cookie=x_amazon_cookie)
     merged = merge(result.works)
     return to_grimmory(merged, matched_edition(result, merged, isbn))
 

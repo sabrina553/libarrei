@@ -11,7 +11,7 @@ test('the most common value across sources wins, counted once per source', () =>
     { value: 465, source: 'openlibrary' },
   ], all)
   expect(modal).toBe('464')
-  expect(states).toEqual({ hardcover: 'agrees', goodreads: 'agrees', openlibrary: 'differs', audible: 'missing' })
+  expect(states).toEqual({ hardcover: 'agrees', goodreads: 'agrees', openlibrary: 'differs', audible: 'missing', amazon: 'missing' })
 })
 
 test('duplicate records that disagree among themselves differ', () => {
@@ -26,15 +26,15 @@ test('duplicate records that disagree among themselves differ', () => {
 test('a gap only counts as missing when another source has a value', () => {
   expect(rowStates('asin', [], all).states.hardcover).toBe('empty')
   expect(rowStates('asin', [{ value: 'B0X', source: 'goodreads' }], all).states)
-    .toEqual({ hardcover: 'missing', goodreads: 'agrees', openlibrary: 'missing', audible: 'missing' })
+    .toEqual({ hardcover: 'missing', goodreads: 'agrees', openlibrary: 'missing', audible: 'missing', amazon: 'missing' })
 })
 
 test('covers are not compared, since every source hosts its own copy', () => {
   const { states, problem } = rowStates('cover_url', [
     { value: 'a.jpg', source: 'hardcover' }, { value: 'b.jpg', source: 'goodreads' }, { value: 'c.jpg', source: 'openlibrary' },
-    { value: 'd.jpg', source: 'audible' },
+    { value: 'd.jpg', source: 'audible' }, { value: 'e.jpg', source: 'amazon' },
   ], all)
-  expect(Object.values(states)).toEqual(['agrees', 'agrees', 'agrees', 'agrees'])
+  expect(Object.values(states)).toEqual(['agrees', 'agrees', 'agrees', 'agrees', 'agrees'])
   expect(problem).toBe(false)
 })
 

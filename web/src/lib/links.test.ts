@@ -14,6 +14,7 @@ test('each source links works and editions to its own pages', () => {
 test('audible links to the store the record came from', () => {
   expect(recordUrl('edition', 'audible', 'B004EW5KKU', { audible: 'co.uk' })).toBe('https://www.audible.co.uk/pd/B004EW5KKU')
   expect(recordUrl('edition', 'audible', 'B004EW5KKU')).toBeUndefined()
+  expect(recordUrl('edition', 'amazon', '0575089911', { amazon: 'de' })).toBe('https://www.amazon.de/dp/0575089911')
 })
 
 test('hardcover needs a slug, and odd ids cannot escape the path', () => {

@@ -21,8 +21,8 @@ test('colours cells that differ or are missing, with no majority to pick from', 
   // One source each for 310 and 320, so neither is the majority and both differ.
   expect(screen.getByText('310').closest('td')).toHaveClass('differs')
   expect(screen.getByText('320').closest('td')).toHaveClass('differs')
-  // Goodreads gives page counts but has none here.
-  expect(screen.getByText('—').closest('td')).toHaveClass('missing')
+  // Goodreads and Amazon give page counts but have none here.
+  for (const gap of screen.getAllByText('—')) expect(gap.closest('td')).toHaveClass('missing')
   expect(screen.getByText('differs')).toBeInTheDocument()
   expect(screen.getByText('missing')).toBeInTheDocument()
 })
@@ -47,7 +47,7 @@ test('highlights where a value departs from the majority', () => {
 test('only problems hides rows where every source agrees', () => {
   const language: Resolved = {
     value: 'en', source: 'hardcover', source_id: '1', conflict: false, alternatives: [],
-    values: (['hardcover', 'goodreads', 'openlibrary', 'audible'] as const).map((source) => ({ value: 'en', source, source_id: '1' })),
+    values: (['hardcover', 'goodreads', 'openlibrary', 'audible', 'amazon'] as const).map((source) => ({ value: 'en', source, source_id: '1' })),
   }
   render(<FieldGrid fields={{ pages, language }} order={['pages', 'language']} level="edition" />)
 
@@ -62,10 +62,10 @@ test('shows every field and tells unsupported fields apart from empty ones', () 
   expect(screen.getByText('Title')).toBeInTheDocument()
   // Only Hardcover and Audible give an audiobook length, and Audible gives no page count.
   const unsupported = screen.getAllByText('not provided')
-  expect(unsupported).toHaveLength(3)
+  expect(unsupported).toHaveLength(4)
   expect(unsupported[0]).toHaveAttribute('title', 'Goodreads does not provide this field')
-  // Empty: title on all four sources, duration on Hardcover and Audible, pages on Goodreads.
-  expect(screen.getAllByText('—')).toHaveLength(7)
+  // Empty: title on all five sources, duration on Hardcover and Audible, pages on Goodreads and Amazon.
+  expect(screen.getAllByText('—')).toHaveLength(9)
 })
 
 test('picking a value stages a correction for the source that disagrees', async () => {

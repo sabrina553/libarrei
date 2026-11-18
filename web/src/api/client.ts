@@ -1,4 +1,4 @@
-import { getToken } from '../settings/token'
+import { amazonCookie, getToken } from '../settings/token'
 import type { components } from './schema'
 
 export type LookupResponse = components['schemas']['LookupResponse']
@@ -18,6 +18,8 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers)
   const token = getToken()
   if (token) headers.set('X-Hardcover-Token', token)
+  const cookie = amazonCookie.get()
+  if (cookie) headers.set('X-Amazon-Cookie', cookie)
   if (init.body) headers.set('Content-Type', 'application/json')
 
   const response = await fetch(path, { ...init, headers })
