@@ -6,9 +6,9 @@ and fields where sources genuinely disagree are flagged for review.
 
 import re
 
-from bs4 import BeautifulSoup
 from pydantic import BaseModel
 
+from libarrei.description import Block, parse_description, plain_text
 from libarrei.match import EditionGroup, align
 from libarrei.model import Candidate, Source, Work
 
@@ -37,6 +37,8 @@ class Alternative(BaseModel):
     value: object
     source: Source
     source_id: str
+    # Descriptions only: the value's safe formatting, whose plain text is the value.
+    formatted: list[Block] | None = None
 
 
 class Resolved(BaseModel):
@@ -95,8 +97,11 @@ def merge_group(group: EditionGroup) -> MergedEdition:
 
 
 def resolve(name: str, candidates: list[Candidate]) -> Resolved | None:
+    formatted: dict[int, list[Block]] = {}
     if name == "description":
-        candidates = [c.model_copy(update={"value": v}) for c in candidates if (v := clean_description(c.value))]
+        parsed = [(c, b) for c in candidates if (b := description_blocks(c.source, c.value))]
+        candidates = [c.model_copy(update={"value": plain_text(b)}) for c, b in parsed]
+        formatted = {id(c): b for c, (_, b) in zip(candidates, parsed)}
     if not candidates:
         return None
     priority = TEXT_PRIORITY if name in TEXT_FIELDS else DATA_PRIORITY
@@ -112,13 +117,17 @@ def resolve(name: str, candidates: list[Candidate]) -> Resolved | None:
     for c in ranked:
         if (k := key(name, c.value)) not in seen:
             seen.add(k)
-            alternatives.append(Alternative(value=c.value, source=c.source, source_id=c.source_id))
+            alternatives.append(_alternative(c, formatted))
     return Resolved(
         value=chosen.value, source=chosen.source, source_id=chosen.source_id, alternatives=alternatives,
-        values=[Alternative(value=c.value, source=c.source, source_id=c.source_id) for c in ranked],
+        values=[_alternative(c, formatted) for c in ranked],
         conflict=conflict and name not in NEVER_CONFLICT,
         licence=LICENCES[chosen.source] if name == "description" else None,
     )
+
+
+def _alternative(c: Candidate, formatted: dict[int, list[Block]]) -> Alternative:
+    return Alternative(value=c.value, source=c.source, source_id=c.source_id, formatted=formatted.get(id(c)))
 
 
 def text_key(value: str) -> str:
@@ -157,18 +166,11 @@ def _resolve_date(ranked: list[Candidate]) -> tuple[Candidate, bool]:
     return chosen, conflict
 
 
-PROMO = re.compile(r"^\s*brought to you by\b", re.IGNORECASE)
+def description_blocks(source: Source, raw: str) -> list[Block]:
+    # Goodreads sends HTML; the others send Markdown with the odd inline HTML tag.
+    return parse_description(raw, markdown=source != GR)
 
 
-def clean_description(raw: str) -> str | None:
-    """Plain text without HTML or publisher promo lines."""
-    soup = BeautifulSoup(raw, "html.parser")
-    # Only block-level breaks become newlines, so inline tags like <b> don't split sentences.
-    for br in soup.find_all("br"):
-        br.replace_with("\n")
-    for block in soup.find_all(["p", "div", "li"]):
-        block.append("\n")
-    text = soup.get_text()
-    lines = [line.strip() for line in text.splitlines()]
-    kept = "\n".join(line for line in lines if not PROMO.match(line))
-    return re.sub(r"\n{3,}", "\n\n", kept).strip() or None
+def clean_description(raw: str, source: Source = GR) -> str | None:
+    """Plain text without markup or publisher promo lines."""
+    return plain_text(description_blocks(source, raw)) or None

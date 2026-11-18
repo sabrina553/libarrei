@@ -109,6 +109,22 @@ export interface components {
             source: components["schemas"]["Source"];
             /** Source Id */
             source_id: string;
+            /** Formatted */
+            formatted?: components["schemas"]["Block"][] | null;
+        };
+        /** Block */
+        Block: {
+            /**
+             * Kind
+             * @default paragraph
+             * @enum {string}
+             */
+            kind: "paragraph" | "item";
+            /**
+             * Runs
+             * @default []
+             */
+            runs: components["schemas"]["Run"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -210,6 +226,21 @@ export interface components {
             conflict: boolean;
             /** Licence */
             licence?: string | null;
+        };
+        /** Run */
+        Run: {
+            /** Text */
+            text: string;
+            /**
+             * Bold
+             * @default false
+             */
+            bold: boolean;
+            /**
+             * Italic
+             * @default false
+             */
+            italic: boolean;
         };
         /**
          * Source
