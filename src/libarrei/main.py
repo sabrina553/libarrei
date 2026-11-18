@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
 
-from libarrei.models.hardcover.hardcover import Hardcover
-from libarrei.models.hardcover.transport import TransportLayer as TransportLayerHC
+from libarrei.sources.hardcover.client import Hardcover
+from libarrei.sources.hardcover.transport import TransportLayer as TransportLayerHC
 from libarrei.models.goodreads.goodreads import Goodreads
 from libarrei.models.goodreads.transport import TransportLayer as TransportLayerGR
 

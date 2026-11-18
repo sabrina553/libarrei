@@ -1,0 +1,29 @@
+{
+  "id": 2243188,
+  "title": "Salt Lakes: An Unnatural History",
+  "subtitle": "An Unnatural History",
+  "description": "",
+  "cached_contributors": [
+    {"author": {"id": 1303680, "name": "Caroline Tracey"}, "contribution": "Author"},
+    {"author": {"id": 99, "name": "Test Translator"}, "contribution": "Translator"}
+  ],
+  "featured_book_series": {"series": {"name": "Test Series"}, "position": 1.5},
+  "release_date": "2026-03-17",
+  "cached_tags": {"Genre": [{"tag": "Nature"}], "Mood": []},
+  "editions": [
+    {
+      "id": 32475686,
+      "title": "Salt Lakes: An Unnatural History",
+      "subtitle": null,
+      "cached_contributors": [{"author": {"id": 1303680, "name": "Caroline Tracey"}, "contribution": null}],
+      "pages": 272,
+      "release_date": "2026-03-17",
+      "image": {"url": "https://assets.hardcover.app/edition/32475686/cover.jpeg"},
+      "publisher": {"name": "W. W. Norton"},
+      "isbn_10": null,
+      "isbn_13": "9781324089025",
+      "language": {"code2": "en"},
+      "reading_format_id": 1
+    }
+  ]
+}
