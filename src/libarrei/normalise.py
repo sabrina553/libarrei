@@ -124,6 +124,7 @@ def work(record: Work) -> None:
         for name, normaliser in EDITION_FIELDS.items():
             setattr(edition, name, _apply(getattr(edition, name), normaliser))
         _derive_isbn13(edition)
+        _drop_audiobook_pages(edition)
 
 
 def _apply(candidates: list, normaliser) -> list:
@@ -141,3 +142,10 @@ def _derive_isbn13(edition: Edition) -> None:
         if (twin := isbn10_to_13(c.value)) not in known:
             edition.isbn13.append(c.model_copy(update={"value": twin}))
             known.add(twin)
+
+
+def _drop_audiobook_pages(edition: Edition) -> None:
+    # Sources put disc counts, hours or the print page count here, so the number
+    # means nothing reliable once every source agrees the edition is audio.
+    if edition.format and all(c.value == "audiobook" for c in edition.format):
+        edition.pages = []

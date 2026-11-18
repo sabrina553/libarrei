@@ -12,7 +12,7 @@ goodreads:10094399 | - | - | physical | en | 1977-02 | 287 | Ballantine Books | 
 goodreads:10125754 | - | 9788445077528 | physical | es | 2012-02 | 320 | Booket | El Hobbit
 goodreads:101583869 | - | 9788482642772 | physical | es | 1983 | 278 | La Magrana | El hòbbit
 goodreads:10249147 | - | - | physical | en | 1990 | 264 | Guild Publishing | The Hobbit
-goodreads:10253006 | - | 9781400671779 | physical | en | - | - | - | The Hobbit or There and Back Again
+goodreads:10253006 | - | 9781400671779 | physical | en | - | - | Folio Society, The | The Hobbit or There and Back Again
 goodreads:10276015 hardcover:8228213 openlibrary:OL26371117M | isbn13 | 9789027473837 | physical | nl | 1937-09-21! | 253 | Het Spectrum | De Hobbit: of daarheen en weer terug!
 goodreads:10303734,17339032 hardcover:32424120 openlibrary:OL24244614M | isbn13 DUP | 9789510223598! | physical | fi | 1937-09-21! | 307! | WSOY | Hobitti eli sinne ja takaisin!
 goodreads:10333227 hardcover:31109206 | isbn13 | 9789510154861 | physical | fi | 1937-09-21! | 307! | WSOY | Hobitti eli Sinne ja takaisin
@@ -21,7 +21,7 @@ goodreads:10351083 | - | - | physical | de | 1995 | 382 | Deutscher Taschenbuchv
 goodreads:10384008 | - | 9788822112095 | physical | it | 1993-01-01 | 404 | Adelphi / La Nuova Italia | Lo hobbit o la riconquista del tesoro
 goodreads:10387731 hardcover:32157626 | isbn13 | 9789089681546 | physical | nl | 1937-09-21! | 256! | Mynx, De Boekerij | De Hobbit
 goodreads:10400385 | - | 9788210043000 | physical | no | 1998 | 283 | Tiden Norsk Forlag | Hobbiten, eller Fram og tilbake igjen
-goodreads:1044149 | - | 9781556902338 | audiobook | en | 1991 | 11 | Recorded Books | The Hobbit
+goodreads:1044149 | - | 9781556902338 | audiobook | en | 1991 | - | Recorded Books | The Hobbit
 goodreads:1044150 hardcover:3775405 openlibrary:OL7850059M | isbn13 | 9780553700251 | audiobook | en | 1937-09-21! | - | Random House Audio | The Hobbit
 goodreads:105114965 hardcover:8643642 openlibrary:OL12540649M | isbn13 | 9785170241163 | physical | ru | 2004-01-01! | 380! | AST! | Khobbit!
 goodreads:105189722 | - | 9785171227647 | physical | ru | 2020-09-07 | 336 | АСТ | Хоббит
@@ -47,7 +47,7 @@ goodreads:11515067 | - | - | physical | - | 2009-01 | 877 | Arka Bahçe | The Ho
 goodreads:11520599 | - | - | türkçe edisyon | tr | - | - | - | The Hobbit
 goodreads:11529526 | - | 9789545841415 | physical | bg | 2010 | 320 | Бард | Хобит
 goodreads:11529608 | - | 9789545859021 | physical | bg | 2008 | 304 | Бард | Хобит
-goodreads:1154176 hardcover:29902858 openlibrary:OL8663969M | isbn13 | 9781565116726 | audiobook | en | 1937-09-21! | 1 | Highbridge Audio! | The Hobbit
+goodreads:1154176 hardcover:29902858 openlibrary:OL8663969M | isbn13 | 9781565116726 | audiobook | en | 1937-09-21! | - | Highbridge Audio! | The Hobbit
 goodreads:11567852 | - | - | audiobook | en | 1974 | - | Argo Records | The Hobbit
 goodreads:11663244 | - | 9788611157795 | physical | sl | 2000 | 284 | Mladinska knjiga | Hobit ali Tja in spet nazaj
 goodreads:117158121 | - | 9781127450107 | - | - | 1938-01-01 | - | BALLANTINE BOOKS @ | Hobbit 1ST Edition Thus With Lion on Cover
@@ -57,7 +57,7 @@ goodreads:11963975 hardcover:30390241 | isbn13 | 9788578273873 | physical | pb! 
 goodreads:12082986 | - | - | physical | vi | 2010-08 | 458 | Hội Nhà Văn, Nhã Nam | Anh Chàng Hobbit
 goodreads:12133576 | - | 9785699005994 | physical | ru | 2003 | 560 | Эксмо | Хоббит, или Туда и обратно
 goodreads:12223437 | - | - | physical | he | 1976 | 246 | זמורה, ביתן | ההוביט, או לשם ובחזרה
-goodreads:12242769 | - | - | audiobook | en | - | - | - | The Hobbit
+goodreads:12242769 | - | - | audiobook | en | - | - | BBC Audiobooks America | The Hobbit
 goodreads:123060984 | - | 9788365558633 | physical | slavic (other) | 2023-02 | 336 | Silesia Progress | Hobit, abo tam i nazŏd
 goodreads:12312458 hardcover:30866546 | isbn13 | 9785080001703 | physical | ru | 1937-09-21! | 252! | Издательство «Детская литература» | Хоббит, или Туда и обратно
 goodreads:123130187 | - | - | physical | en | 2012-09-30 | - | Planeta | El Hobbit
@@ -66,18 +66,18 @@ goodreads:123620672 hardcover:30858502 openlibrary:OL48180928M | isbn13 | 978000
 goodreads:12370887 | - | - | physical | nl | 1979 | 256 | Het Spectrum B.V. | De Hobbit
 goodreads:12375730 | - | - | physical | en | 1985 | 234 | - | Hobbit, czyli tam i z powrotem
 goodreads:12416368 | - | - | physical | en | 1997 | 245 | Folio Society | The Hobbit
-goodreads:12422389,828303 hardcover:31674605 | isbn13 DUP | 9781405629423! | physical! | en | 1937-09-21! | 5! | BBC Radio Productions! | The Hobbit
+goodreads:12422389,828303 hardcover:31674605 | isbn13 DUP | 9781405629423! | physical! | en | 1937-09-21! | 5 | BBC Radio Productions! | The Hobbit
 goodreads:12422881 | - | - | ebook | - | 2011-08-12 | - | Sneid & Post Publishing | The Hobbit
 goodreads:124928116 | - | - | ebook | en | 2023-09-14 | 400 | HarperCollins Publishers | The Hobbit
 goodreads:124939926 | - | 9786052650936 | physical | tr | 2023-04-05 | 384 | İthaki Yayınları | Hobbit
 goodreads:12499617 | - | 9789721046351 | physical | pt | 1999-09 | 10 | Publicações Europa-América | O Hobbit
 goodreads:125067028 openlibrary:OL47527257M | isbn13 | 9782267051315 | physical | fr | 2023-04-06 | 306 | Bourgois | Le Hobbit!
-goodreads:125123532 | - | - | physical | en | - | - | - | [(The Hobbit
+goodreads:125123532 | - | - | physical | en | - | - | Houghton Mifflin | [(The Hobbit
 goodreads:12567454 | - | 9789985610268 | physical | et | 1995 | 319 | Kupar | Kääbik
 goodreads:1259841 hardcover:24245677 openlibrary:OL9131905M | isbn13 | 9788445072820 | physical | es | 1937-09-21! | 304! | Minotauro! | El Hobbit!
 goodreads:12622443 hardcover:24684425 openlibrary:OL30194212M | isbn13 | 9789600403084 | physical | el | 1937-09-21! | 381! | Kedros Publishers! | Χόμπιτ!
 goodreads:12647565 | - | 9788324138937 | physical | - | 2011-03-25 | 350 | Firma Księgarska Olesiejuk | Hobbit
-goodreads:127063536 | - | 9788324148646 | physical | pl | - | 144 | - | Hobbit
+goodreads:127063536 | - | 9788324148646 | physical | pl | - | 144 | Amber | Hobbit
 goodreads:12777023 openlibrary:OL28345239M | isbn13 | 9789022543207 | physical | nl | 2008-12 | 253 | De Boekerij | De Hobbit
 goodreads:12808157 | - | - | physical | en | 1984 | 288 | Edicions de la Magrana | El Hòbbit
 goodreads:128579370 hardcover:32248093 openlibrary:OL48826368M | isbn13 | 9780063347540 | ebook | en | 2023-09-19 | 400! | William Morrow! | The Hobbit Illustrated by the Author!
@@ -114,12 +114,12 @@ goodreads:13496288 | - | 9788324127627 | physical | pl | 2007 | 224 | Amber | Ho
 goodreads:13511174 | - | - | physical | en | 1987 | 285 | Unwin Paperbacks | The Hobbit
 goodreads:13512030 hardcover:32397240 | fuzzy | - | physical | ru | 2000-01-01 | 254 | Эксмо-Пресс | Хоббит, или Туда и обратно
 goodreads:13512170 | - | - | ebook | en | 2012-02-12 | 322 | Houghton Mifflin Harcourt | The Hobbit
-goodreads:135512605 | - | - | audiobook | en | 2013 | - | - | The Hobbit
+goodreads:135512605 | - | - | audiobook | en | - | - | BBC Physical Audio; Abridged edition edition (2013-10-03) | The Hobbit
 goodreads:13568210 | - | 8936024915100 | physical | vi | 2010-08 | 458 | Nhã Nam & NXB Hội Nhà Văn | Anh Chàng Hobbit
 goodreads:13572169 openlibrary:OL50514240M | isbn13 | 9788210050381 | physical | nn | 2008-01-01 | 268 | Tiden norsk forlag | Hobbiten eller ditut og attende
 goodreads:13579738 | - | - | physical | pt | 1976 | 227 | Editora Artenova S.A. | O Hobbit
 goodreads:1358029 hardcover:24606994 openlibrary:OL10925422M | isbn13 | 9780606244268 | physical | es | 1937-09-21! | - | Turtleback Books Distributed by Demco Media! | Hobbit!
-goodreads:13591711 hardcover:31416671 openlibrary:OL32189451M | isbn13 | 9781620641132 | audiobook | en | 2012-09-18! | 1 | BBC Audiobooks! | The Hobbit
+goodreads:13591711 hardcover:31416671 openlibrary:OL32189451M | isbn13 | 9781620641132 | audiobook | en | 2012-09-18! | - | BBC Audiobooks! | The Hobbit
 goodreads:13592925,59736018 hardcover:16193290,32099406 openlibrary:OL7604539M | isbn13 DUP | 9780547953830! | physical | en | 1937-09-21! | 320! | Houghton Mifflin! | The Hobbit: Or There and Back Again!
 goodreads:13595486 hardcover:780973 openlibrary:OL27605004M | isbn13 | 9780547928241 | physical | en | 2012-09-18 | 320 | Houghton Mifflin Harcourt! | The Hobbit
 goodreads:13603071 | - | - | physical | es | 2007-11 | 350 | Ediciones Minotauro | El Hobbit
@@ -131,9 +131,9 @@ goodreads:13644671 | - | 9788080853013 | physical | sk | 2007-05-28 | 232 | Slov
 goodreads:137945731 | - | 9783763243822 | physical | de | 1995 | 346 | Büchergilde Gutenberg | Der kleine Hobbit
 goodreads:138070826 | - | - | physical | - | 2012-01-01 | 230 | Linking Publishing Co. | 哈比人（全新修訂譯本）
 goodreads:138787126 | - | - | physical | ru | 1989-01-01 | 254 | Detskaya Literatura | The Hobbit Soviet Russian book
-goodreads:139398753 | - | - | physical | en | - | - | - | The Annotated Hobbit by J.R.R. Tolkien
-goodreads:139398768 | - | - | physical | en | - | - | - | The Hobbit by Tolkien. J. R. R. ( 2012 ) Paperback
-goodreads:140241943 | - | - | physical | en | - | - | - | Bilbo le Hobbit (French Edition) by Pocket
+goodreads:139398753 | - | - | physical | en | - | - | Houghton Mifflin Harcourt | The Annotated Hobbit by J.R.R. Tolkien
+goodreads:139398768 | - | - | physical | en | - | - | HarperCollinsChildren'sBooks | The Hobbit by Tolkien. J. R. R. ( 2012 ) Paperback
+goodreads:140241943 | - | - | physical | en | - | - | Pocket (FR) | Bilbo le Hobbit (French Edition) by Pocket
 goodreads:141449366 | - | - | physical | en | 2002-01-01 | 233 | Generic | Rare J. R. R. Tolkien THE ANNOTATED HOBBIT 2002 Houghton Mifflin Revised & Expanded [Hardcover] unknown
 goodreads:1425869 | - | - | physical | es | 1991 | 314 | Minotauro | El hobbit
 goodreads:142839403 | - | - | physical | en | 1900-01-01 | - | Fisical_Book | The Hobbit
@@ -163,7 +163,7 @@ goodreads:15756563 | - | 9789635394531 | physical | hu | 2003 | 242 | Ciceró | 
 goodreads:15760197 | - | 9789731032788 | physical | ro | 2007-09 | 310 | RAO International Publishing Company | Hobbitul
 goodreads:15766582 | - | 9786070706837 | physical | es | 2012-04 | 310 | Minotauro | El Hobbit
 goodreads:15774338 hardcover:31777390 | isbn13 | 9789510282670 | physical | fi | 1937-09-21! | 331 | WSOY (WS Bookwell Oy) | Hobitti, eli, Sinne ja takaisin
-goodreads:15775196 | - | - | audiobook | en | - | - | - | The Hobbit
+goodreads:15775196 | - | - | audiobook | en | - | - | BBC | The Hobbit
 goodreads:15777193 | - | - | physical | en | 1993 | 285 | Harper Collins | The Hobbit
 goodreads:15777504 | - | - | physical | fi | 2011 | 331 | WSOY | Hobitti eli Sinne ja takaisin
 goodreads:15779810 | - | - | physical | en | 1977 | 287 | Ballantine Books | The Hobbit
@@ -197,7 +197,7 @@ goodreads:16052784 | - | 9788818121001 | physical | it | 1991 | 460 | Rusconi | 
 goodreads:16053513 hardcover:26682938 openlibrary:OL26757518M | isbn13 | 9780547951966 | ebook | en | 2012-02-15 | 320! | Houghton Mifflin Harcourt | The Hobbit or, There and Back Again!
 goodreads:16055384 hardcover:31816729 openlibrary:OL44125156M | isbn13 | 9780007887705 | physical | en | 1937-09-21! | 288! | HarperCollins Publishers! | The Hobbit!
 goodreads:16060812 | - | - | physical | ar | 2010 | 464 | دار الحكايات | الهوبيت، أو الرحيل والعودة
-goodreads:16070445 | - | - | physical | en | - | 317 | - | The Hobbit
+goodreads:16070445 | - | - | physical | en | - | 317 | Houghton Mifflin Company Boston | The Hobbit
 goodreads:16072551 | - | - | physical | en | 1968 | 287 | Ballantine Books | The Hobbit
 goodreads:16075298 hardcover:26451606 openlibrary:OL28345113M | isbn13 | 9783423214124 | physical | de | 1937-09-21! | 333! | Deutscher Taschenbuch Verlag! | Der kleine Hobbit
 goodreads:16088284 hardcover:6460922 openlibrary:OL28345147M | isbn13 | 9783608939774 | physical | de | 1937-09-21! | 384 | Klett-Cotta | Der Hobbit
@@ -223,16 +223,16 @@ goodreads:16143729 | - | - | physical | fi | 2005 | 331 | WSOY | Hobitti - eli S
 goodreads:16163750 | - | - | physical | ro | 1987 | 252 | Literatura artistică | Hobbitul sau Dus şi întors
 goodreads:16167858 hardcover:32277014 | isbn13 | 9788055606378 | physical | sk | 1937-09-21! | 232 | Slovart | Hobit
 goodreads:16168731 hardcover:32140997 openlibrary:OL47323241M,OL49656370M,OL49948384M | isbn13 DUP | 9788845271403 | physical | it | 1937-09-21! | 422! | Bompiani! | Lo Hobbit annotato
-goodreads:16170191 | - | - | audiobook | en | 2012-10-09 | 11 | Recorded Books | The Hobbit
+goodreads:16170191 | - | - | audiobook | en | 2012-10-09 | - | Recorded Books | The Hobbit
 goodreads:16170202 hardcover:30582808 openlibrary:OL34601210M | isbn13 | 9780007487301 | physical | en | 1937-09-21! | 300! | HarperCollins Publishers! | The Hobbit
 goodreads:16172233 | - | 9788055606361 | physical | sk | 2012-10-02 | 232 | Slovart | Hobit
-goodreads:16173236 | - | - | audiobook | de | 2011-09-16 | 11 | Der Hörverlag | Der Hobbit
+goodreads:16173236 | - | - | audiobook | de | 2011-09-16 | - | Der Hörverlag | Der Hobbit
 goodreads:16176371 | - | - | ebook | en | 2012-09-18 | 305 | Houghton Mifflin Harcourt | The Hobbit
 goodreads:16178040 hardcover:33219439 | isbn13 | 9789934019302 | physical | lv | 2011-01-01 | 288 | Zvaigzne ABC | Hobits jeb turp un atpakaļ
 goodreads:16194782 hardcover:25868856 openlibrary:OL30903254M,OL30903255M | isbn13 DUP | 9788445000656 | physical | es | 2012-09-18 | 286! | Booket! | El Hobbit
 goodreads:16207303 hardcover:31073927 openlibrary:OL37952096M | isbn13 | 9780007487318 | ebook | en | 2012-11-08 | 306! | HarperCollins Publishers! | The Hobbit
 goodreads:16207338 hardcover:32336622 | isbn13 | 9789022564073 | physical | nl | 2012-11-01 | 253 | Boekerij | De Hobbit
-goodreads:16219068 | - | 9788374957021 | audiobook | pl | 2010 | 11 | Muza | Hobbit, czyli tam i z powrotem
+goodreads:16219068 | - | 9788374957021 | audiobook | pl | 2010 | - | Muza | Hobbit, czyli tam i z powrotem
 goodreads:16234636 | - | 9789089681379 | physical | nl | 2007 | 253 | Mynx | De Hobbit
 goodreads:16281839 | - | - | physical | en | 1972-11 | 287 | Ballantine Books | The Hobbit
 goodreads:16301363 | - | - | physical | en | 1995 | 273 | HarperCollins | The Hobbit
@@ -241,7 +241,7 @@ goodreads:16482016 | - | - | audiobook | en | 2007-03-01 | - | HighBridge Compan
 goodreads:165487 hardcover:29315660 openlibrary:OL9796768M | isbn13 | 9780828811934 | physical | de | 1937-09-21! | 300! | French & European Pubns | Der kleine Hobbit
 goodreads:16699844 hardcover:32739295 | isbn13 | 9780007511082 | physical | en | 2012-01-01 | 400 | HarperCollins Publishers | The Hobbit!
 goodreads:168202343 | - | - | physical | en | 1961-01-01 | - | Puffin Books, [1961] | The Hobbit
-goodreads:168308531 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:168308531 | - | - | physical | en | - | - | Harper Collins | The Hobbit
 goodreads:16949996 | - | 9785271459771 | physical | ru | 2013 | 288 | Астрель | Хоббит, или туда и обратно
 goodreads:17028115 hardcover:31503243 openlibrary:OL33999104M | isbn13 | 9780544115552 | physical! | en | 1937-09-21! | 320 | Houghton Mifflin Harcourt Publishing Company! | The Hobbit!
 goodreads:17057897 | - | - | ebook | en | 2012-11-08 | 306 | HarperCollins | The Hobbit
@@ -264,11 +264,11 @@ goodreads:17201898 | - | 9788324141999 | physical | pl | 2012-02 | 352 | Amber |
 goodreads:17211516 | - | - | physical | en | - | 305 | - | The Hobbit
 goodreads:17226375 | - | 9789721061903 | physical | pt | 2012-11 | 261 | Europa América | O Hobbit
 goodreads:17227902 | - | 9789113017655 | physical | sv | 2007-08-29 | 276 | Norstedts | Hobbiten
-goodreads:17237517 | - | - | ebook | - | - | - | - | The Hobbit
+goodreads:17237517 | - | - | ebook | - | - | - | Houghton Mifflin Harcourt; Mti edition | The Hobbit
 goodreads:17238735 hardcover:32418876 | isbn13 | 9788578276300 | physical | pt | 1937-09-21! | 297 | WMF Martins Fontes | O Hobbit
 goodreads:17240441 | - | 9789758023257 | physical | tr | 1996-07 | 325 | Altıkırkbeş Yay. & Mitos Yay. | Hobbit
 goodreads:17253881 | - | - | physical | en | 2012 | 303 | Mariner Books | The Hobbit
-goodreads:17255648 openlibrary:OL47527256M | isbn13 | 9782356414915 | audiobook | fr | 2012-11-07! | 614 | Audiolib! | Le Hobbit!
+goodreads:17255648 openlibrary:OL47527256M | isbn13 | 9782356414915 | audiobook | fr | 2012-11-07! | - | Audiolib! | Le Hobbit!
 goodreads:17257422 | - | 9789113050300 | physical | sv | 2012-10-15 | 279 | Norstedts | Hobbiten
 goodreads:17257525 hardcover:31567594 | isbn13 | 9789113044903 | physical | sv | 1937-09-21! | 276! | Norstedts | Hobbiten eller Bort och hem igen
 goodreads:17257631 hardcover:33155988 | isbn13 | 9789113046792 | audiobook | sv | 2012-10-15 | - | Norstedts | Hobbiten
@@ -309,7 +309,7 @@ goodreads:17912237 | - | 9789584233028 | physical | es | 2012 | 285 | minotauro 
 goodreads:17916038 openlibrary:OL36679073M | isbn13 | 9781782010333 | physical | ga | 2013-03-25 | 284 | Evertype | An hobad!
 goodreads:17926705 | - | 9789985551301 | physical | et | 2002 | 280 | Tiritamm | Kääbik, ehk sinna ja tagasi
 goodreads:17932610 openlibrary:OL35677526M | isbn13 | 9782267024029 | physical | fr | 2012-10-04 | 303! | Christian Bourgeois! | Le Hobbit!
-goodreads:17971619 | - | - | audiobook | de | - | - | - | Der Hobbit
+goodreads:17971619 | - | - | audiobook | de | - | - | der hörverlag | Der Hobbit
 goodreads:18044754 | - | 9789630079549 | physical | hu | 2012 | 312 | Európa Könyvkiadó | A hobbit
 goodreads:18049666 | - | - | - | pt | 1998 | - | Martins Fontes | O Hobbit
 goodreads:18069967 | - | 9789747597554 | physical | th | 2002-03 | 363 | แพรวเยาวชน | ฮอบบิท
@@ -317,7 +317,7 @@ goodreads:18071686 hardcover:2362521 openlibrary:OL9443590M | isbn13 | 978220355
 goodreads:18078305 hardcover:31568344 openlibrary:OL24486835M | isbn13 | 9789172632226 | physical | sv | 2001-01-01 | 229! | Rabén & Sjögren | Bilbo: En hobbits äventyr!
 goodreads:18086783 | - | - | physical | en | 1993 | 287 | Harper Collins | The Hobbit
 goodreads:18112722 | - | - | physical | tr | 1997-10 | 324 | Altıkırkbeş Yayınevi | Hobbit
-goodreads:18119238 | - | 9780792772859 | audiobook | en | 2010-08-01 | 4 | Audiogo / Playaway Digital Audio | The Hobbit
+goodreads:18119238 | - | 9780792772859 | audiobook | en | 2010-08-01 | - | Audiogo / Playaway Digital Audio | The Hobbit
 goodreads:18130862 | - | - | audiobook | da | 2013-06-24 | - | Gyldendal | Hobbitten
 goodreads:18131492 hardcover:6946394 openlibrary:OL31907481M | isbn13 | 9788445001417 | physical | es | 1937-09-21! | 287! | Booket! | El Hobbit
 goodreads:18135852 | - | 9788702011180 | physical | da | 2004 | 298 | Gyldendal | Hobbitten
@@ -342,7 +342,7 @@ goodreads:18309127 | - | 9781481172301 | physical | yi | 2012 | 282 | CreateSpac
 goodreads:18361455 hardcover:32522214 | isbn13 | 9788324402052 | physical | pl | 1937-09-21! | 280! | Iskry | Hobbit, czyli tam i z powrotem
 goodreads:18375770 | - | - | physical | bg | 1975 | 280 | Народна младеж | Билбо Бегинс или Дотам и обратно
 goodreads:18396686 | - | 9789630795524 | physical | hu | 2011 | 312 | Európa Könyvkiadó | A Hobbit
-goodreads:184394720 | - | - | - | en | - | - | - | [J.R.R. Tolkien] The Hobbit
+goodreads:184394720 | - | - | - | en | - | - | Bestinova | [J.R.R. Tolkien] The Hobbit
 goodreads:18455330 | - | - | physical | sv | 1947 | 269 | Almqvist och Wiksell Boktryckeri Aktiebolag | Hompen, En resa dit och tillbaks igen
 goodreads:184606530 hardcover:30453741 openlibrary:OL31834369M | isbn13 | 9780007270613 | physical | en | 2008-04-01! | 384! | HarperCollins Publishers! | The Hobbit
 goodreads:184617015 | - | 9783608987492 | physical | de | 2023 | 456 | Klett-Cotta | Der Hobbit
@@ -376,16 +376,16 @@ goodreads:19292776 hardcover:31275532 | isbn13 | 9783608106459 | ebook | de | 20
 goodreads:19295165 | - | - | ebook | pt | 2012-12-03 | 297 | Martins Fontes | O Hobbit
 goodreads:19319788 | - | - | physical | en | 2006 | 353 | HarperCollins Publishers | The Hobbit
 goodreads:19401076 | - | - | physical | pt | 2002 | 293 | Martins Fontes | O Hobbit
-goodreads:19412505 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:19412505 | - | - | physical | en | - | - | Hardcover | The Hobbit
 goodreads:19460277 hardcover:28513553 openlibrary:OL16197261M,OL51696707M | isbn13 DUP | 9788320714746 | physical | pl | 1937-09-21! | 233! | Iskry | Hobbit, czyli tam i z powrotem!
 goodreads:19462066 hardcover:32041167 openlibrary:OL46534316M | isbn13 | 9782267024203 | ebook | fr | 2012-10-03! | 214! | Christian Bourgois éditeur! | Le Hobbit
 goodreads:19477031 hardcover:32381339 | isbn13 | 9789630781626 | physical | hu | 1937-09-21! | 299 | Európa Könyvkiadó | A hobbit
-goodreads:19492780 | - | - | audiobook | en | - | - | - | The Hobbit
+goodreads:19492780 | - | - | audiobook | en | - | - | Soundelux Audio Pub | The Hobbit
 goodreads:194928797 | - | 9789505472697 | physical | es | 2023-01-01 | 448 | Minotauro | El Hobbit
 goodreads:195016300 openlibrary:OL51231576M | isbn13 | 9788210059544 | physical | nb | 2023-08-04 | 333! | Tiden! | Hobbiten
 goodreads:195061283 | - | 9788324145997 | physical | pl | 2013-01-01 | - | Amber | Hobbit
 goodreads:19523099 | - | - | audiobook | cs | 2013 | - | Tympánum | Hobit
-goodreads:195465180 hardcover:32352864 | isbn13 | 9788445014448 | audiobook | es | 1937-09-21! | 12 | Planeta Audio | El Hobbit
+goodreads:195465180 hardcover:32352864 | isbn13 | 9788445014448 | audiobook | es | 1937-09-21! | - | Planeta Audio | El Hobbit
 goodreads:195637063 | - | 9786555114188 | physical | pt | 2025-12-22 | 368 | HarperCollins | O Hobbit
 goodreads:195735843 hardcover:24856771 | fuzzy | - | physical | en | 1966-01-01 | 310 | Allen & Unwin | The hobbit
 goodreads:195748513 | - | 9786352324582 | physical | en | 2014-01-01 | - | - | The Hobbit (Film tie-in edition) Paperback – 25 Nov 2014 by J.R.R. Tolkien
@@ -404,8 +404,8 @@ goodreads:200458245 | - | - | physical | en | 2020-01-01 | - | Generic | NEW-The
 goodreads:200576691 | - | - | physical | en | 1968-01-01 | - | Ballantine Books | The Hobbit or There and back again
 goodreads:200585295 | - | - | audiobook | - | 2022-11-10 | - | Penguin Random House Audio | El hòbbit
 goodreads:200791299 | - | - | physical | en | 1984-01-01 | - | Ballantine Books | The Hobbit or There and Back Again
-goodreads:20125858 | - | 9781611749083 | audiobook | en | 2012-01-01 | 255 | Highbridge Co | The Hobbit
-goodreads:20135891 | - | - | audiobook | en | 2012-09-11 | 1 | AudioGO | The Hobbit
+goodreads:20125858 | - | 9781611749083 | audiobook | en | 2012-01-01 | - | Highbridge Co | The Hobbit
+goodreads:20135891 | - | - | audiobook | en | 2012-09-11 | - | AudioGO | The Hobbit
 goodreads:201506359 | - | - | - | - | 1971-01-01 | 287 | Ballantine Books | The Hobbit or There and Back Again
 goodreads:201737803 | - | - | ebook | ru | 2023-09-08 | 484 | АСТ | Хоббит, или Туда и Обратно
 goodreads:202198674 | - | - | physical | - | 1999-01-01 | - | Harper Collins Publishers | The Hobbit, or There and Back Again
@@ -414,11 +414,11 @@ goodreads:202799813 | - | - | physical | en | 1968-01-01 | - | Dramatic Pub. | T
 goodreads:20319554 | - | - | physical | en | 1997 | 289 | HarperCollinsPublishers | The Hobbit
 goodreads:20321889 hardcover:30954019 | isbn13 | 9788845274404 | physical | it | 1937-09-21! | 374 | Bompiani | Lo Hobbit: Un viaggio inaspettato!
 goodreads:20333628 | - | - | physical | da | 2001 | 312 | Gyldendal | Hobbitten
-goodreads:20338792 | - | - | physical | en | - | - | - | The Hobbit or There and Back Again. Illustrated by the Author
-goodreads:20342097 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:20338792 | - | - | physical | en | - | - | Houghton Mifflin Co. | The Hobbit or There and Back Again. Illustrated by the Author
+goodreads:20342097 | - | - | physical | en | - | - | HarperCollinsPublishers | The Hobbit
 goodreads:20342396 | - | - | physical | en | 1996 | 272 | HarperCollins Publishers | The Hobbit
-goodreads:203459366 | - | - | physical | de | - | - | - | Der Kleine Hobbit
-goodreads:203955436 | - | - | - | - | - | - | - | The Hobbit
+goodreads:203459366 | - | - | physical | de | - | - | Deutscher Bücherbund GmbH & Co | Der Kleine Hobbit
+goodreads:203955436 | - | - | - | - | - | - | George Allen & Unwin | The Hobbit
 goodreads:20411193 | - | 9786066095846 | physical | ro | 2013 | 416 | Editura RAO | Hobbitul
 goodreads:204145612 | - | 9786257724838 | physical | ku | 2023-07 | 311 | Weşanên Lîs | Hobbit
 goodreads:204159000 hardcover:32803409 openlibrary:OL50965438M | isbn13 | 9780063396203 | physical | en | 2024-08-06 | 282! | HarperCollins Publishers! | The Hobbit!
@@ -432,7 +432,7 @@ goodreads:20503695 | - | 9785170817504 | physical | ru | 2013-11 | 248 | АСТ 
 goodreads:20510309 hardcover:31605831 | isbn13 | 9782267025583 | physical | fr | 1937-09-21! | 316 | Christian Bourgois éditeur! | Le Hobbit, ou un aller et un retour
 goodreads:20518287 hardcover:30705167 | isbn13 | 9788072037223 | physical | cs | 1937-09-21! | 255 | Argo | Hobit aneb Cesta tam a zase zpátky
 goodreads:205256740 hardcover:32781752 openlibrary:OL48198543M | isbn13 | 9780008627843 | ebook | en | 2023-09-14 | 387! | HarperCollins UK! | The Hobbit: Illustrated by the Author!
-goodreads:20550783 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:20550783 | - | - | physical | en | - | - | Paperback | The Hobbit
 goodreads:205578717 hardcover:7729965 openlibrary:OL2033157M,OL51709289M | isbn13 DUP | 9780395476901 | physical | en | 1937-09-21! | 335! | Houghton Mifflin Co.! | The Annotated Hobbit
 goodreads:20569130 | - | - | ebook | - | 1995 | 233 | HarperCollins Publishers | The Hobbit
 goodreads:205760223 hardcover:32377407 | isbn13 | 9789505472260 | physical | es | 1937-09-21! | 287 | Minotauro | El Hobbit
@@ -444,7 +444,7 @@ goodreads:20621687 hardcover:32377149 openlibrary:OL42865600M | isbn13 | 9788435
 goodreads:206256177 | - | 9785226014024 | physical | ru | 2009-01-01 | - | - | Хоббит
 goodreads:206256703 | - | 9785403013093 | physical | ru | 2009-01-01 | - | HOUGHTON MIFFLIN & COMPANY | Хоббит
 goodreads:20642141 hardcover:31998373 openlibrary:OL37785369M | isbn13 | 9788025707418 | physical | cs | 1937-09-21! | 242! | Argo | Hobit
-goodreads:20648763 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:20648763 | - | - | physical | en | - | - | Ballantine Books | The Hobbit
 goodreads:20656211 | - | 9788702134605 | physical | da | 2012 | 323 | Gyldendal | Hobbitten
 goodreads:206646969 | - | - | physical | - | 1986-01-01 | - | Ballantine Books | The Hobbit or There and Back Again
 goodreads:207416901 | - | - | physical | en | 1996-01-01 | - | Del Rey | Hobbit - The Enchanting Prelude To - The Lord Of The Rings
@@ -460,7 +460,7 @@ goodreads:20828580 | - | 9788025708842 | physical | cs | 2013 | 388 | Argo | Hob
 goodreads:208438691 | - | 9789779922751 | physical | ar | 2024 | 344 | عصير الكتب | الهوبيت
 goodreads:20859770 hardcover:20066447 openlibrary:OL28343196M | isbn13 | 9780007525508 | physical | en | 1937-09-21! | 400 | HarperCollins Promotion! | The Hobbit
 goodreads:208618244 | - | - | audiobook | - | 2009-01-01 | - | Abridged Audiobook | The Hobbit
-goodreads:208720246 | - | - | - | - | - | - | - | The Hobbit
+goodreads:208720246 | - | - | - | - | - | - | Houghton Miffin Company | The Hobbit
 goodreads:20881459 hardcover:30713416 openlibrary:OL46849279M | isbn13 | 9789022567722 | physical | nl | 2014-01! | 253 | De Boekerij bv! | De Hobbit!
 goodreads:20893054 hardcover:18289042 openlibrary:OL27906299M | isbn13 | 9780544422841 | physical | en | 1937-09-21! | 300! | Mariner Books | The Hobbit!
 goodreads:208998628 | - | 9782266342124 | physical | fr | 2024-08-29 | 400 | POCKET | Le Hobbit
@@ -490,16 +490,16 @@ goodreads:213529009 | - | - | ebook | ru | 2023-09-08 | 339 | АСТ | Хобб�
 goodreads:213546574 | - | - | ebook | ru | 2023-09-08 | 333 | АСТ | Хоббит
 goodreads:213937560 | - | - | physical | hu | 2023 | 311 | Magvető | A hobbit
 goodreads:213964606 | - | 9787541169380 | physical | zh | 2024-05-01 | 314 | Sichuan Literature & Art Publishing House | The Hobbit (Hardcover)
-goodreads:21399182 | - | - | - | ar | - | - | - | الهوبيت
+goodreads:21399182 | - | - | - | ar | - | - | Random House Publishing Group/دار ليلى | الهوبيت
 goodreads:21416335 hardcover:31780786 | isbn13 | 9789630793360 | physical | hu | 1937-09-21! | 316 | Európa Könyvkiadó | A hobbit
 goodreads:214507158 openlibrary:OL57884250M | isbn13 | 9788445017210 | physical | es | 2025-11-12! | 448 | Minotauro | El hobbit. Edición ilustrada por el autor!
 goodreads:21469832 | - | - | physical | de | 2012 | 334 | Deutscher Taschenbuch Verlag | Der kleine Hobbit
 goodreads:21479014 | - | 9781417826865 | physical | es | 2001-12-01 | - | Turtleback Books | Hobbit
 goodreads:214897417 | - | - | physical | - | - | - | - | The Annotated Hobbit By Tolkien J R R Anderson Douglas A
-goodreads:21490881 | - | - | audiobook | en | - | - | - | The Hobbit [NPR radio dramatization]
+goodreads:21490881 | - | - | audiobook | en | - | - | Mind's Eye / Soundelux Audio Publishing | The Hobbit [NPR radio dramatization]
 goodreads:21528840 hardcover:8465919 openlibrary:OL26872121M | isbn13 | 9780007497935 | physical | en | 1937-09-21! | 374! | HarperCollins Children's Books! | The Hobbit!
 goodreads:21544283 | - | 9788210031441 | physical | no | 1988 | 304 | Tiden | Hobbiten, eller Fram og tilbake igjen
-goodreads:21546239 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:21546239 | - | - | physical | en | - | - | HarperCollins | The Hobbit
 goodreads:215606952 | - | 9788445017289 | physical | es | 2024-10-02 | 304 | Minotauro | El hobbit. Ilustrado por Alan Lee
 goodreads:215723970 | - | 9781917237154 | physical | cy | 2024-06-30 | 312 | Melin Bapur | Yr Hobyd (The Hobbit in Welsh)
 goodreads:21596555 hardcover:32282972 openlibrary:OL35690489M | isbn13 | 9782267024012 | physical | fr | 2012-10-03! | 390! | Christian Bourgois éditeur! | Le Hobbit
@@ -532,21 +532,21 @@ goodreads:219844539 | - | - | physical | en | 1938-01-01 | 310 | Houghton- Miffl
 goodreads:22010882 | - | - | physical | ar | 2008 | 288 | دار ليلى / دايموند بوك | الهوبيت
 goodreads:22016940 hardcover:32615669 | isbn13 | 9789022566824 | physical | nl | 1937-09-21! | 256! | Boekerij | De Hobbit
 goodreads:220199537 | - | - | audiobook | pt | 2019 | - | HarperCollins Brasil | O Hobbit
-goodreads:22027489 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:22027489 | - | - | physical | en | - | - | Houghton Mifflin Books | The Hobbit
 goodreads:22029613 | - | 9786176640196 | physical | uk | 2012 | 378 | Астролябія | Гобіт, або Туди і звідти
 goodreads:22038204 | - | 9788498199215 | physical | et | 2008 | 218 | Eesti Päevaleht | Kääbik
 goodreads:220404545 hardcover:31821290 | isbn13 | 9791221704914 | physical! | it | 2024-10-23 | 396! | Bompiani | Lo Hobbit!
 goodreads:22044084 hardcover:10932879 openlibrary:OL22950280M | isbn13 | 9785080000980 | physical | ru | 1937-09-21! | 252! | "Detskai︠a︡ lit-ra"! | Хоббит, или Туда и обратно!
 goodreads:22087416 | - | - | physical | en | 1997-12-01 | - | 114th Edition | The Hobbit
-goodreads:22088339 | - | - | physical | en | - | 256 | - | The Hobbit
+goodreads:22088339 | - | - | physical | en | - | 256 | Houghton Mifflin | The Hobbit
 goodreads:22092455 | - | - | physical | sv | 2001-01 | 305 | Pan Reprint | Bilbo
 goodreads:220952458 | - | 9788830110410 | physical | it | 2024-10-23 | 416 | Bompiani | Lo Hobbit. Illustrato dall'autore
-goodreads:22095634 | - | - | audiobook | en | - | - | - | The Hobbit [NPR radio dramatization]
+goodreads:22095634 | - | - | audiobook | en | - | - | Mind's Eye / Soundelux Audio Publishing | The Hobbit [NPR radio dramatization]
 goodreads:22097713 | - | - | physical | en | 2002 | - | Graphia,2002 | Hobbit or There & Back Again
 goodreads:221022980 | - | - | physical | - | 1970-01-01 | - | George Allen & Unwin Ltd | The Hobbit
 goodreads:221099775 | - | 9781917100212 | physical | zh | 2024-10-01 | 388 | Warwick International Publishing House | The Hobbit
 goodreads:221360256 | - | - | physical | en | 2024-11-19 | 272 | Folio Society | The Hobbit
-goodreads:22174817 | - | - | physical | en | - | - | - | The Hobbit or There and Back Again. Illustrated by the Author
+goodreads:22174817 | - | - | physical | en | - | - | Houghton Mifflin Co. | The Hobbit or There and Back Again. Illustrated by the Author
 goodreads:221888855 | - | - | physical | ru | 1990-01-01 | 256 | Amur | Хоббит, или Туда и обратно
 goodreads:221908148 hardcover:32518592 | isbn13 | 9788445011409 | physical | es | 1937-09-21! | 448 | Booket | El Hobbit
 goodreads:22230633,6415068,6428445 hardcover:32318177,32397246,8692734 openlibrary:OL24276117M | isbn13 DUP | 9780061917738! | physical! | en | 1937-09-21! | 336! | HarperCollins Publishers! | The Hobbit
@@ -556,20 +556,20 @@ goodreads:222716327 | - | - | physical | es | 2001-01-01 | - | Minotauro | El ho
 goodreads:222899408 | - | - | physical | ru | 2022-01-01 | 320 | AST | Хоббит, или Туда и обратно
 goodreads:222992786 hardcover:32898896 | isbn13 | 9788445009291 | physical | es | 1937-09-21! | 430! | Austral Intrépida! | El Hobbit
 goodreads:22304563 | - | - | physical | he | 1977 | 242 | זמורה-ביתן | הוביט
-goodreads:22305579 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:22305579 | - | - | physical | en | - | - | Ballantine Books | The Hobbit
 goodreads:223220807 | - | 9788383354019 | physical | pl | 2024-09-10 | 304 | Zysk i S-ka | Hobbit, albo tam i z powrotem
-goodreads:22366469 | - | - | physical | en | - | - | - | The Hobbit or There and Back Again. Illustrated by the Author
+goodreads:22366469 | - | - | physical | en | - | - | Houghton Mifflin Co. | The Hobbit or There and Back Again. Illustrated by the Author
 goodreads:22371911 | - | - | physical | en | 1975 | 285 | Unwin Paperbacks | The Hobbit, or There and Back Again
 goodreads:22371962 | - | 9789935910448 | physical | is | 2012 | 329 | Sena | Hobbitinn
-goodreads:22390308 | - | - | audiobook | en | - | - | - | The Hobbit
-goodreads:22390746 | - | - | physical | en | - | 287 | - | The Hobbit
+goodreads:22390308 | - | - | audiobook | en | - | - | Recorded Books | The Hobbit
+goodreads:22390746 | - | - | physical | en | - | 287 | Ballantine Books | The Hobbit
 goodreads:2239767 hardcover:29152804 openlibrary:OL27908061M | isbn13 | 9780048231543 | physical | en | 1937-09-21! | 278! | Unwin Paperbacks! | The Hobbit
 goodreads:2239768 hardcover:3308277 openlibrary:OL22368666M,OL48587863M,OL7273993M,OL9228702M | isbn13 DUP | 9780048230706 | physical | en | 1937-09-21! | 288! | Ballantine Books! | The Hobbit
 goodreads:22400138 | - | - | physical | en | 1997 | 256 | Houghton Mifflin Company | The Hobbit
-goodreads:22400762 | - | - | audiobook | en | - | - | - | The Hobbit by J. R. R. Tolkien Unabridged CD Audiobook
-goodreads:22456193 | - | - | physical | en | - | - | - | The Hobbit
+goodreads:22400762 | - | - | audiobook | en | - | - | Recorded Books | The Hobbit by J. R. R. Tolkien Unabridged CD Audiobook
+goodreads:22456193 | - | - | physical | en | - | - | HarperCollins | The Hobbit
 goodreads:22470221 | - | - | physical | en | 1988-09 | 304 | Ballantine Books | The Hobbit
-goodreads:22474292 | - | - | physical | en | - | - | - | J.R.R. Tolkien, The Hobbit First Printing August 1965 with Lion
+goodreads:22474292 | - | - | physical | en | - | - | Ballantine | J.R.R. Tolkien, The Hobbit First Printing August 1965 with Lion
 goodreads:22591110 hardcover:33234893 | isbn13 | 9783608938647 | physical | de | 2012-03-07! | 464! | Klett-Cotta! | Der Hobbit oder Hin und zurück!
 goodreads:22622036 | - | - | physical | no | 2002 | 287 | Den norske bokklubben | Hobbiten
 goodreads:2267890 hardcover:17272347 openlibrary:OL10684408M | isbn13 | 9780345318589 | physical | en | 1937-09-21! | 287 | Ballantine Books | The Hobbit: The Enchanting Prelude To The Lord Of The Rings!
@@ -615,7 +615,7 @@ goodreads:232527225 | - | - | - | no | 1988 | 304 | Tiden norsk forlag | Hobbite
 goodreads:2328301 | - | 9785835200092 | physical | ru | 1991 | 351 | Северо-Запад | Хоббит, или Туда и обратно
 goodreads:23308770 | - | 9788487484889 | physical | eu | 2008 | 415 | Igela Argitaletxea | Hobita edo joan-etorri bat
 goodreads:233213145 | - | - | ebook | ar | 2024 | - | عصير الكتب للترجمة والنشر والتوزيع | الهوبيت
-goodreads:23347605 hardcover:32306931 | isbn13 | 9781445846637 | physical! | en | 1937-09-21! | 1 | BBC Physical Audio | The Hobbit
+goodreads:23347605 hardcover:32306931 | isbn13 | 9781445846637 | physical! | en | 1937-09-21! | - | BBC Physical Audio | The Hobbit
 goodreads:234315628 | - | - | physical | - | 1979-01-01 | - | Unwin | The Hobbit, or There and Back Again
 goodreads:23432822 hardcover:11420465 openlibrary:OL26313936M | isbn13 | 9780544445796 | physical | en | 1937-09-21! | 300 | Houghton Mifflin Harcourt! | The Hobbit: Or There and Back Again!
 goodreads:23432887 hardcover:12371380 openlibrary:OL27531863M | isbn13 | 9780007591862 | physical | en | 1937-09-21! | 400! | HarperCollins Publishers! | The Hobbit
@@ -632,7 +632,7 @@ goodreads:23590856 | - | 9788845026683 | physical | it | 1991 | 346 | Bompiani (
 goodreads:23644129 | - | - | - | en | 1973-04 | 287 | Ballantine books | The Hobbit
 goodreads:23653 hardcover:6505511 openlibrary:OL10236412M | isbn13 | 9780261103306 | physical | en | 1937-09-21! | 288! | HarperCollins Publishers! | The Hobbit, or, There and Back Again!
 goodreads:236609036 | - | 9789631426434 | physical | hu | 2020-10-16 | 368 | Magvető | A hobbit
-goodreads:23748470 | - | - | physical | en | - | 365 | - | The Hobbit
+goodreads:23748470 | - | - | physical | en | - | 365 | Harper Collins | The Hobbit
 goodreads:237573246 | - | 9788269223996 | physical | smj | 2023-12-12 | 351 | Tjihkkom Almmudahka | Hobihtta, jali Dåhku ja máhttse
 goodreads:237647820 | - | - | physical | - | 1978-01-01 | - | Magnum Books | The Hobbit, or There and Back Again
 goodreads:23777989 hardcover:31441795 | isbn13 | 9786090107324 | physical | lt | 1937-09-21! | 272 | Alma Littera | Hobitas
@@ -670,20 +670,20 @@ goodreads:244453400 | - | 9789935956163 | physical | is | 2025 | 307 | Kver | Ho
 goodreads:24450527 | - | - | physical | es | 1991 | 310 | Minotauro | El Hobbit
 goodreads:24463264 | - | - | physical | fi | 2011 | 331 | WSOY | Hobitti eli Sinne ja Takaisin
 goodreads:24517233 | - | 9789505471768 | physical | es | 2014-11 | 288 | Minotauro | El hobbit
-goodreads:245223189 | - | - | - | en | - | - | - | J.R.R. TOLKIEN THE HOBBIT
+goodreads:245223189 | - | - | - | en | - | - | Games and Stuff | J.R.R. TOLKIEN THE HOBBIT
 goodreads:24532453 | - | - | physical | ro | 2012-12 | 320 | Rao | Hobbitul
 goodreads:24558877 | - | - | physical | en | 1997 | 289 | Harper Collins | The Hobbit
 goodreads:24591095 | - | 9785762000710 | physical | ru | 1989-08 | 320 | Новосибирское книжное издательство | Хоббит
-goodreads:24594843 | - | - | audiobook | en | 2011-05-14 | 11 | Recorded Books | The Hobbit
+goodreads:24594843 | - | - | audiobook | en | 2011-05-14 | - | Recorded Books | The Hobbit
 goodreads:24639488 | - | - | physical | ro | 2012 | 320 | Rao | Hobbitul
 goodreads:2466202 hardcover:11042396 openlibrary:OL20943852M | isbn13 | 9780048231055 | physical | en | 1937-09-21! | 317! | Allen and Unwin! | The Hobbit
 goodreads:2466204 hardcover:32414256 openlibrary:OL47315806M | isbn13 | 9780345015327 | physical | en | 1937-09-21! | 287 | Ballantine Books | The Hobbit: or There and Back Again
-goodreads:24683657 | - | 9789510408223 | physical | fi | - | 328 | - | Hobitti eli sinne ja takaisin
+goodreads:24683657 | - | 9789510408223 | physical | fi | - | 328 | WSOY | Hobitti eli sinne ja takaisin
 goodreads:24684502 | - | 9789941216961 | physical | ka | 2014 | 290 | პალიტრა L | ჰობიტი
 goodreads:24694303 | - | - | physical | es | 2002-03 | 310 | Grupo Editorial Planeta S.A.I.C. / Minotauro | El hobbit
 goodreads:24750731 | - | - | physical | nl | 1968 | 233 | Spectrum | De Hobbit
 goodreads:247551926 | - | - | physical | en | 1979 | 285 | Unwin Paperbacks | The Hobbit, or There and Back Again
-goodreads:247950507 | - | - | - | - | - | - | - | 1975 Hobbit
+goodreads:247950507 | - | - | - | - | - | - | J.R.R. Tolkien | 1975 Hobbit
 goodreads:24852340 | - | - | physical | en | 2013-08-29 | 368 | Harper Collins Children's Books | The Hobbit
 goodreads:24852428 | - | - | physical | it | 1986 | 289 | Mondadori | Lo Hobbit o La Riconquista del tesoro
 goodreads:24853263 | - | - | physical | sr | 2003 | 321 | Solaris | Hobit
@@ -714,7 +714,7 @@ goodreads:25469992 | - | 9788210053504 | physical | no | 2014 | 345 | Tiden | Ho
 goodreads:254731073 | - | 9789953473956 | physical | ar | 2012 | - | دار الحكايات للطباعة والنشر والتوزيع | الهوبيت، أو الرحيل والعودة
 goodreads:25555438 | - | - | physical | de | 1998 | 320 | Abraxas | Der Hobbit oder Hin und zurück
 goodreads:25573032 | - | 9780240316154 | physical | en | 1974-01-01 | - | Ballantine | The Hobbit or There and Back Again
-goodreads:25594515 | - | - | - | tr | - | 324 | - | Hobbit - Oradaydık ve Şimdi Buradayız
+goodreads:25594515 | - | - | - | tr | - | 324 | Altıkırkbeş | Hobbit - Oradaydık ve Şimdi Buradayız
 goodreads:25598388 | - | 9789849132783 | physical | bn | 2015-04 | 192 | আদী প্রকাশন | দ্য হবিট
 goodreads:25610407 | - | 9771825788176 | physical | it | 2005 | 480 | RCS | Lo Hobbit annotato
 goodreads:25623112 | - | 9780007498093 | physical | en | 2001-12-01 | 240 | MAME | MARTYRS, SEMENCE DE CHRETIENS
@@ -770,9 +770,9 @@ goodreads:28385042 | - | - | physical | el | 1978-05 | 381 | Εκδόσεις Κ
 goodreads:28439790 | - | - | physical | pl | 2012 | 351 | Amber | Hobbit
 goodreads:28443260 | - | - | - | - | - | - | - | Hobbit, czyli tam i z powrotem
 goodreads:28457860 | - | - | physical | es | 1991 | 228 | Círculo de lectores | El Hobbit
-goodreads:2847080 | - | 9783895840678 | audiobook | de | - | - | - | Der kleine Hobbit
+goodreads:2847080 | - | 9783895840678 | audiobook | de | - | - | DerHorVerlag | Der kleine Hobbit
 goodreads:2847081 | - | 9783127612103 | - | de | 1987-06 | - | Klett-Cotta, Stgt. | Der kleine Hobbit
-goodreads:28502392 | - | 9783867179249 | audiobook | de | 2012-10-01 | 11 | der Hörverlag | Der Hobbit
+goodreads:28502392 | - | 9783867179249 | audiobook | de | 2012-10-01 | - | der Hörverlag | Der Hobbit
 goodreads:28512117 | - | - | physical | en | - | - | - | The Hobbit
 goodreads:28513483 | - | - | physical | en | 2012 | 358 | Haper Collins Publishers | The Hobbit, or There and Back Again
 goodreads:28656593 | - | - | physical | en | 2006 | 389 | Harper Collins | The Hobbit
@@ -782,7 +782,7 @@ goodreads:2870946 hardcover:4723436 openlibrary:OL8181272M | isbn13 | 9780883657
 goodreads:28786725 | - | - | audiobook | en | 2007-05-18 | - | HighBridge | The Hobbit [NPR radio dramatization]
 goodreads:28797838 | - | - | physical | en | 2012 | 358 | Haper Collins Publishers | The Hobbit, or There and Back Again
 goodreads:28923154 | - | - | physical | en | 2012-02-15 | 372 | - | The Hobbit
-goodreads:289867 hardcover:33302839 | isbn13 | 9780563389996 | audiobook | en | 1997-09-01! | 271 | BBC Worldwide! | The Hobbit
+goodreads:289867 hardcover:33302839 | isbn13 | 9780563389996 | audiobook | en | 1997-09-01! | - | BBC Worldwide! | The Hobbit
 goodreads:289870 | - | - | physical | en | 2007 | 300 | Houghton Mifflin Harcourt | The Hobbit
 goodreads:289873 hardcover:23777745 openlibrary:OL10236397M | isbn13 | 9780261102576 | physical | en | 1937-09-21! | 288 | HarperCollins Publishers! | The Hobbit
 goodreads:289889 | - | 9780563494386 | audiobook | en | 2003-04-07 | - | Bbc Book Pub | The Hobbit
@@ -816,7 +816,7 @@ goodreads:29559316 | - | - | physical | ro | 2012 | 320 | Editura RAO | Hobbitul
 goodreads:29565191 | - | - | physical | es | 1982 | 227 | Círculo de Lectores | The Hobbit
 goodreads:2978833 hardcover:32749597 | isbn13 | 9788702005387 | physical | da | 1937-09-21! | 298 | Gyldendal | Hobbitten eller Ud og hjem igen!
 goodreads:29901628 hardcover:31990097 | isbn13 | 9788071456902 | physical | sk | 1937-09-21! | 219! | Slovart | Hobit alebo cesta tam a späť
-goodreads:30125550 | - | - | physical | en | - | 300 | - | The Hobbit
+goodreads:30125550 | - | - | physical | en | - | 300 | Houghton Mifflin Harcourt | The Hobbit
 goodreads:30148266 | - | 9781533125187 | physical | - | 2016-05-06 | 208 | Createspace Independent Publishing Platform | El Hobbit
 goodreads:30282872 hardcover:2905748 openlibrary:OL26374869M | isbn13 | 9789584242983 | physical | es | 1937-09-21! | 283! | Minotauro! | El Hobbit
 goodreads:30304475 | - | - | physical | ar | 2015 | 417 | ‎الشركة السعودية للنشر والتوزيع‎ | الهوبيت
@@ -828,14 +828,14 @@ goodreads:30348914 hardcover:7169813 openlibrary:OL28345116M | isbn13 | 97834237
 goodreads:3035404 | - | 9781559351195 | audiobook | en | 1994-01-01 | - | Soundelux Audio Pub | The Hobbit
 goodreads:3041002 | - | 9789089680709 | physical | nl | 2008-08-28 | 256 | Mynx | De hobbit
 goodreads:30512060 hardcover:31050626 | isbn13 | 9781533527769 | physical | es | 1937-09-21! | 208 | CreateSpace Independent Publishing Platform | El Hobbit: Un Viaje Inesperado!
-goodreads:3060479 | - | 9783867172110 | audiobook | de | 2008-03-14 | 11 | Der Hörverlag | Der Hobbit
+goodreads:3060479 | - | 9783867172110 | audiobook | de | 2008-03-14 | - | Der Hörverlag | Der Hobbit
 goodreads:30687968 | - | - | physical | nl | 1976 | 253 | Spectrum | De Hobbit of Daarheen en Weer Terug
 goodreads:3086136 hardcover:31460233 | isbn13 | 9788252542257 | physical | nb | 1937-09-21! | - | De norske Bokklubbene | Hobbiten
 goodreads:3090713 | - | 9782277114864 | physical | fr | 1981-06-19 | 371 | J'ai lu | Bilbo le Hobbit
 goodreads:3103333 hardcover:9362635 openlibrary:OL14975006M | isbn13 | 9780261102507 | physical | en | 1937-09-21! | 290! | Grafton! | The Illustrated Hobbit
 goodreads:3103334 hardcover:22996533 openlibrary:OL21217150M | isbn13 | 9780261102491 | physical | en | 1937-09-21! | 304! | HarperCollins Publishers! | The Illustrated Hobbit!
 goodreads:31189509 | - | 9789941241192 | physical | ka | 2016 | 330 | გამომცემლობა პალიტრა L | ჰობიტი
-goodreads:31328714 | - | - | audiobook | en | - | - | - | The Hobbit
+goodreads:31328714 | - | - | audiobook | en | - | - | Audible | The Hobbit
 goodreads:31344984 | - | 9787208119468 | physical | en | 2014-02-01 | 310 | Shanghai people's publishing house | The Hobbit
 goodreads:31353483 | - | 9789510323243 | physical | fi | 2006 | 340 | WSOY | Hobitti eli Sinne ja takaisin
 goodreads:3140936 hardcover:20787503 openlibrary:OL31452592M | isbn13 | 9782253032939 | physical | fr | 1937-09-21! | 400! | Stock! | Bilbo le hobbit
@@ -843,7 +843,7 @@ goodreads:31425764 | - | - | ebook | fr | 2012-10-03 | 344 | Christian Bourgois 
 goodreads:31569384 | - | - | physical | ar | 2015 | 419 | دار عبد المجيد عثمان للنشر والتوزيع | الهوبيت
 goodreads:31571418 | - | 9788362478620 | physical | pl | 2012-11-16 | 456 | Bukowy Las | Hobbit
 goodreads:31623791 | - | 9787208118546 | physical | zh | 2014-10-01 | 133 | Shanghai Peoples Publishing House | The Hobbit (Hardcover)
-goodreads:31624561 | - | - | physical | nl | - | 253 | - | De Hobbit
+goodreads:31624561 | - | - | physical | nl | - | 253 | Boekerij | De Hobbit
 goodreads:31673435 | - | 9783899405651 | audiobook | en | 2005-05-19 | - | der Hörverlag | The Hobbit
 goodreads:31683819 hardcover:32144551 | isbn13 | 9788210051197 | physical | no | 1937-09-21! | 293 | Tiden | Hobbiten
 goodreads:31695914 | - | - | physical | it | 1986-02-01 | 346 | Bompiani | Lo Hobbit
@@ -852,14 +852,14 @@ goodreads:3185334 hardcover:32397186 openlibrary:OL43505854M | isbn13 | 97890225
 goodreads:32489777 | - | - | - | ast | - | - | - | El Hobbit n'asturianu
 goodreads:32501487 | - | - | physical | de | 2003 | 320 | - | Der Hobbit oder Hin und zurück
 goodreads:32504612 | - | 9786176640820 | physical | uk | 2014 | 384 | Астролябія | Гобіт, або Туди і звідти
-goodreads:3257778 | - | 9781565115521 | audiobook | en | 2001-08-24 | 1 | HighBridge Company | The Hobbit
+goodreads:3257778 | - | 9781565115521 | audiobook | en | 2001-08-24 | - | HighBridge Company | The Hobbit
 goodreads:3263368 | - | 9788700602243 | physical | da | 2002-06-13 | 320 | Gyldendal | Hobbitten
 goodreads:3263597 | - | - | physical | - | 1967 | 287 | Ballantine Books | The Hobbit
 goodreads:32794896 | - | - | physical | ro | 2012-12 | 320 | Grupul editorial RAO | Hobbitul
 goodreads:32856911 | - | - | audiobook | fr | 2012-11-03 | - | Audiolib | Le Hobbit
 goodreads:33039025 | - | 9782012032941 | physical | fr | 2012-11-07 | 528 | HACHETTE ROMANS | Bilbo le hobbit
 goodreads:33040509 hardcover:32328713 | isbn13 | 9782013973014 | physical | fr | 1937-09-21! | 503! | Hachette Romans | Bilbo Le Hobbit - Edition Texte Integral Avec L'Affiche Du Film 3 En Couverture!
-goodreads:3311450 hardcover:17343616 openlibrary:OL28216573M | isbn13 | 9781602834545 | audiobook | en | 1937-09-21! | 5 | BBC Audiobooks America! | The Hobbit
+goodreads:3311450 hardcover:17343616 openlibrary:OL28216573M | isbn13 | 9781602834545 | audiobook | en | 1937-09-21! | - | BBC Audiobooks America! | The Hobbit
 goodreads:33132852 | - | - | physical | en | 1992 | 304 | Ballantine Books | The Hobbit
 goodreads:3315155 | - | - | physical | - | 1966 | 287 | Ballantine Books | The Hobbit or There and Back Again
 goodreads:33234535 | - | - | - | tr | 1996 | - | Mitos Yayınları & Altıkırkbeş Yayınları | Hobbit
@@ -882,7 +882,7 @@ goodreads:33899044 | - | 9789985552889 | physical | et | 2012 | 328 | Tiritamm |
 goodreads:33965016 | - | - | physical | be | 2002 | 264 | - | Хобіт, альбо вандроўка туды і назад
 goodreads:34233682 | - | - | audiobook | en | 2009-01-12 | - | HarperCollins Publishers Limited | The Hobbit
 goodreads:34235125 | - | 9782010030314 | physical | fr | 1976-01-01 | 318 | Hachette | Bilbo le Hobbit
-goodreads:34238209 | - | 9789505471522 | - | es | - | 288 | - | El Hobbit
+goodreads:34238209 | - | 9789505471522 | - | es | - | 288 | Kairry | El Hobbit
 goodreads:34346700 | - | - | ebook | zh | 2013-01-01 | 340 | 上海人民出版社 | 霍比特人
 goodreads:34367586 | - | - | physical | pt | 1976 | 228 | artenova | o hobbit
 goodreads:34461051 hardcover:32743326 | isbn13 | 9788461715459 | physical | ast | 1937-09-21! | 278 | Terrier SL | El Hobbit
@@ -893,12 +893,12 @@ goodreads:34752697 | - | 9788324403868 | physical | pl | 2014-11-07 | 320 | Wyda
 goodreads:34762260 | - | - | physical | - | 2013 | 364 | HarperCollins | The Hobbit
 goodreads:34775411 | - | - | - | en | - | - | - | The Hobbit
 goodreads:3484996 | - | - | physical | - | 1973 | 80 | Houghton Mifflin | The Hobbit, or There and Back Again
-goodreads:34863688 | - | 9788445076064 | physical | es | - | - | - | El Hobbit
+goodreads:34863688 | - | 9788445076064 | physical | es | - | - | Booket | El Hobbit
 goodreads:34874763 | - | 9782208617716 | physical | en | 2011-10-27 | 389 | - | The Hobbit
 goodreads:349248 hardcover:26959981 | isbn13 | 9780808520801 | physical | en | 1937-09-21! | 306! | Turtleback Books! | The Hobbit
 goodreads:34937480 | - | - | physical | en | 1987 | 285 | Unwin | The Hobbit
 goodreads:34971628 | - | - | physical | en | 1993 | 285 | Harper Collins | The Hobbit
-goodreads:35017542 | - | 9788184833744 | physical | mr | - | 256 | - | The Hobbit
+goodreads:35017542 | - | 9788184833744 | physical | mr | - | 256 | Diamond Publications | The Hobbit
 goodreads:35051202 | - | - | physical | ca | 2013-04 | 336 | RBA Llibres | El hòbbit o viatge d'anada i tornada
 goodreads:35064156 | - | - | physical | en | 2013 | 368 | HarperCollins Children's Books | The Hobbit
 goodreads:35156489 | - | 9785271461590 | physical | ru | 2013 | 288 | АСТ | Хоббит
@@ -906,9 +906,9 @@ goodreads:35167225 openlibrary:OL56477504M | isbn13 | 9781514309230 | physical |
 goodreads:35183791 | - | - | physical | vi | 2010-08 | 464 | Nhã Nam | Anh chàng Hobbit
 goodreads:35220390 | - | - | ebook | en | 1937 | 239 | Houghton Mifflin Harcourt | The Hobbit or There and Back Again
 goodreads:35286674 | - | 9789027473004 | physical | nl | 2000 | 253 | Uitgeverij Het Spectrum B.V. | De Hobbit
-goodreads:35437585 | - | - | audiobook | en | 2009-01-12 | 11 | HarperCollins Publishers Limited | The Hobbit
+goodreads:35437585 | - | - | audiobook | en | 2009-01-12 | - | HarperCollins Publishers Limited | The Hobbit
 goodreads:35498718 | - | - | physical | en | 1991 | 287 | Grafton | The Hobbit
-goodreads:35554677 | - | - | physical | - | - | 389 | - | The Hobbit
+goodreads:35554677 | - | - | physical | - | - | 389 | Harper Collins | The Hobbit
 goodreads:35617234 | - | 9785267001335 | physical | ru | 2000 | 416 | Азбука | Хоббит, или Туда и обратно
 goodreads:35641278 openlibrary:OL56447535M | isbn13 | 9781548547295 | physical | en | 2017-07-04 | 234 | Createspace Independent Publishing Platform | The Hobbit!
 goodreads:35646420 hardcover:32157584 | isbn13 | 9788202336431 | audiobook | no | 1937-09-21! | - | Cappelen Damm | Hobbiten
@@ -954,7 +954,7 @@ goodreads:39119239 | - | 9789994364183 | physical | sq | 2005 | 404 | Shtëpia e
 goodreads:39208154 | - | - | physical | en | 1937-09-21 | - | George Allen & Unwin | The Hobbit
 goodreads:39343949 | - | - | ebook | de | 2013-07-09 | 385 | Klett-Cotta | Der Hobbit
 goodreads:394406 hardcover:16119568 openlibrary:OL17911508M,OL18360267M,OL7465523M | isbn13 DUP | 9780395071229 | physical | en | 1937-09-21! | 256! | Clarion Books! | The Hobbit!
-goodreads:39696577 | - | - | physical | fr | - | 401 | - | Le Hobbit
+goodreads:39696577 | - | - | physical | fr | - | 401 | Le Livre De Poche | Le Hobbit
 goodreads:39719012 | - | - | physical | pl | 2012-09-11 | 280 | Iskry | Hobbit, czyli tam i z powrotem
 goodreads:39789809 | - | - | ebook | de | 2010-08-25 | 385 | Klett-Cotta | Der Hobbit
 goodreads:39866423 hardcover:31761466 | isbn13 | 9789505471584 | physical | es | 1937-09-21! | - | PLANETA | El Hobbit. La Desolacion de Smaug
@@ -984,20 +984,20 @@ goodreads:40972340 | - | 9788956372259 | physical | en | 2012-12-21 | - | unknow
 goodreads:41015191 hardcover:32191828 | isbn13 | 9789510394069 | audiobook | fi | 2012-09-18 | - | WSOY | Hobitti eli Sinne ja takaisin
 goodreads:41045401 | - | 9780547896205 | physical | en | 2013-12-30 | - | - | The Hobbit
 goodreads:41054238 | - | - | physical | fr | 2012-11 | 384 | Le Livre de Poche | Bilbo le Hobbit
-goodreads:41086979 | - | 9789802718078 | - | en | - | - | - | El Hobbit
+goodreads:41086979 | - | 9789802718078 | - | en | - | - | EDITORIAL PLANETA DE VENEZUELA | El Hobbit
 goodreads:41208568 | - | - | physical | ca | 2002 | 278 | La Magrana | El Hòbbit
 goodreads:41220955 | - | 9788702155617 | ebook | da | 2013 | - | Gyldendal | Hobbitten
 goodreads:41387563 | - | - | physical | ku | 2017 | 566 | ئەندێشە | هۆبیت
 goodreads:41394361 | - | 9788324139842 | physical | pl | 2011-01-01 | - | Amber | Hobbit
-goodreads:41565307 | - | - | physical | - | - | 319 | - | The Hobbit
-goodreads:416454 hardcover:2361507 openlibrary:OL9217079M | isbn13 | 9780007146901 | audiobook | en | 2002-09-16 | 12 | HarperAudio! | The Hobbit
+goodreads:41565307 | - | - | physical | - | - | 319 | Houghton Mifflin Company | The Hobbit
+goodreads:416454 hardcover:2361507 openlibrary:OL9217079M | isbn13 | 9780007146901 | audiobook | en | 2002-09-16 | - | HarperAudio! | The Hobbit
 goodreads:41880775 openlibrary:OL39810193M | isbn13 | 9788416884117 | physical | gl | 2018-04-04 | 287! | Sushi Books | O hobbit
 goodreads:42050087 | - | - | physical | cs | 2016 | 242 | Argo | Hobit aneb cesta tam a zase zpátky
 goodreads:42263654 | - | 9785171026561 | physical | ru | 2018-05-28 | 288 | АСТ | Хоббит
 goodreads:42412949 | - | 9789510392317 | physical | fi | 2012-09 | 330 | WSOY | Hobitti eli sinne ja takaisin
 goodreads:42422062 | - | 9788324404766 | physical | pl | 1997 | 315 | Iskry | Hobbit, czyli tam i z powrotem
 goodreads:42625041 | - | - | physical | en | 2003 | 276 | Harper Collins India | The Hobbit
-goodreads:42630015 hardcover:32610392 | isbn13 | 9788324153831 | physical | pl | 1937-09-21 | 352 | - | Hobbit
+goodreads:42630015 hardcover:32610392 | isbn13 | 9788324153831 | physical | pl | 1937-09-21 | 352 | Amber | Hobbit
 goodreads:42672 | - | - | physical | en | 2006 | 353 | Harper Collins | The Hobbit
 goodreads:42750200 openlibrary:OL34715833M | isbn13 | 9780008323332 | physical | en | 2019-03-21 | 416 | HarperCollins Publishers Ltd! | The Annotated Hobbit!
 goodreads:42787668 | - | 9780320099625 | audiobook | - | 2014-03-31 | - | French and European Publications Inc | Bilbo le Hobbit Audiobook PACK [Book + 2 CDMP3]
@@ -1038,7 +1038,7 @@ goodreads:45158898 | - | - | - | - | - | - | - | Hobbit - özel ciltli baskı
 goodreads:45415079 | - | - | physical | en | 2013 | 368 | HarperCollins Children's Books | The Hobbit
 goodreads:45734610 | - | 9785171145316 | physical | ru | 2019 | 284 | АСТ | Хоббит
 goodreads:4584207 hardcover:32098502 | isbn13 | 9789643342005 | physical | fa | 1937-09-21! | 432 | روزنه | هابیت؛ یا آنجا و بازگشت دوباره
-goodreads:46020411 | - | 9788328700314 | audiobook | pl | 2009 | 366 | MUZA SA | Hobbit, czyli tam i z powrotem
+goodreads:46020411 | - | 9788328700314 | audiobook | pl | 2009 | - | MUZA SA | Hobbit, czyli tam i z powrotem
 goodreads:46136762 | - | - | physical | de | 1957 | 352 | Recklinghausen Georg Bitter Verlag | Der kleine Hobbit
 goodreads:46225501 | - | 9785171167592 | physical | ru | 2019-06 | 384 | АСТ | Хоббит, или Туда и обратно
 goodreads:4833017 hardcover:12483100 openlibrary:OL25441857M | isbn13 | 9788439596264 | physical | es | 1937-09-21! | 360! | Planeta-De Agostini | El Hobbit
@@ -1053,14 +1053,14 @@ goodreads:49903453 | - | 9789643620653 | physical | fa | 2003-01 | 371 | کتا�
 goodreads:50027026 | - | 9786944717242 | physical | en | 2008-01-01 | 288 | - | The Hobbit
 goodreads:50032440 | - | - | physical | en | 1993 | 285 | Harper Collins | The Hobbit
 goodreads:50072534 | - | 9781440736261 | audiobook | en | 2009-07-06 | - | Recorded Books | The Hobbit
-goodreads:50088839 | - | - | audiobook | nb | 2010 | 10 | Cappelen Damm Lydbok | Hobbiten
-goodreads:50089098 | - | - | audiobook | nb | 2008 | 10 | Cappelen Damm Lydbok | Hobbiten
+goodreads:50088839 | - | - | audiobook | nb | 2010 | - | Cappelen Damm Lydbok | Hobbiten
+goodreads:50089098 | - | - | audiobook | nb | 2008 | - | Cappelen Damm Lydbok | Hobbiten
 goodreads:50170645 | - | - | physical | bn | 2015-11 | 352 | Shobujpata | দি হবিট
 goodreads:50170806 | - | 9789584232847 | physical | en | 2013-01-01 | 288 | Booket | El Hobbit +
 goodreads:50217683 | - | 9789113056906 | physical | sv | 2013 | 279 | Norstedts | Hobbiten
 goodreads:50244071 hardcover:30513063 | isbn13 | 9788595085800 | physical! | pt | 1937-09-21! | 305! | HarperCollins Brasil | O Hobbit
 goodreads:50590326 | - | - | physical | de | 2013 | 398 | dtv | Der kleine Hobbit
-goodreads:50606535 | - | - | physical | it | - | 342 | - | Lo hobbit o la Riconquista del Tesoro
+goodreads:50606535 | - | - | physical | it | - | 342 | Adelphi | Lo hobbit o la Riconquista del Tesoro
 goodreads:50732360 | - | - | physical | en | 1988 | - | Houghton Mifflin Company | The Annotated Hobbit
 goodreads:50734801 | - | - | physical | en | 1982-01 | 303 | Ballantine Books | The Hobbit
 goodreads:50787533 | - | - | physical | en | 1986-07 | - | Ballantine Books | The Hobbit, or There and Back Again
@@ -1069,7 +1069,7 @@ goodreads:50960093 | - | 9788445001257 | physical | es | 2013-04-01 | 224 | Edic
 goodreads:51032553 hardcover:26090844 openlibrary:OL26803637M | isbn13 | 9780007458424 | physical | en | 2013-02-01! | 368 | HarperCollins Children's Books! | The Hobbit
 goodreads:51033467 | - | 9788595085817 | physical | pt | 2019 | 337 | Harper Collins | O Hobbit
 goodreads:51057339 | - | 9786176641155 | physical | uk | 2017 | 384 | Астролябія | Гобіт, або Туди і звідти
-goodreads:51059855 hardcover:2689011 openlibrary:OL28001875M,OL32047644M | isbn13 DUP | 9781461836179 | audiobook | en | 2011-05-13! | 12 | Recorded Books | The Hobbit!
+goodreads:51059855 hardcover:2689011 openlibrary:OL28001875M,OL32047644M | isbn13 DUP | 9781461836179 | audiobook | en | 2011-05-13! | - | Recorded Books | The Hobbit!
 goodreads:51081040 | - | - | physical | en | 1992-01 | - | Ballantine Books | The Hobbit or There and Back Again
 goodreads:51158308 | - | - | physical | ca | 1983-04 | 280 | La Magrana | El hòbbit
 goodreads:51177731 hardcover:30459901 openlibrary:OL35836365M | isbn13 | 9780008376055 | physical | en | 1937-09-21! | 336! | HarperCollins Publishers! | The Hobbit
@@ -1095,7 +1095,7 @@ goodreads:52566380 | - | 9789635395156 | - | - | 2006 | - | Ciceró | A hobbit "
 goodreads:52578201 | - | - | - | uk | 1985 | 303 | Веселка | Гобіт, або Мандрівка за Імлисті гори
 goodreads:52609577 | - | 9788210019227 | - | no | 1980 | 305 | Tiden Norsk Forlag | Hobbiten
 goodreads:5263190 | - | 9788445075371 | physical | - | 2002-01-01 | 320 | Minotauro | El Hobbit
-goodreads:526423 hardcover:8270408 openlibrary:OL8151617M | isbn13 | 9780788789823 | audiobook | en | 1937-09-21! | 11 | Recorded Books | The Hobbit
+goodreads:526423 hardcover:8270408 openlibrary:OL8151617M | isbn13 | 9780788789823 | audiobook | en | 1937-09-21! | - | Recorded Books | The Hobbit
 goodreads:52759009 | - | - | - | es | - | 411 | - | El Hobbit
 goodreads:5280632 hardcover:27617782 openlibrary:OL24085138M | isbn13 | 9780061756269 | physical | es | 1937-09-21! | 272 | Rayo | El hobbit!
 goodreads:5280633 hardcover:27259397 openlibrary:OL23040293M | isbn13 | 9788320706147 | physical | pl | 1937-09-21! | 233 | Iskry | Hobbit, czyli tam i z powrotem
@@ -1120,9 +1120,9 @@ goodreads:54166662 | - | - | physical | es | 2019-10-08 | 440 | Minotauro | El H
 goodreads:54224972 | - | - | physical | uk | 2014 | 384 | Астролябія | Гобіт
 goodreads:54285898 | - | - | physical | pl | 2008-02-09 | 304 | Zysk i S-ka | Hobbit
 goodreads:54314729 | - | - | physical | es | 2002 | 278 | - | El Hobbit
-goodreads:54426747 | - | - | audiobook | en | 2020-09-21 | 11 | Recorded Books | The Hobbit
+goodreads:54426747 | - | - | audiobook | en | 2020-09-21 | - | Recorded Books | The Hobbit
 goodreads:54449878 hardcover:32742423 | isbn13 | 9785170612444 | physical | ru | 1937-09-21! | 412! | АСТ | Хоббит, или Туда и обратно
-goodreads:54470053 | - | - | physical | sr | - | - | - | Hobit
+goodreads:54470053 | - | - | physical | sr | - | - | Narodna knjiga | Hobit
 goodreads:54563889 | - | - | audiobook | cs | 2013 | - | Tympanum | Hobit
 goodreads:54572258 openlibrary:OL35627303M | isbn13 | 9789505472079 | physical | es | 2014-01-01! | 288 | Minotauro | El hobbit!
 goodreads:54650844 | - | 9788701025317 | physical | da | 1984 | 275 | Gyldendals Bogklub | Hobbitten eller Ud og hjem igen
@@ -1131,11 +1131,11 @@ goodreads:54801974 hardcover:8353174 openlibrary:OL28374591M | isbn13 | 97800075
 goodreads:54802062 | - | - | physical | en | 2013 | 389 | HarperCollins Publishers | The Hobbit
 goodreads:54913605 | - | 9789533421582 | physical | hr | 2020-06 | 230 | Lumen izdavaštvo | Hobit ili Tamo i natrag
 goodreads:54993302 openlibrary:OL39545905M | isbn13 | 9781782012696 | physical | br | 2020-08-01 | 276 | Evertype | An Hobbit, pe, Eno ha Distro!
-goodreads:55271547 hardcover:31983534 | isbn13 | 9780008433840 | audiobook | en | 2020-09-03 | 10 | HarperCollins Publishers! | The Hobbit
-goodreads:55271559 | - | - | audiobook | en | 2020-09-03 | 11 | HarperCollins | The Hobbit, or There and Back Again
+goodreads:55271547 hardcover:31983534 | isbn13 | 9780008433840 | audiobook | en | 2020-09-03 | - | HarperCollins Publishers! | The Hobbit
+goodreads:55271559 | - | - | audiobook | en | 2020-09-03 | - | HarperCollins | The Hobbit, or There and Back Again
 goodreads:55290191 openlibrary:OL32226758M,OL32226759M | isbn13 DUP | 9781782012689 | physical | br | 2020-08-01 | 276 | Evertype | An Hobbit, pe, Eno ha Distro
-goodreads:55293378 | - | - | audiobook | en | 1974 | 4 | Argo Records | The Hobbit
-goodreads:55405545 | - | - | audiobook | - | - | 10 | - | The Hobbit, or There and Back Again
+goodreads:55293378 | - | - | audiobook | en | 1974 | - | Argo Records | The Hobbit
+goodreads:55405545 | - | - | audiobook | - | - | - | - | The Hobbit, or There and Back Again
 goodreads:554105 hardcover:30379301 openlibrary:OL9604991M | isbn13 | 9782267014143 | physical | fr | 1937-09-21! | 300 | Christian Bourgois éditeur! | Le Hobbit!
 goodreads:554214 hardcover:23081827 openlibrary:OL13268184M | isbn13 | 9788445071533 | physical | es | 1937-09-21! | 349! | Minotauro! | El Hobbit. Anotado e ilustrado!
 goodreads:554215 hardcover:10283602 openlibrary:OL9216889M | isbn13 | 9780007141821 | audiobook | en | 1937-09-21! | - | HarperAudio! | The Hobbit
@@ -1183,18 +1183,18 @@ goodreads:56869536 hardcover:13097102 openlibrary:OL31900303M | isbn13 | 9780007
 goodreads:56869828 | - | - | physical | en | 2012 | 389 | HarperCollins Publishers | The Hobbit
 goodreads:56950770 | - | - | physical | nl | 1979 | 253 | Het Spectrum | De Hobbit
 goodreads:56968393 hardcover:15935649 openlibrary:OL31935416M | isbn13 | 9788445076736 | physical | es | 1937-09-21! | 288! | Minotauro | El Hobbit
-goodreads:57094089 | - | - | audiobook | en | 2020-09-03 | 11 | Harper Collins UK Audio | The Hobbit
+goodreads:57094089 | - | - | audiobook | en | 2020-09-03 | - | Harper Collins UK Audio | The Hobbit
 goodreads:57128122 openlibrary:OL23042414M | fuzzy | - | physical | vi | 2002 | 142 | Nhà xuá̂t bản Hội nhà văn! | Chúa tể của những chiếc nhẫn!
 goodreads:57250100 | - | - | physical | pt | 2013 | 297 | WMF Martins Fontes | O Hobbit
 goodreads:57257758 openlibrary:OL32071915M | isbn13 | 9781665165419 | audiobook | en | 2009-02-19! | - | Blackstone Pub! | The Hobbit!
-goodreads:57257759 | - | 9781665165426 | audiobook | en | 2021-03-01 | 1 | Highbridge Audio and Blackstone Publishing | The Hobbit
-goodreads:57257760 openlibrary:OL46528814M | isbn13 | 9781665165433 | audiobook | en | 2021-03-01 | 1 | Highbridge Audio and Blackstone Publishing | The Hobbit
+goodreads:57257759 | - | 9781665165426 | audiobook | en | 2021-03-01 | - | Highbridge Audio and Blackstone Publishing | The Hobbit
+goodreads:57257760 openlibrary:OL46528814M | isbn13 | 9781665165433 | audiobook | en | 2021-03-01 | - | Highbridge Audio and Blackstone Publishing | The Hobbit
 goodreads:57508763 | - | - | physical | de | 1971 | 346 | Georg Bitter Verlag | Der Kleine Hobbit
 goodreads:57565683 | - | - | - | tr | - | 432 | - | Hobbit
 goodreads:57565783 | - | - | physical | tr | - | 432 | - | Hobbit
-goodreads:57581986 | - | - | physical | en | - | 255 | - | The Hobbit, or There and Back Again
+goodreads:57581986 | - | - | physical | en | - | 255 | Houghton Mifflin Company | The Hobbit, or There and Back Again
 goodreads:57610612 | - | - | ebook | en | 2009-04-20 | 251 | HarperCollins | The Hobbit, or There and Back Again
-goodreads:57616941 | - | - | audiobook | en | 2020-09-03 | 11 | HarperCollins | The Hobbit, or There and Back Again
+goodreads:57616941 | - | - | audiobook | en | 2020-09-03 | - | HarperCollins | The Hobbit, or There and Back Again
 goodreads:57618495 | - | - | - | - | 2013-12 | 416 | Editura Rao | Hobbitul
 goodreads:57656327 | - | - | physical | de | 1997 | 246 | Klett-Cotta | Der Hobbit
 goodreads:57825454 | - | - | physical | kw | 2019 | - | Evertype | An Hobys, pò An Fordh Dy ha Tre Arta
@@ -1218,7 +1218,7 @@ goodreads:58760428 | - | 9785171227616 | physical | ru | 2020-01-01 | 320 | АС
 goodreads:58762887 | - | 9788324145669 | physical | pl | 2012 | 351 | Amber | Hobbit
 goodreads:58784937 | - | - | physical | pt | 1995 | 302 | Martins Fontes | O hobbit
 goodreads:58867445 | - | - | physical | cs | 2006 | 270 | Argo | Hobit
-goodreads:58922846 | - | - | audiobook | en | 1997 | 5 | BBC Worldwide Limited | The Hobbit
+goodreads:58922846 | - | - | audiobook | en | 1997 | - | BBC Worldwide Limited | The Hobbit
 goodreads:58937073 | - | 9786555111491 | ebook | pt | 2021-07-22 | 751 | HarperCollins Brasil | O Hobbit anotado
 goodreads:58944003 | - | - | - | bg | - | - | - | Хобит. Билбо Бегинс, или дотам и обратно
 goodreads:58944186 | - | - | physical | - | 2012 | 280 | Wydawnictwo Iskry | Hobbit, czyli tam i z powrotem
@@ -1231,7 +1231,7 @@ goodreads:5908 | - | 9780807288849 | audiobook | en | 2001-02-27 | - | Listening
 goodreads:5909 hardcover:115028 openlibrary:OL9216158M | isbn13 | 9780007115440 | physical | en | 1937-09-21! | 400 | HarperCollins Publishers! | The Hobbit
 goodreads:5910 hardcover:18448747 openlibrary:OL9216764M | isbn13 | 9780007137275 | physical | en | 1937-09-21! | 399! | HarperCollins Publishers! | The Annotated Hobbit
 goodreads:5912 hardcover:25779873 openlibrary:OL8875466M | isbn13 | 9781594130052 | physical | en | 1937-09-21! | 481! | Large Print Press! | The Hobbit: Or There and Back Again!
-goodreads:5913 hardcover:9097321 openlibrary:OL8373889M | isbn13 | 9781402536946 | audiobook | en | 1937-09-21! | 11 | Recorded Books | The Hobbit!
+goodreads:5913 hardcover:9097321 openlibrary:OL8373889M | isbn13 | 9781402536946 | audiobook | en | 1937-09-21! | - | Recorded Books | The Hobbit!
 goodreads:59132522 | - | - | physical | fr | 2007-06 | 312 | Livre de Poche | Bilbo le Hobbit
 goodreads:5915 hardcover:32500344 openlibrary:OL9786619M | isbn13 | 9780261103283 | physical | en | 1995-01-01! | 277! | HarperCollins Publishers! | The Hobbit
 goodreads:59247796 openlibrary:OL37925417M | isbn13 | 9786555111507 | physical | pt | 2021 | 364 | Harper Collins! | O Hobbit anotado
@@ -1250,9 +1250,9 @@ goodreads:59929294 | - | - | physical | he | - | 319 | - | ההוביט
 goodreads:60049242 | - | - | ebook | en | - | 244 | - | The Hobbit, or There and Back Again
 goodreads:60058550 | - | - | - | - | 1988 | 234 | Iskry | Hobbit, czyli tam i z powrotem
 goodreads:60159316 | - | - | physical | lt | 1985 | 237 | Vyturys | Hobitas, arba ten ir atgal
-goodreads:60238032 | - | - | audiobook | pl | - | 366 | - | The Hobbit, or There and Back Again
+goodreads:60238032 | - | - | audiobook | pl | - | - | - | The Hobbit, or There and Back Again
 goodreads:60258181 | - | 9789635440788 | audiobook | hu | 2020 | - | Kossuth Kiadó | A Hobbit
-goodreads:6029307 hardcover:22786804 openlibrary:OL28179924M | isbn13 | 9781428127333 | audiobook | en | 1937-09-21! | 11 | Recorded Books, Inc.! | The Hobbit
+goodreads:6029307 hardcover:22786804 openlibrary:OL28179924M | isbn13 | 9781428127333 | audiobook | en | 1937-09-21! | - | Recorded Books, Inc.! | The Hobbit
 goodreads:60384793 | - | - | ebook | en | 2009-04-20 | 251 | HarperCollins | The Hobbit
 goodreads:60390867 | - | - | - | lt | 2020 | 296 | Alma littera | Hobitas, arba Ten ir atgal
 goodreads:6039399 | - | - | physical | en | 1971-12 | 287 | Ballantine Books | The Hobbit
@@ -1304,9 +1304,9 @@ goodreads:62793863 | - | 9788419334008 | ebook | ca | 2022-11-10 | 343 | LA MAGR
 goodreads:6288724 hardcover:31308421 | isbn13 | 9788675600039 | physical | en! | 1937-09-21! | 361 | Solaris | Hobit
 goodreads:62896700 | - | 9789696624189 | physical | ur | 2021-02-01 | 343 | Book Corner, Jhelum | دی ہابٹ
 goodreads:62915988 hardcover:31061654 | isbn13 | 9788382027679 | physical | pl | 1937-09-21! | 352! | Wydawnictwo Amber! | Hobbit
-goodreads:63110635 hardcover:33095140 | isbn13 | 9783844507157 | audiobook | de | 2010-12-26! | 11 | der Hörverlag! | Der Hobbit: Der Herr der Ringe 0.5!
-goodreads:63110656 | - | 9783844506341 | audiobook | de | 2002-02-01 | 5 | Der Hörverlag | Der Hobbit
-goodreads:63110659 | - | 9783895849183 | audiobook | de | 2002-02-01 | 5 | Der Hörverlag | Der Hobbit
+goodreads:63110635 hardcover:33095140 | isbn13 | 9783844507157 | audiobook | de | 2010-12-26! | - | der Hörverlag! | Der Hobbit: Der Herr der Ringe 0.5!
+goodreads:63110656 | - | 9783844506341 | audiobook | de | 2002-02-01 | - | Der Hörverlag | Der Hobbit
+goodreads:63110659 | - | 9783895849183 | audiobook | de | 2002-02-01 | - | Der Hörverlag | Der Hobbit
 goodreads:6332181 hardcover:30478570 | isbn13 | 9789721043053 | physical | pt | 1937-09-21! | 259! | Publicações Europa-América | O Hobbit
 goodreads:63334577 hardcover:32522688 | isbn13 | 9788419013996 | physical | ca | 1937-09-21! | 344 | La Magrana | El hòbbit: o viatge d'anada i tornada!
 goodreads:64000119 | - | 9782723429764 | physical | fr | - | - | - | Bilbo le Hobbit
@@ -1315,9 +1315,9 @@ goodreads:6418533 | - | 9788467022599 | physical | es | 2006-10-31 | 384 | Espas
 goodreads:6421426 hardcover:31469576 | isbn13 | 9788020405067 | physical | cs | 1937-09-21! | 256! | Mladá fronta | Hobit aneb Cesta tam a zase zpátky
 goodreads:64441341 | - | 9781482077469 | physical | en | 2013-02-01 | 250 | CreateSpace Independent Publishing Platform | The Hobbit
 goodreads:64441343 | - | 9781560600688 | physical | en | 1990-01-01 | - | Eclipse Books | The Hobbit or There and Back Again
-goodreads:64441344 | - | 9789991444338 | audiobook | en | - | - | - | The Hobbit
+goodreads:64441344 | - | 9789991444338 | audiobook | en | - | - | Soundelux Audio Pub | The Hobbit
 goodreads:6446128 | - | 9789027419217 | physical | nl | 1988 | 288 | Het Spectrum | De Hobbit
-goodreads:6468453 hardcover:32638416 | isbn13 | 9781598878981 | physical! | en | 1937-09-21! | 1 | Highbridge Co | The Hobbit
+goodreads:6468453 hardcover:32638416 | isbn13 | 9781598878981 | physical! | en | 1937-09-21! | - | Highbridge Co | The Hobbit
 goodreads:6470703 hardcover:17221538 openlibrary:OL27167680M | isbn13 | 9785768404734 | physical | ru | 1937-09-21! | 333! | Azbuka! | The Hobbit or There and Back Again/Hobbit, ili Tuda i Obratno /!
 goodreads:64722058 openlibrary:OL55289545M | isbn13 | 9781507624012 | physical | es | 2015-01-18 | 184 | CreateSpace Independent Publishing Platform | El Hobbit!
 goodreads:6472585 | - | - | physical | en | 1984 | 317 | Easton Press | The Hobbit
@@ -1325,9 +1325,9 @@ goodreads:6495082 | - | - | physical | en | 1991 | 285 | Grafton | The Hobbit
 goodreads:6508606 | - | - | physical | en | 1975-04 | 287 | Ballantine Books | The Hobbit
 goodreads:6513883 | - | - | physical | pl | 1988 | 319 | Iskry | Hobbit, czyli tam i z powrotem
 goodreads:6516309 hardcover:27055964 openlibrary:OL32009549M | isbn13 | 9787806571903 | physical | zh | 1937-09-21! | 321! | Yi Lin Chu Ban She/Tsai Fong Books! | 魔戒: 前传: 霍比特人!
-goodreads:6554624 hardcover:32582485 | isbn13 | 9783867174435 | audiobook | de | 2009-07-09 | 11 | der Hörverlag! | Der Hobbit
+goodreads:6554624 hardcover:32582485 | isbn13 | 9783867174435 | audiobook | de | 2009-07-09 | - | der Hörverlag! | Der Hobbit
 goodreads:6554629 | - | 9782744167324 | physical | fr | 2003-09 | 401 | France Loisirs | Bilbo le Hobbit
-goodreads:6603019 | - | - | ebook | en | - | 322 | - | The Hobbit
+goodreads:6603019 | - | - | ebook | en | - | 322 | Houghton Mifflin Harcourt | The Hobbit
 goodreads:6637795 hardcover:19865754 openlibrary:OL8151461M | isbn13 | 9780788737275 | physical! | en | 1937-09-21! | - | Recorded Books, LLC | The Hobbit, Prequel to the Lord of the Rings Trilogy!
 goodreads:66378638 | - | 9783899400670 | audiobook | - | - | - | - | The Hobbit, 4 Audio-CDs, engl. Version
 goodreads:6645440 | - | - | physical | ar | 2008 | 288 | دار ليلى / دايموند بوك | الهوبيت
@@ -1341,22 +1341,22 @@ goodreads:7076545 openlibrary:OL37378697M | isbn13 | 9780061917769 | ebook | en 
 goodreads:7082578 hardcover:32057936 | isbn13 | 9789172631649 | physical | sv | 1937-09-21! | 305! | Rabén & Sjögren | Bilbo - en hobbits äventyr
 goodreads:70891909 | - | 9785352019146 | physical | ru | 2006-01-01 | 320 | Азбука-классика | Хоббит, или Туда и Обратно
 goodreads:70891911 hardcover:18227066 openlibrary:OL12541260M | isbn13 | 9785170267095 | physical | ru | 2005-03-21 | 274! | AST! | Khobbit, ili Tuda i obratno!
-goodreads:70891913 | - | 9785942780289 | physical | ru | - | - | - | Хоббит, или Туда и Обратно
+goodreads:70891913 | - | 9785942780289 | physical | ru | - | - | Амфора | Хоббит, или Туда и Обратно
 goodreads:70891917 | - | 9785170264087 | physical | ru | 2011-01-01 | 412 | АСТ, Астрель | Хоббит, или Туда и обратно
 goodreads:70891919 | - | 9785845200693 | physical | ru | 1992-01-01 | 252 | Детская литература | Хоббит
 goodreads:70891921 | - | 9785768407001 | physical | ru | 1999 | 413 | Азбука | Хоббит, или Туда и Обратно
 goodreads:7098340 | - | 9788324135110 | physical | pl | 2009-01 | 280 | Amber | Hobbit
-goodreads:714060 hardcover:19391592 openlibrary:OL8151615M | isbn13 | 9780788789564 | audiobook | en | 1937-09-21! | 11 | Recorded Books | The Hobbit
+goodreads:714060 hardcover:19391592 openlibrary:OL8151615M | isbn13 | 9780788789564 | audiobook | en | 1937-09-21! | - | Recorded Books | The Hobbit
 goodreads:71461922 | - | 9789852002998 | physical | ru | 2012-01-01 | - | Астрель | Хоббит
-goodreads:71632293 | - | - | physical | - | - | - | - | O Hobbit
+goodreads:71632293 | - | - | physical | - | - | - | WMF Martins Fontes | O Hobbit
 goodreads:71661044 | - | 9785907097100 | physical | ru | 2018-01-01 | 112 | Antologiia | The Hobbit = Hobbit
-goodreads:71685239 | - | 9784001109832 | physical | ja | - | - | - | ホビットの冒険 [Hobbit no Bōken]
-goodreads:71685242 | - | 9784001157062 | physical | ja | - | - | - | ホビットの冒険 [Hobbit no Bōken]
+goodreads:71685239 | - | 9784001109832 | physical | ja | - | - | Iwanami Shoten | ホビットの冒険 [Hobbit no Bōken]
+goodreads:71685242 | - | 9784001157062 | physical | ja | - | - | Iwanami Shoten | ホビットの冒険 [Hobbit no Bōken]
 goodreads:71809154 | - | 9789851820159! | physical | ru | 2013-12-24 | 288 | АСТ | Хоббит
 goodreads:72305529 | - | 9785171347697 | physical | ru | 2021-04-24 | 352 | АСТ | Хоббит
 goodreads:72305532 | - | 9785171454999 | physical | ru | 2022-07-13 | 320 | АСТ | Хоббит
 goodreads:72305535 | - | 9785171227678 | physical | ru | 2020-08-10 | 304 | АСТ | Хоббит
-goodreads:72532188 | - | 9788328713222 | audiobook | pl | - | - | - | Hobbit, czyli tam i z powrotem - J.R.R. Tolkien [AUDIOBOOK]
+goodreads:72532188 | - | 9788328713222 | audiobook | pl | - | - | Muza | Hobbit, czyli tam i z powrotem - J.R.R. Tolkien [AUDIOBOOK]
 goodreads:7390006 hardcover:24254458 openlibrary:OL11152615M | isbn13 | 9780792443483 | physical | en | 1937-09-21! | - | World Pubns | Hobbit: An Illustrated Edition!
 goodreads:7390027 hardcover:30833675 openlibrary:OL10236401M,OL22738196M | isbn13 DUP | 9780007611621! | physical | en | 1997-09-19! | 288! | HarperCollins UK! | The Hobbit
 goodreads:74044932 | - | 9786043683424 | physical | vi | 2022 | 400 | Nhã Nam & NXB Hội nhà văn | Anh Chàng Hobbit
@@ -1393,35 +1393,35 @@ goodreads:8167707 | - | - | physical | en | 2006 | 353 | HarperCollins Publisher
 goodreads:821432 hardcover:3268364 openlibrary:OL28429751M | isbn13 | 9780007118359 | physical | en | 1937-09-21! | 295! | HarperCollins Publishers! | The Hobbit!
 goodreads:82343997 | - | 9784562048663 | physical | ja | - | - | - | ホビット ゆきてかえりし物語 [Hobbit
 goodreads:823754 | - | - | physical | en | 1990 | 399 | Houghton Mifflin Company | The Annotated Hobbit
-goodreads:82539742 | - | 9781471677120 | physical | de | - | - | - | Hobit
+goodreads:82539742 | - | 9781471677120 | physical | de | - | - | lulu.com | Hobit
 goodreads:83141551 | - | 9789935910400 | physical | is | 2012-01-01 | - | Sena | Hobbitinn
 goodreads:837610 hardcover:14896999 openlibrary:OL9045059M | isbn13 | 9785552438310 | physical | en | 1937-09-21! | 335! | Houghton Mifflin Company | Annotated Hobbit
 goodreads:837611 hardcover:12052468 openlibrary:OL51711358M,OL7465912M | isbn13 DUP | 9780395282656 | physical | en | 1937-09-21! | 259! | Houghton Mifflin Company! | The Hobbit: or There and Back Again!
 goodreads:838638 hardcover:30259837 openlibrary:OL9215156M | isbn13 | 9780006754022 | physical | en | 1998-11-02 | 365! | HarperCollins Publishers! | The Hobbit!
-goodreads:838639 openlibrary:OL37442482M | isbn13 | 9780563528807 | audiobook | en | 2002-10-07 | 1 | BBC Books | The Hobbit
+goodreads:838639 openlibrary:OL37442482M | isbn13 | 9780563528807 | audiobook | en | 2002-10-07 | - | BBC Books | The Hobbit
 goodreads:838640 hardcover:28719485 openlibrary:OL22735149M,OL46532061M,OL8887608M | isbn13 DUP | 9782253049418 | physical | fr | 1937-09-21! | 312! | Le Livre de Poche | Bilbo le Hobbit
 goodreads:838641 hardcover:17716219 openlibrary:OL3969888M | isbn13 | 9780618162215 | physical | en | 1937-09-21! | 333! | Houghton Mifflin Company! | The Hobbit, Or, There and Back Again!
-goodreads:838642 | - | 9781856956987 | audiobook | en | 1993 | 11 | Isis Audio Books | The Hobbit
+goodreads:838642 | - | 9781856956987 | audiobook | en | 1993 | - | Isis Audio Books | The Hobbit
 goodreads:838643 hardcover:27726022 openlibrary:OL21755817M,OL9403108M | isbn13 DUP | 9782010147807 | physical | fr | 1937-09-21! | 400 | Stock! | Bilbo le Hobbit
 goodreads:838645 hardcover:3071302 openlibrary:OL9228183M | isbn13 | 9780044400912 | physical | en | 1937-09-21! | 286! | Harper Collins Publishers Stock Account! | The Hobbit Or, There and Back Again!
 goodreads:838647 hardcover:22827258 openlibrary:OL9032793M | isbn13 | 9783423202770 | physical | de | 1999-10-01! | 332! | Deutscher Taschenbuch Verlag! | Der kleine Hobbit
 goodreads:838649 | - | 9780007158782 | audiobook | en | 2003-02-17 | - | HarperCollins | The Hobbit
 goodreads:838652 | - | - | physical | - | 1996 | 276 | Harper Collins | The Hobbit
-goodreads:842390 hardcover:698851 openlibrary:OL7603640M | isbn13 | 9780618087853 | audiobook | en | 1937-09-21! | 6 | Houghton Mifflin! | The Hobbit
+goodreads:842390 hardcover:698851 openlibrary:OL7603640M | isbn13 | 9780618087853 | audiobook | en | 1937-09-21! | - | Houghton Mifflin! | The Hobbit
 goodreads:86176224 openlibrary:OL48608134M | isbn13 | 9780007172733 | physical | en | 2003-04-25 | 64 | W.H. Smith! | The Hobbit!
 goodreads:862290 openlibrary:OL44795696M | isbn13 | 9782012010857 | physical | fr | 2006-02-10 | 504 | Hachette! | Bilbo le Hobbit
 goodreads:8692770 | - | - | ebook | en | - | 304 | - | The Hobbit
 goodreads:8877901 | - | 9789706906540 | physical | es | 2009-12 | 310 | Minotauro | El Hobbit
 goodreads:899694 hardcover:13882306 openlibrary:OL14732029M,OL20943433M | isbn13 DUP | 9780044403371 | physical | en | 1937-09-21! | 335! | Unwin Hyman | The Annotated Hobbit
-goodreads:899698 | - | - | audiobook | de | 2002-01-31 | 4 | Dhv der Hörverlag | Der Hobbit
+goodreads:899698 | - | - | audiobook | de | 2002-01-31 | - | Dhv der Hörverlag | Der Hobbit
 goodreads:899699 hardcover:6743245 openlibrary:OL10457133M | isbn13 | 9780320036873 | physical | de! | 1937-09-21! | - | French & European Pubns | El Hobbit!
-goodreads:899702 | - | 9780563558323 | audiobook | en | 1999 | 4 | BBC Worldwide | The Hobbit
+goodreads:899702 | - | 9780563558323 | audiobook | en | 1999 | - | BBC Worldwide | The Hobbit
 goodreads:899703 | - | 9780563402275 | audiobook | en | 1994-10-03 | - | BBC | The Hobbit
 goodreads:899705 hardcover:30346938 openlibrary:OL30932989M | isbn13 | 9780807288832 | physical! | en | 1937-09-21! | - | Listening Library | The Hobbit
 goodreads:899706 | - | 9780881422696 | audiobook | en | 1985-01-01 | - | Soundelux Audio Pub | The Hobbit
 goodreads:899708 | - | 9780881423266 | audiobook | en | 1986-05-01 | - | Soundelux Audio Pub | The Hobbit
 goodreads:899711 | - | 9780753107812 | audiobook | en | - | - | - | The Hobbit
-goodreads:899713 hardcover:20692058 openlibrary:OL7827594M | isbn13 | 9780553471076 | audiobook | en | 1937-09-21! | 4 | Random House Audio! | The Hobbit
+goodreads:899713 hardcover:20692058 openlibrary:OL7827594M | isbn13 | 9780553471076 | audiobook | en | 1937-09-21! | - | Random House Audio! | The Hobbit
 goodreads:899714 | - | 9780563225614 | audiobook | en | 1990-12-31 | - | BBC Consumer Publishing | The Hobbit
 goodreads:899715 hardcover:10332721 openlibrary:OL2105246M | isbn13 | 9780048233868 | physical | en | 1937-09-21! | 288! | Unwin Hyman | The Hobbit!
 goodreads:899721 hardcover:25003693 openlibrary:OL20943857M,OL9228706M | isbn13 DUP | 9780048231277 | physical | en | 1937-09-21! | 286! | Allen and Unwin! | The Hobbit, Or, There And Back Again!
@@ -1445,10 +1445,10 @@ goodreads:9772064 | - | 9789022557587 | physical | nl | 2010-11 | 253 | De Boeke
 goodreads:9813200 hardcover:33403333 | fuzzy | - | physical | it | 1987-11-01 | 244 | Club degli Editori | Lo Hobbit
 goodreads:9824733 hardcover:3927192 openlibrary:OL15950279M | isbn13 | 9788845290633 | physical | it | 1937-09-21! | 394! | Bompiani | Lo Hobbit!
 goodreads:9843706 hardcover:31605955 openlibrary:OL59690711M | isbn13 | 9789027400437 | physical | nl | 1937-09-21! | 256! | Prisma-boeken! | De Hobbit
-goodreads:9865829 hardcover:31875682 | isbn13 | 9781598874495 | audiobook | en | 2009-02-17 | 5 | HighBridge Company | The Hobbit!
+goodreads:9865829 hardcover:31875682 | isbn13 | 9781598874495 | audiobook | en | 2009-02-17 | - | HighBridge Company | The Hobbit!
 goodreads:98820162 | - | 9782378284343 | physical | fr | 2022-03-07 | 664 | VOIR DE PRES | Le Hobbit
 goodreads:98965666 | - | 9788377584170 | cd-rom | pl | 2013-01-01 | - | Muza | Hobbit czyli tam i z powrotem
-goodreads:99386381 | - | 9788324148561 | physical | pl | - | 288 | - | Hobbit
+goodreads:99386381 | - | 9788324148561 | physical | pl | - | 288 | Amber | Hobbit
 hardcover:10526129 openlibrary:OL10683697M | isbn13 | 9780345296078 | physical | en | 1955-10-20! | 1805 | Ballantine Books | The Hobbit and The Lord of the Rings
 hardcover:11700975 openlibrary:OL8321425M | isbn13 | 9780913035801 | physical | en | 1989-09 | - | Eclipse Books | Hobbit or There and Back Again: A Graphic Novel!
 hardcover:12015636 | - | - | physical | vi | 2010-01-01 | 459 | Nhà xuất bản Hội nhà văn | Anh chàng Hobbit
@@ -1563,7 +1563,7 @@ hardcover:32604771 | - | 9781705009055 | audiobook | en | 2020-09-21 | - | Recor
 hardcover:32644742 | - | - | physical | - | - | - | - | The Hobbit
 hardcover:32664930 | - | - | physical | - | - | - | - | The Hobbit (Enhanced Edition): The Classic Bestselling Fantasy Novel
 hardcover:32670068 | - | 9785170851096 | physical | ru | 2001-05-29 | 208 | АСТ | Хоббит, или Туда и обратно
-hardcover:32682524 | - | - | audiobook | en | 1937-09-21 | 5 | - | The Hobbit
+hardcover:32682524 | - | - | audiobook | en | 1937-09-21 | - | - | The Hobbit
 hardcover:32691624 | - | 9780008440480 | physical | en | - | - | - | The Hobbit
 hardcover:32697120 | - | - | physical | en | 2002-08-15 | - | Houghton Mifflin | The Hobbit, or There and Back Again
 hardcover:32716408 | - | - | audiobook | en | 2020-09-21 | - | Recorded Books | The Hobbit
