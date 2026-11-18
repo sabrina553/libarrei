@@ -3,7 +3,7 @@ title: Salt Lakes: An Unnatural History [hardcover] CONFLICT
 subtitle: An Unnatural History [hardcover]
 contributors: Caroline Tracey [hardcover] CONFLICT
 description: [goodreads description] [goodreads]
-genres: Nonfiction, Science, Nature, Memoir, History, Environment, Audiobook, LGBT, Queer, Travel [goodreads]
+genres: Nonfiction, Science, Nature, Memoir, History, Environment, LGBT, Queer, Travel [goodreads]
 original_release_date: 2026-03-17 [hardcover]
 
 # editions (7); ! marks a conflict

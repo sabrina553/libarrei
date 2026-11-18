@@ -2,7 +2,7 @@
 title: Hello Beautiful [hardcover]
 contributors: Ann Napolitano [hardcover]
 description: [goodreads description] [goodreads] CONFLICT
-genres: Fiction, Book Club, Audiobook, Historical Fiction, Romance, Literary Fiction, Contemporary, Family, Adult, Adult Fiction [goodreads]
+genres: Fiction, Historical Fiction, Romance, Literary Fiction, Contemporary, Family, Adult, Adult Fiction [goodreads]
 original_release_date: 2023-03-14 [goodreads]
 
 # editions (74); ! marks a conflict
