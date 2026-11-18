@@ -247,6 +247,9 @@ def next_page_url(html):
     return _absolute_goodreads_url(link["href"]) if link and link.has_attr("href") else None
 
 
+MAX_ATTEMPTS = 3
+
+
 def editions_url(work_id, page=1):
     return f"https://www.goodreads.com/work/editions/{work_id}?per_page=100&page={page}"
 
@@ -261,10 +264,16 @@ def fetch_editions(work_id, cache, limiter, user_agent=None):
     headers = {"User-Agent": user_agent or random.choice(USER_AGENTS)}
 
     def load(url):
-        limiter.wait()
-        res = requests.get(url, headers=headers, timeout=30)
-        res.raise_for_status()
-        return res.text
+        # Goodreads pages occasionally hang; one slow page shouldn't lose the rest.
+        for attempt in range(MAX_ATTEMPTS):
+            limiter.wait()
+            try:
+                res = requests.get(url, headers=headers, timeout=30)
+                res.raise_for_status()
+                return res.text
+            except (requests.Timeout, requests.ConnectionError):
+                if attempt == MAX_ATTEMPTS - 1:
+                    raise
 
     editions = []
     url = editions_url(work_id)
