@@ -45,7 +45,7 @@ export function Book() {
       <p className="muted">{formatValue(shown.work.fields.contributors?.value)}</p>
       <Notes notes={shown.notes} />
       <FieldGrid
-        fields={shown.work.fields} order={WORK_FIELDS}
+        fields={shown.work.fields} order={WORK_FIELDS} level="work"
         staging={{ book, scope: 'work', records: workRecords(shown.work.ids) }}
       />
       <p>
