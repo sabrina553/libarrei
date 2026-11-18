@@ -1,7 +1,7 @@
 # work
 title: The Hobbit, or There and Back Again [hardcover] CONFLICT
 subtitle: Heartache, Heritage, and Happiness [hardcover]
-contributors: J.R.R. Tolkien [hardcover] CONFLICT
+contributors: J.R.R. Tolkien [hardcover]
 description: [goodreads description] [goodreads] CONFLICT
 series: Middle Earth #1 [hardcover]
 genres: Fantasy, Classics, Fiction, Adventure, Young Adult, High Fantasy, Science Fiction Fantasy, Dragons [goodreads]

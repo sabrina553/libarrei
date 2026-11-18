@@ -1,7 +1,7 @@
 # work
 title: The Sandman [hardcover]
 subtitle: Act I [hardcover] CONFLICT
-contributors: Dirk Maggs, Neil Gaiman, Neil Gaiman (narrator), Riz Ahmed (narrator), Kat Dennings (narrator), Taron Egerton (narrator), James McAvoy (narrator), Samantha Morton (narrator), Bebe Neuwirth (narrator), Andy Serkis (narrator), Michael Sheen (narrator) [hardcover] CONFLICT
+contributors: Dirk Maggs, Neil Gaiman [hardcover] CONFLICT
 description: [goodreads description] [goodreads] CONFLICT
 series: Sandman Audible Original #1 [hardcover]
 genres: Fantasy, Fiction, Horror, Graphic Novels, Comics, Mythology, Urban Fantasy, Magic, Supernatural [goodreads]

@@ -17,3 +17,12 @@ def test_openlibrary_edition_name_is_merged():
 
 def test_edition_statement_is_edition_only():
     assert "edition_statement" not in Work.model_fields
+
+
+def test_is_edition_statement():
+    from libarrei.normalise import is_edition_statement
+
+    for text in ["Deluxe Edition", "2nd ed.", "50th Anniversary Edition", "Collector\u2019s Edition", "Revised"]:
+        assert is_edition_statement(text), text
+    for text in ["The Last Edition", "A Novel", "", "Book"]:
+        assert not is_edition_statement(text), text
