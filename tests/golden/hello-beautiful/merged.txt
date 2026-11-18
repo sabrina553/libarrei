@@ -55,7 +55,7 @@ goodreads:228682753 | - | - | ebook | ru | 2025-03-04 | 465 | Фантом Пр�
 goodreads:229077534 | - | - | audiobook | ru | 2025-03-12 | - | Вимбо | Привет, красавица
 goodreads:229671531 | - | - | audiobook | it | 2024-04-26 | - | Mondadori Libri S.p.A. | Tutto è meraviglia
 goodreads:229739430 | - | - | audiobook | de | 2024-03-13 | - | DUMONT Buchverlag | Hallo, du Schöne
-goodreads:230938473 | - | 9785047304069 | ebook | ru | - | 453 | - | Привет, красавица
+goodreads:230938473 | - | 9785047304069 | ebook | ru | - | 453 | Фантом Пресс | Привет, красавица
 goodreads:231164817 | - | 9786171709089 | physical | uk | 2025-06-16 | 528 | Vivat | Привіт, красуне
 goodreads:233537807 | - | 9786075745619 | physical | es | - | - | - | Hola, preciosa
 goodreads:237850306 | - | 9782370834942 | physical | fr | 2025-09-01 | 636 | GABELIRE | Les Bien-aimés

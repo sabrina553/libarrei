@@ -46,3 +46,11 @@ def test_edition_from_scrape():
 def test_unknown_format_is_kept_lowercased():
     assert normalise_format("Toinen Painos") == "toinen painos"
     assert normalise_format("Unknown Binding") is None
+
+
+def test_publish_row_without_a_date_keeps_only_the_publisher():
+    from libarrei.sources.goodreads.scraper import parse_publish_row
+
+    assert parse_publish_row("Published by Adelphi") == (None, "Adelphi")
+    assert parse_publish_row("Published April 28th 2026 by Dutton") == ("April 28th 2026", "Dutton")
+    assert parse_publish_row("Published 2001") == ("2001", None)

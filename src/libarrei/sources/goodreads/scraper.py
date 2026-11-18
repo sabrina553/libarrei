@@ -52,7 +52,8 @@ def parse_title_and_series(raw_title):
 def parse_publish_row(text):
     """Parses "Published April 28th 2026 by Dutton" -> (publish_date, publisher)."""
     text = " ".join(text.split())
-    match = re.match(r"^Published\s+(.*?)(?:\s+by\s+(.*))?$", text)
+    # The date is optional: "Published by Adelphi" has only a publisher.
+    match = re.match(r"^Published(?:\s+(?!by\b)(.*?))?(?:\s*\bby\s+(.*))?$", text)
     if not match:
         return None, None
     publish_date = match.group(1).strip() if match.group(1) else None
