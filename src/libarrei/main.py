@@ -1,11 +1,10 @@
 import os
 from dotenv import load_dotenv
 
-from libarrei.models.goodreads import goodreads
-from models.hardcover.hardcover import Hardcover
-from models.hardcover.transport import TransportLayer as TransportLayerHC
-from models.goodreads.goodreads import Goodreads
-from models.goodreads.transport import TransportLayer as TransportLayerGR
+from libarrei.models.hardcover.hardcover import Hardcover
+from libarrei.models.hardcover.transport import TransportLayer as TransportLayerHC
+from libarrei.models.goodreads.goodreads import Goodreads
+from libarrei.models.goodreads.transport import TransportLayer as TransportLayerGR
 
 # Load the environment variables
 load_dotenv()

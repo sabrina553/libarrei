@@ -149,7 +149,11 @@ def _absolute_goodreads_url(href):
     return f"https://www.goodreads.com{href}"
 
 def parse_id(url):
-    return re.search("\\d+", url)[0]
+    """Pulls the numeric Goodreads book ID out of a /book/show/<id>-slug URL."""
+    if not url:
+        return None
+    match = re.search(r"/book/show/(\d+)", url)
+    return match.group(1) if match else None
 
 def scrape_edition(book_el):
     edition_data = book_el.find("div", class_="editionData")
@@ -212,7 +216,7 @@ def scrape_edition(book_el):
         "average_rating": average_rating,
         "ratings_count": ratings_count,
         "url": _absolute_goodreads_url(book_url),
-        "hardcover_id": parse_id(book_url)
+        "goodreads_id": parse_id(book_url)
     }
 
 
