@@ -16,6 +16,7 @@ class Goodreads:
             imageUrl
             description
             primaryContributorEdge {
+              role
               node {
                 id
                 legacyId
@@ -24,6 +25,7 @@ class Goodreads:
               }
             }
             secondaryContributorEdges {
+              role
               node {
                 id
                 legacyId

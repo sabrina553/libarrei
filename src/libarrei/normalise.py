@@ -10,7 +10,7 @@ from datetime import date
 
 import pycountry
 
-from libarrei.model import Edition, Work
+from libarrei.model import Contributor, Edition, Work
 
 MONTH_NAMES = ["january", "february", "march", "april", "may", "june",
                "july", "august", "september", "october", "november", "december"]
@@ -128,13 +128,54 @@ def genres(raw: list[str] | None) -> list[str] | None:
     return kept or None
 
 
-EDITION_FIELDS = {"pages": pages, "release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn, "asin": asin}
+# Sources' wording for the same job ("Reading", "Narrator/Reader", "Cover Art"), lowercased.
+ROLE_NAMES = {
+    "writer": "author",
+    "translation": "translator",
+    "translated by": "translator",
+    "illustrations": "illustrator",
+    "illustrated by": "illustrator",
+    "narration": "narrator",
+    "narrated by": "narrator",
+    "reader": "narrator",
+    "reading": "narrator",
+    "narrator/reader": "narrator",
+    "read by": "narrator",
+    "edited by": "editor",
+    "cover art": "cover artist",
+    "cover illustration": "cover artist",
+    "cover design": "cover designer",
+    "annotations": "annotator",
+    "notes by": "notes",
+    "adaptation": "adapter",
+    "revised by": "reviser",
+}
+# Display order after the authors; roles not listed follow, in source order.
+ROLE_ORDER = ["author", "editor", "translator", "illustrator", "cover artist", "cover designer",
+              "narrator", "introduction", "foreword", "afterword", "annotator", "adapter", "contributor"]
+
+
+def role(raw: str | None) -> str:
+    text = " ".join((raw or "").split()).lower()
+    return ROLE_NAMES.get(text, text) or "author"
+
+
+def contributors(raw: list[Contributor] | None) -> list[Contributor] | None:
+    """Canonical role names; authors first, then each role grouped, keeping source order within a group."""
+    people = [c.model_copy(update={"role": role(c.role)}) for c in raw or []]
+    rank = {r: i for i, r in enumerate(ROLE_ORDER)}
+    # sorted() is stable, so the first-listed (primary) author stays first.
+    return sorted(people, key=lambda c: rank.get(c.role, len(rank))) or None
+
+
+EDITION_FIELDS = {"contributors": contributors, "pages": pages, "release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn, "asin": asin}
 
 
 def work(record: Work) -> None:
     """Normalises a mapped Work and its editions in place."""
     record.original_release_date = _apply(record.original_release_date, release_date)
     record.genres = _apply(record.genres, genres)
+    record.contributors = _apply(record.contributors, contributors)
     for edition in record.editions:
         for name, normaliser in EDITION_FIELDS.items():
             setattr(edition, name, _apply(getattr(edition, name), normaliser))
