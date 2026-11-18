@@ -107,12 +107,22 @@ def main() -> None:
     find.add_argument("--editions", action="store_true", help="fetch and list every edition, aligned across sources (slow when uncached)")
     find.add_argument("--merged", action="store_true", help="pick one value per field and flag conflicts")
     find.add_argument("--json", action="store_true", help="print the full model as JSON")
+    serve = commands.add_parser("serve", help="run the HTTP API")
+    # Loopback by default so the API is only reachable from this machine unless asked.
+    serve.add_argument("--host", default="127.0.0.1")
+    serve.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
+
+    load_dotenv()
+    if args.command == "serve":
+        import uvicorn
+
+        uvicorn.run("libarrei.api:app", host=args.host, port=args.port)
+        return
 
     if not args.isbn and not args.title:
         parser.error("give a title or --isbn")
 
-    load_dotenv()
     result = lookup(isbn=args.isbn, title=args.title, author=args.author, use_cache=not args.no_cache,
                     all_editions=args.editions)
     if args.merged:
