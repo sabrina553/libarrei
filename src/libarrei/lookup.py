@@ -31,7 +31,9 @@ class LookupResult:
     notes: dict[Source, str] = field(default_factory=dict)
 
 
-def from_openlibrary(cache, isbn: str | None, title: str | None, author: str | None) -> Work | None:
+def from_openlibrary(
+    cache, isbn: str | None, title: str | None, author: str | None, all_editions: bool
+) -> Work | None:
     ol = OpenLibrary(cache=cache)
     editions = []
     if isbn:
@@ -48,15 +50,18 @@ def from_openlibrary(cache, isbn: str | None, title: str | None, author: str | N
     if not work:
         return None
     # The ISBN's own edition stays first so it remains the best match.
-    seen = {e["key"] for e in editions}
-    editions += [e for e in ol.all_editions(work_key) if e["key"] not in seen]
+    if all_editions:
+        seen = {e["key"] for e in editions}
+        editions += [e for e in ol.all_editions(work_key) if e["key"] not in seen]
     # Only the work's authors: edition-level keys across hundreds of editions
     # would cost one request each on a cold cache.
     names = ol.author_names(author_keys(work))
     return openlibrary_work(work, editions, names)
 
 
-def from_hardcover(cache, token: str, isbn: str | None, title: str | None, author: str | None) -> Work | None:
+def from_hardcover(
+    cache, token: str, isbn: str | None, title: str | None, author: str | None, all_editions: bool
+) -> Work | None:
     client = Hardcover(HardcoverTransport(token, cache=cache))
     if isbn:
         books = client.search({"isbn": [isbn], "hcid": []})["books"]
@@ -66,6 +71,8 @@ def from_hardcover(cache, token: str, isbn: str | None, title: str | None, autho
     if not books:
         return None
     work = hardcover_work(books[0])
+    if not all_editions:
+        return work
     # The searched edition stays first so it remains the best match.
     seen = {e.ids[Source.HARDCOVER] for e in work.editions}
     work.editions += [
@@ -74,7 +81,7 @@ def from_hardcover(cache, token: str, isbn: str | None, title: str | None, autho
     return work
 
 
-def from_goodreads(cache, token: str, query: str) -> Work | None:
+def from_goodreads(cache, token: str, query: str, all_editions: bool) -> Work | None:
     client = Goodreads(GoodreadsTransport(token))
     edges = client.search({"query": query})["getSearchSuggestions"]["edges"]
     urls = [e["node"]["webUrl"] for e in edges if e.get("node", {}).get("webUrl")]
@@ -85,7 +92,7 @@ def from_goodreads(cache, token: str, query: str) -> Work | None:
     if not book:
         return None
     work = work_from_graphql(book)
-    if work_id := work.ids.get(Source.GOODREADS):
+    if all_editions and (work_id := work.ids.get(Source.GOODREADS)):
         limiter = RateLimiter(INTERVALS["goodreads"])
         seen = {e.ids.get(Source.GOODREADS) for e in work.editions}
         scraped = [edition_from_editions_page(e) for e in fetch_editions(work_id, cache, limiter)]
@@ -94,8 +101,11 @@ def from_goodreads(cache, token: str, query: str) -> Work | None:
 
 
 def lookup(
-    isbn: str | None = None, title: str | None = None, author: str | None = None, use_cache: bool = True
+    isbn: str | None = None, title: str | None = None, author: str | None = None, use_cache: bool = True,
+    all_editions: bool = False,
 ) -> LookupResult:
+    """Without all_editions only the matched edition per source is fetched: a few
+    requests, rather than minutes for a book with hundreds of editions."""
     result = LookupResult()
     cache = Cache() if use_cache else NoCache()
 
@@ -111,16 +121,16 @@ def lookup(
         else:
             result.notes.setdefault(source, "not found")
 
-    attempt(Source.OPENLIBRARY, lambda: from_openlibrary(cache, isbn, title, author))
+    attempt(Source.OPENLIBRARY, lambda: from_openlibrary(cache, isbn, title, author, all_editions))
 
     if token := os.getenv("HARDCOVER_TOKEN"):
-        attempt(Source.HARDCOVER, lambda: from_hardcover(cache, token, isbn, title, author))
+        attempt(Source.HARDCOVER, lambda: from_hardcover(cache, token, isbn, title, author, all_editions))
     else:
         result.notes[Source.HARDCOVER] = "HARDCOVER_TOKEN not set"
 
     if token := os.getenv("GOODREADS_TOKEN"):
         query = isbn or " ".join(filter(None, [title, author]))
-        attempt(Source.GOODREADS, lambda: from_goodreads(cache, token, query))
+        attempt(Source.GOODREADS, lambda: from_goodreads(cache, token, query, all_editions))
     else:
         result.notes[Source.GOODREADS] = "GOODREADS_TOKEN not set"
 

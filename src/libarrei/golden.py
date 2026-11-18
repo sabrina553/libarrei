@@ -33,7 +33,7 @@ def scrub(work: Work) -> None:
 
 
 def record(name: str, **query) -> None:
-    result = lookup(**query)
+    result = lookup(**query, all_editions=True)
     folder = GOLDEN_DIR / name
     folder.mkdir(parents=True, exist_ok=True)
     for work in result.works.values():
