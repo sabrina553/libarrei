@@ -5,6 +5,7 @@ returned side by side so the results can be compared.
 """
 
 import os
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 
 from libarrei import normalise
@@ -121,17 +122,23 @@ def lookup(
         else:
             result.notes.setdefault(source, "not found")
 
-    attempt(Source.OPENLIBRARY, lambda: from_openlibrary(cache, isbn, title, author, all_editions))
-
+    jobs = {Source.OPENLIBRARY: lambda: from_openlibrary(cache, isbn, title, author, all_editions)}
     if token := os.getenv("HARDCOVER_TOKEN"):
-        attempt(Source.HARDCOVER, lambda: from_hardcover(cache, token, isbn, title, author, all_editions))
+        jobs[Source.HARDCOVER] = lambda: from_hardcover(cache, token, isbn, title, author, all_editions)
     else:
         result.notes[Source.HARDCOVER] = "HARDCOVER_TOKEN not set"
-
-    if token := os.getenv("GOODREADS_TOKEN"):
+    if gr_token := os.getenv("GOODREADS_TOKEN"):
         query = isbn or " ".join(filter(None, [title, author]))
-        attempt(Source.GOODREADS, lambda: from_goodreads(cache, token, query, all_editions))
+        jobs[Source.GOODREADS] = lambda: from_goodreads(cache, gr_token, query, all_editions)
     else:
         result.notes[Source.GOODREADS] = "GOODREADS_TOKEN not set"
 
+    # Sources are independent and network-bound, so a lookup takes as long as
+    # the slowest source rather than all of them added up.
+    with ThreadPoolExecutor(max_workers=len(jobs)) as pool:
+        for source, job in jobs.items():
+            pool.submit(attempt, source, job)
+
+    # Fixed source order keeps output stable whichever source finished first.
+    result.works = {s: result.works[s] for s in Source if s in result.works}
     return result
