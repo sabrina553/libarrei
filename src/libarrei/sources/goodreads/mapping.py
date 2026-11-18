@@ -25,6 +25,14 @@ def contributor(node: dict, role: str) -> Contributor:
     return Contributor(name=node["name"], role=role, ids={GR: str(node["legacyId"])})
 
 
+def scraped_contributor(author) -> Contributor:
+    # Accepts a bare name as well, which carries no role.
+    if isinstance(author, str):
+        return Contributor(name=author)
+    name, role = author
+    return Contributor(name=name, role=(role or "author").lower())
+
+
 def contributors(book: dict) -> list[Contributor]:
     people = []
     edge = book.get("primaryContributorEdge") or {}
@@ -86,7 +94,7 @@ def edition_from_scrape(scraped: dict) -> Edition:
     sid = scraped.get("goodreads_id") or ""
     edition.add("title", scraped.get("title"), GR, sid)
     edition.add("subtitle", scraped.get("subtitle"), GR, sid)
-    edition.add("contributors", [Contributor(name=n) for n in scraped.get("authors") or []], GR, sid)
+    edition.add("contributors", [scraped_contributor(a) for a in scraped.get("authors") or []], GR, sid)
     edition.add("isbn13", scraped.get("isbn13"), GR, sid)
     edition.add("isbn10", scraped.get("isbn10"), GR, sid)
     edition.add("asin", scraped.get("asin"), GR, sid)

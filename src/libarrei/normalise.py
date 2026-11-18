@@ -148,6 +148,23 @@ ROLE_NAMES = {
     "annotations": "annotator",
     "notes by": "notes",
     "adaptation": "adapter",
+    # Goodreads shows roles in the edition's own language.
+    "traduction": "translator",
+    "traducción": "translator",
+    "tradução": "translator",
+    "traduzione": "translator",
+    "übersetzer": "translator",
+    "übersetzung": "translator",
+    "vertaler": "translator",
+    "vertaling": "translator",
+    "översättare": "translator",
+    "oversætter": "translator",
+    "oversættelse": "translator",
+    "tłumacz": "translator",
+    "sprecher": "narrator",
+    "oplæser": "narrator",
+    "uppläsare": "narrator",
+    "lecteur": "narrator",
     "revised by": "reviser",
 }
 # Display order after the authors; roles not listed follow, in source order.

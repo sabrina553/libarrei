@@ -36,6 +36,16 @@ def parse_format_row(text):
     return book_type, pages
 
 
+def parse_author(container):
+    """Returns (name, role) for one author entry; role is None for the main author."""
+    link = container.find("a", class_="authorName")
+    if not link:
+        return None
+    role_el = container.find("span", class_="role")
+    role = role_el.get_text(strip=True).strip("()") if role_el else None
+    return link.get_text(strip=True), role or None
+
+
 def parse_more_details(more_details_div):
     """
     Walks the hidden 'moreDetails' block (present in the static HTML even though
@@ -56,7 +66,8 @@ def parse_more_details(more_details_div):
         key = title_el.get_text(strip=True).rstrip(":")
 
         if key.lower().startswith("author"):
-            authors = [a.get_text(strip=True) for a in value_el.find_all("a", class_="authorName")]
+            authors = [parse_author(c) for c in value_el.find_all("div", class_="authorName__container")]
+            authors = [a for a in authors if a]
             continue
 
         details[key] = " ".join(value_el.get_text(strip=True).split())

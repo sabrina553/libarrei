@@ -73,3 +73,22 @@ def test_graphql_title_without_subtitle_leaves_subtitle_empty():
 
     assert values(edition.title) == ["Hello Beautiful"]
     assert edition.subtitle == []
+
+
+def test_scraped_authors_keep_roles():
+    from bs4 import BeautifulSoup
+
+    from libarrei.sources.goodreads.scraper import parse_more_details
+
+    html = """<div><div class="dataRow"><div class="dataTitle">Author:</div><div class="dataValue">
+      <div class="authorName__container"><a class="authorName"><span>Matt Dinniman</span></a>
+        <span class="greyText">(Goodreads Author)</span></div>
+      <div class="authorName__container"><a class="authorName"><span>Jeff Hays</span></a>
+        <span class="authorName greyText smallText role">(Narrator)</span></div>
+    </div></div></div>"""
+    _, authors = parse_more_details(BeautifulSoup(html, "html.parser").div)
+    assert authors == [("Matt Dinniman", None), ("Jeff Hays", "Narrator")]
+
+    edition = edition_from_scrape({"title": "Dungeon Crawler Carl", "authors": authors, "goodreads_id": "1"})
+    people = edition.contributors[0].value
+    assert [(p.name, p.role) for p in people] == [("Matt Dinniman", "author"), ("Jeff Hays", "narrator")]
