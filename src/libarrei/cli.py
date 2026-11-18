@@ -8,6 +8,7 @@ import textwrap
 from dotenv import load_dotenv
 
 from libarrei.lookup import LookupResult, lookup
+from libarrei.match import align
 from libarrei.model import Candidate, Contributor, SeriesEntry, Work
 
 COMPARED_FIELDS = ["title", "subtitle", "contributors", "series", "genres", "original_release_date", "description"]
@@ -45,11 +46,20 @@ def print_table(result: LookupResult) -> None:
 
 
 def print_editions(result: LookupResult) -> None:
-    for source, work in result.works.items():
-        print(f"\n{source.value}: {len(work.editions)} editions")
-        for e in work.editions:
-            cells = [first(e.isbn13), first(e.format), first(e.language), first(e.release_date), first(e.title)]
-            print("  " + "  ".join(f"{c:<14}" for c in cells[:4]) + cells[4])
+    groups = sorted(align(result.works), key=lambda g: (-len(g.sources), g.reason or "~"))
+    for g in groups:
+        source, e = g.members[0]
+        cells = [first(e.isbn13), first(e.format), first(e.language), first(e.release_date)]
+        tags = ",".join(sorted(s.value for s in g.sources))
+        how = f"{g.reason} {g.confidence:g}" if g.reason == "fuzzy" else g.reason or "-"
+        dup = f"  DUPLICATE in {','.join(s.value for s in g.duplicates)}" if g.duplicates else ""
+        print("  ".join(f"{c:<14}" for c in cells) + f"{how:<12}{tags}{dup}")
+
+    print(f"\n{len(groups)} edition groups")
+    for n in range(len(result.works), 0, -1):
+        print(f"  in {n} source(s): {sum(len(g.sources) == n for g in groups)}")
+    print(f"  fuzzy-matched: {sum(g.reason == 'fuzzy' for g in groups)}")
+    print(f"  with duplicates: {sum(bool(g.duplicates) for g in groups)}")
     for source, note in result.notes.items():
         print(f"\n{source.value}: {note}")
 
@@ -62,7 +72,7 @@ def main() -> None:
     find.add_argument("--author", help="author name, narrows a title search")
     find.add_argument("--isbn", help="ISBN-10 or ISBN-13")
     find.add_argument("--no-cache", action="store_true", help="ignore cached responses and refetch")
-    find.add_argument("--editions", action="store_true", help="list every edition per source")
+    find.add_argument("--editions", action="store_true", help="list every edition, aligned across sources")
     find.add_argument("--json", action="store_true", help="print the full model as JSON")
     args = parser.parse_args()
 
