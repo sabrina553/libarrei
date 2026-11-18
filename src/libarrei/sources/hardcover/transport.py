@@ -1,4 +1,4 @@
-from gql import Client, gql
+from gql import Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
 class TransportLayer:
@@ -10,4 +10,5 @@ class TransportLayer:
         self.client = Client(transport=transport)
 
     def execute(self, query, variables=None):
-        return self.client.execute(gql(query), variable_values=variables)
+        # query is already a parsed gql() request, built once by the caller
+        return self.client.execute(query, variable_values=variables)

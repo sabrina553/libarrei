@@ -1,0 +1,4 @@
+{"key": "/works/OL28723763W", "title": "Hello Beautiful",
+ "authors": [{"type": {"key": "/type/author_role"}, "author": {"key": "/authors/OL1515577A"}}],
+ "covers": [-1, 14359793], "subjects": ["Fiction, women", "Fiction, family life, siblings"],
+ "description": {"type": "/type/text", "value": "Test description."}}

@@ -1,0 +1,5 @@
+{"key": "/books/OL39420471M", "title": "Hello Beautiful", "subtitle": "A Novel",
+ "authors": [{"key": "/authors/OL1515577A"}], "isbn_13": ["9780593243732"],
+ "languages": [{"key": "/languages/eng"}], "pagination": "416", "publish_date": "2023",
+ "publishers": ["Random House Publishing Group"], "physical_format": "Hardcover",
+ "covers": [13348203], "works": [{"key": "/works/OL28723763W"}]}

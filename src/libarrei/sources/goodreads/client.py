@@ -4,7 +4,7 @@ class Goodreads:
     def __init__(self, transport_layer):
         self.transport_layer = transport_layer
         # Provide a GraphQL query
-        self.legacyBookId = gql(
+        self._book_by_legacy_id_query = gql(
         """
         query GetBookByLegacyId($legacyId: Int!) {
           getBookByLegacyId(legacyId: $legacyId) {
@@ -78,7 +78,7 @@ class Goodreads:
         """
         )
 
-        self.search = gql(
+        self._search_query = gql(
             """
             query GetSearchSuggestions($query: String!) {
               getSearchSuggestions(query: $query) {
@@ -100,7 +100,7 @@ class Goodreads:
         )
 
     def search(self, variable_values):
-        return self.transport_layer.execute(self.search, variable_values)
+        return self.transport_layer.execute(self._search_query, variable_values)
 
     def legacy_id(self, variable_values):
-        return self.transport_layer.execute(self.legacyBookId, variable_values)
+        return self.transport_layer.execute(self._book_by_legacy_id_query, variable_values)
