@@ -44,6 +44,16 @@ def print_table(result: LookupResult) -> None:
         print(f"\n{source.value}: {note}")
 
 
+def print_editions(result: LookupResult) -> None:
+    for source, work in result.works.items():
+        print(f"\n{source.value}: {len(work.editions)} editions")
+        for e in work.editions:
+            cells = [first(e.isbn13), first(e.format), first(e.language), first(e.release_date), first(e.title)]
+            print("  " + "  ".join(f"{c:<14}" for c in cells[:4]) + cells[4])
+    for source, note in result.notes.items():
+        print(f"\n{source.value}: {note}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="libarrei", description="Compare book metadata across sources.")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -51,6 +61,8 @@ def main() -> None:
     find.add_argument("title", nargs="?", help="book title")
     find.add_argument("--author", help="author name, narrows a title search")
     find.add_argument("--isbn", help="ISBN-10 or ISBN-13")
+    find.add_argument("--no-cache", action="store_true", help="ignore cached responses and refetch")
+    find.add_argument("--editions", action="store_true", help="list every edition per source")
     find.add_argument("--json", action="store_true", help="print the full model as JSON")
     args = parser.parse_args()
 
@@ -58,9 +70,11 @@ def main() -> None:
         parser.error("give a title or --isbn")
 
     load_dotenv()
-    result = lookup(isbn=args.isbn, title=args.title, author=args.author)
+    result = lookup(isbn=args.isbn, title=args.title, author=args.author, use_cache=not args.no_cache)
     if args.json:
         works = {s.value: w.model_dump(mode="json", exclude_defaults=True) for s, w in result.works.items()}
         print(json.dumps({"works": works, "notes": {s.value: n for s, n in result.notes.items()}}, indent=2))
+    elif args.editions:
+        print_editions(result)
     else:
         print_table(result)
