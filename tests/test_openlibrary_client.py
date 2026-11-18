@@ -53,3 +53,10 @@ def test_cached_pages_skip_the_network():
     client(session, cache).all_editions("/works/OL27482W", page_size=2)
 
     assert len(session.calls) == 2
+
+
+def test_user_agent_includes_contact_only_when_set():
+    from libarrei.sources.openlibrary.client import USER_AGENT, user_agent
+
+    assert user_agent(None) == USER_AGENT
+    assert user_agent("someone@example.org") == "libarrei (book metadata aggregator; someone@example.org)"

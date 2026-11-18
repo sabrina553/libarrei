@@ -1,5 +1,6 @@
 """Open Library REST client: https://openlibrary.org/developers/api"""
 
+import os
 from urllib.parse import urlencode
 
 import requests
@@ -8,14 +9,21 @@ from libarrei.cache import NoCache
 from libarrei.ratelimit import INTERVALS, RateLimiter
 
 BASE_URL = "https://openlibrary.org"
-# Open Library asks API clients to identify themselves so heavy users can be contacted.
+# Open Library asks API clients to identify themselves with a contact address so
+# heavy users can be reached, and allows identified clients more requests:
+# https://openlibrary.org/developers/api
 USER_AGENT = "libarrei (book metadata aggregator)"
+
+
+def user_agent(contact: str | None) -> str:
+    return f"{USER_AGENT[:-1]}; {contact})" if contact else USER_AGENT
 
 
 class OpenLibrary:
     def __init__(self, session: requests.Session | None = None, cache=None, limiter: RateLimiter | None = None):
         self.session = session or requests.Session()
-        self.session.headers["User-Agent"] = USER_AGENT
+        # Each user supplies their own contact, so none is ever built into the code.
+        self.session.headers["User-Agent"] = user_agent(os.getenv("OPENLIBRARY_CONTACT"))
         self.cache = cache or NoCache()
         self.limiter = limiter or RateLimiter(INTERVALS["openlibrary"])
 
