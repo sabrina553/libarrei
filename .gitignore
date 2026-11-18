@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Raw scraped pages (copyrighted, large): keep local only
+tests/fixtures/raw/
