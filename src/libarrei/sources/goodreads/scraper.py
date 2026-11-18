@@ -220,25 +220,56 @@ def scrape_edition(book_el):
     }
 
 
-def scrape_editions(work_id, per_page=1):
-    url = f"https://www.goodreads.com/work/editions/{work_id}?utf8=%E2%9C%93&per_page={per_page}"
-    res = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)})
-    res.raise_for_status()
-
-    soup = BeautifulSoup(res.content, "html.parser")
-    book_elements = soup.find_all("div", class_="elementList clearFix")
-
-    return [scrape_edition(book_el) for book_el in book_elements]
+def full_size_cover(src):
+    """Drops the "._SY75_" style resize suffix so the URL serves the full cover."""
+    if not src or "nophoto" in src:
+        return None
+    return re.sub(r"\._[A-Z]{2}\d+_(?=\.\w+$)", "", src)
 
 
+def parse_editions(html):
+    """Parses one /work/editions page into the same dicts as scrape_edition, plus cover_url."""
+    soup = BeautifulSoup(html, "html.parser")
+    editions = []
+    for book_el in soup.find_all("div", class_="elementList clearFix"):
+        edition = scrape_edition(book_el)
+        if edition is None:
+            continue
+        img = book_el.select_one("div.leftAlignedImage img")
+        edition["cover_url"] = full_size_cover(img.get("src") if img else None)
+        editions.append(edition)
+    return editions
 
-# todo
-# remove this main function
-# verifty data is good
-# find how many editions total
-if __name__ == "__main__":
-    editions = scrape_editions(250135212, per_page=100)
-    for edition in editions:
-        for key, value in edition.items():
-            print(f"{key}: {value}")
-        print("-" * 40)
+
+def next_page_url(html):
+    """The "next »" link, or None on the last page; following it avoids guessing page counts."""
+    link = BeautifulSoup(html, "html.parser").find("a", class_="next_page")
+    return _absolute_goodreads_url(link["href"]) if link and link.has_attr("href") else None
+
+
+def editions_url(work_id, page=1):
+    return f"https://www.goodreads.com/work/editions/{work_id}?per_page=100&page={page}"
+
+
+def fetch_editions(work_id, cache, limiter, user_agent=None):
+    """
+    Every edition of a work, all languages, following pagination.
+
+    Each page goes through the cache (raw HTML keyed by URL) so re-parsing never
+    refetches, and the limiter only waits before a real request.
+    """
+    headers = {"User-Agent": user_agent or random.choice(USER_AGENTS)}
+
+    def load(url):
+        limiter.wait()
+        res = requests.get(url, headers=headers, timeout=30)
+        res.raise_for_status()
+        return res.text
+
+    editions = []
+    url = editions_url(work_id)
+    while url:
+        html = cache.fetch("goodreads", url, lambda: load(url))
+        editions.extend(parse_editions(html))
+        url = next_page_url(html)
+    return editions
