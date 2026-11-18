@@ -7,6 +7,7 @@ returned side by side so the results can be compared.
 import os
 from dataclasses import dataclass, field
 
+from libarrei import normalise
 from libarrei.cache import Cache, NoCache
 from libarrei.model import Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
@@ -105,6 +106,7 @@ def lookup(
             result.notes[source] = f"error: {error}"
             return
         if work:
+            normalise.work(work)
             result.works[source] = work
         else:
             result.notes.setdefault(source, "not found")
