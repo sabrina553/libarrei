@@ -1,7 +1,9 @@
 """Finds a book in every configured source and returns one Work per source.
 
 Matching across sources is not attempted here: each source's best guess is
-returned side by side so the results can be compared.
+returned side by side so the results can be compared. Stores that cannot be
+searched by ISBN (Audible) run in a second round, on the title, author and
+ASINs the catalogue sources found.
 """
 
 import os
@@ -12,6 +14,9 @@ from libarrei import normalise
 from libarrei.cache import Cache, NoCache
 from libarrei.model import Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
+from libarrei.sources.audible.client import DEFAULT_REGION as AUDIBLE_DEFAULT_REGION
+from libarrei.sources.audible.client import Audible
+from libarrei.sources.audible.mapping import to_work as audible_work
 from libarrei.sources.goodreads.client import Goodreads
 from libarrei.sources.goodreads.mapping import edition_from_editions_page, work_from_graphql
 from libarrei.sources.goodreads.scraper import fetch_editions, parse_id
@@ -24,12 +29,64 @@ from libarrei.sources.openlibrary.client import OpenLibrary
 from libarrei.sources.openlibrary.mapping import author_keys
 from libarrei.sources.openlibrary.mapping import to_work as openlibrary_work
 
+# Each known ASIN costs one request, so a work with many audiobook editions is capped.
+MAX_KNOWN_ASINS = 10
+# Catalogue sources, best first, for the title and author that later stores search by.
+CATALOGUE_ORDER = [Source.HARDCOVER, Source.GOODREADS, Source.OPENLIBRARY]
+
 
 @dataclass
 class LookupResult:
     works: dict[Source, Work] = field(default_factory=dict)
     # Why a source returned nothing: missing token, not found, or an error.
     notes: dict[Source, str] = field(default_factory=dict)
+
+
+@dataclass
+class Clues:
+    """What the first round of sources learnt, for stores that search by title or ASIN."""
+    title: str | None = None
+    author: str | None = None
+    audiobook_asins: list[str] = field(default_factory=list)
+
+
+def clues(works: dict[Source, Work], title: str | None, author: str | None) -> Clues:
+    found = Clues(title, author)
+    for source in CATALOGUE_ORDER:
+        if not (work := works.get(source)):
+            continue
+        if not found.title and work.title:
+            found.title = work.title[0].value
+        if not found.author and work.contributors:
+            found.author = next((c.name for c in work.contributors[0].value if c.role == "author"), None)
+        for edition in work.editions:
+            if any(c.value == "audiobook" for c in edition.format):
+                found.audiobook_asins += [c.value for c in edition.asin if c.value not in found.audiobook_asins]
+    found.audiobook_asins = found.audiobook_asins[:MAX_KNOWN_ASINS]
+    return found
+
+
+def _name_words(name: str) -> set[str]:
+    return set(name.casefold().replace(".", " ").split())
+
+
+def same_author(product: dict, author: str | None) -> bool:
+    # Keyword search ranks loosely, so a hit must share a word with the wanted author's name.
+    if not author:
+        return True
+    return any(_name_words(author) & _name_words(a.get("name") or "") for a in product.get("authors") or [])
+
+
+def from_audible(cache, region: str, found: Clues, all_editions: bool) -> Work | None:
+    client = Audible(region, cache=cache)
+    products = [p for asin in found.audiobook_asins if (p := client.product(asin))]
+    if found.title and (all_editions or not products):
+        seen = {p["asin"] for p in products}
+        hits = client.search(found.title, found.author, limit=20 if all_editions else 5)
+        products += [p for p in hits if p["asin"] not in seen and same_author(p, found.author)]
+    if not products:
+        return None
+    return audible_work(products if all_editions else products[:1], region)
 
 
 def from_openlibrary(
@@ -101,6 +158,14 @@ def from_goodreads(cache, token: str, query: str, all_editions: bool) -> Work | 
     return work
 
 
+def run_parallel(jobs: dict, attempt) -> None:
+    # Sources are independent and network-bound, so a round takes as long as
+    # the slowest source rather than all of them added up.
+    with ThreadPoolExecutor(max_workers=max(len(jobs), 1)) as pool:
+        for source, job in jobs.items():
+            pool.submit(attempt, source, job)
+
+
 def lookup(
     isbn: str | None = None, title: str | None = None, author: str | None = None, use_cache: bool = True,
     all_editions: bool = False, hardcover_token: str | None = None,
@@ -133,12 +198,11 @@ def lookup(
         jobs[Source.GOODREADS] = lambda: from_goodreads(cache, gr_token, query, all_editions)
     else:
         result.notes[Source.GOODREADS] = "GOODREADS_TOKEN not set"
+    run_parallel(jobs, attempt)
 
-    # Sources are independent and network-bound, so a lookup takes as long as
-    # the slowest source rather than all of them added up.
-    with ThreadPoolExecutor(max_workers=len(jobs)) as pool:
-        for source, job in jobs.items():
-            pool.submit(attempt, source, job)
+    found = clues(result.works, title, author)
+    region = os.getenv("AUDIBLE_REGION") or AUDIBLE_DEFAULT_REGION
+    run_parallel({Source.AUDIBLE: lambda: from_audible(cache, region, found, all_editions)}, attempt)
 
     # Fixed source order keeps output stable whichever source finished first.
     result.works = {s: result.works[s] for s in Source if s in result.works}

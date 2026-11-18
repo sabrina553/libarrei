@@ -12,6 +12,8 @@ const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
       'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url']),
     openlibrary: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin',
       'identifiers', 'publisher', 'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url', 'series']),
+    audible: new Set(['title', 'subtitle', 'contributors', 'asin', 'publisher', 'release_date', 'format', 'format_detail',
+      'duration_seconds', 'language', 'cover_url', 'series']),
   },
   work: {
     hardcover: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',
@@ -19,6 +21,7 @@ const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
     goodreads: new Set(['title', 'contributors', 'description', 'series', 'genres', 'original_release_date']),
     openlibrary: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',
       'original_release_date']),
+    audible: new Set(['title', 'subtitle', 'contributors', 'description', 'series']),
   },
 }
 

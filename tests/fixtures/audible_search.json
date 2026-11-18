@@ -1,0 +1,233 @@
+{
+ "products": [
+  {
+   "asin": "0008433844",
+   "title": "The Hobbit",
+   "authors": [
+    {
+     "asin": "B0H8M7NMXY",
+     "name": "J. R. R. Tolkien"
+    }
+   ],
+   "narrators": [
+    {
+     "name": "Andy Serkis"
+    }
+   ],
+   "series": [
+    {
+     "asin": "B00HQ0XPUY",
+     "sequence": "0.5",
+     "title": "The Lord of the Rings"
+    }
+   ],
+   "publisher_name": "HarperCollins",
+   "release_date": "2020-09-03",
+   "issue_date": "2020-09-03",
+   "language": "english",
+   "publisher_summary": "<p> <strong>This brand-new unabridged audio book of J.R.R. Tolkien’s beloved <em>The Hobbit</em> is read by the BAFTA award-winning actor, director and author, Andy Serkis.</strong> </p> <p>Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the pantry of his hobbit-hole in Bag End. But his contentment is disturbed when the wizard, Gandalf, and a company of thirteen dwarves arrive on his doorstep one day, to whisk him away on a journey ‘there and back again’. They have a plot to raid the treasure hoard of Smaug the Magnificent, a large and very ...</p>",
+   "merchandising_summary": "This brand-new unabridged audio book of J.R.R. Tolkien’s beloved The Hobbit is read by the BAFTA award-winning actor, director and author, Andy Serkis. Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the pantry of his hobbit-hole in Bag End...",
+   "product_images": {
+    "1000": "https://m.media-amazon.com/images/I/81xDFRQUlHL._SL1000_.jpg"
+   },
+   "runtime_length_min": 624,
+   "format_type": "unabridged",
+   "content_type": "Product",
+   "category_ladders": [
+    {
+     "ladder": [
+      {
+       "id": "19378253031",
+       "name": "Literature & Fiction"
+      },
+      {
+       "id": "19378271031",
+       "name": "Classics"
+      }
+     ],
+     "root": "Genres"
+    },
+    {
+     "ladder": [
+      {
+       "id": "19378442031",
+       "name": "Science Fiction & Fantasy"
+      },
+      {
+       "id": "19378443031",
+       "name": "Fantasy"
+      },
+      {
+       "id": "19378444031",
+       "name": "Action & Adventure"
+      }
+     ],
+     "root": "Genres"
+    }
+   ]
+  },
+  {
+   "asin": "B004EW5KKU",
+   "title": "The Hobbit",
+   "authors": [
+    {
+     "asin": "B0H8M7NMXY",
+     "name": "J. R. R. Tolkien"
+    }
+   ],
+   "narrators": [
+    {
+     "name": "Rob Inglis"
+    }
+   ],
+   "series": [
+    {
+     "asin": "B00HQ0XPUY",
+     "sequence": "0.5",
+     "title": "The Lord of the Rings"
+    }
+   ],
+   "publisher_name": "HarperCollins Publishers Limited",
+   "release_date": "2008-12-28",
+   "issue_date": "2008-12-28",
+   "language": "english",
+   "publisher_summary": "<p>Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure.</p> <p>Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the pantry of his hobbit-hole in Bag End.</p> <p>But his contentment is disturbed when the wizard, Gandalf, and a company of thirteen dwarves arrive on his doorstep one day to whisk him away on an unexpected journey ‘there and back again’. They have a plot to raid the treasure hoard of Smaug the ...</p>",
+   "merchandising_summary": "Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure. Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the...",
+   "product_images": {
+    "1000": "https://m.media-amazon.com/images/I/A1Y78U6hxRL._SL1000_.jpg"
+   },
+   "runtime_length_min": 662,
+   "format_type": "unabridged",
+   "content_type": "Product",
+   "category_ladders": [
+    {
+     "ladder": [
+      {
+       "id": "19378442031",
+       "name": "Science Fiction & Fantasy"
+      },
+      {
+       "id": "19378443031",
+       "name": "Fantasy"
+      }
+     ],
+     "root": "Genres"
+    }
+   ]
+  },
+  {
+   "asin": "B004EWDDIQ",
+   "title": "The Hobbit",
+   "authors": [
+    {
+     "asin": "B0H8M7NMXY",
+     "name": "J. R. R. Tolkien"
+    }
+   ],
+   "narrators": [
+    {
+     "name": "Martin Shaw"
+    }
+   ],
+   "publisher_name": "HarperCollins",
+   "release_date": "2005-10-11",
+   "issue_date": "2005-10-11",
+   "language": "english",
+   "publisher_summary": "<p>Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure.</p> <p>Smaug certainly looked fast asleep, when Bilbo peeped once more from the entrance. He was just about to step out on to the floor when he casught a sudden thin ray of red from under the drooping lid of Smaug’s left eye. He was only pretending to sleep! He was watching the tunnel entrance!</p> <p>Whisked from his comfortable hobbit-hole by Gandalf the wizard and a band of dwarves. Bilbo Baggins finds ...</p>",
+   "merchandising_summary": "Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure. Smaug certainly looked fast asleep, when Bilbo peeped once more from the entrance. He was just about to step...",
+   "product_images": {
+    "1000": "https://m.media-amazon.com/images/I/61giqd1Hw2L._SL1000_.jpg"
+   },
+   "runtime_length_min": 357,
+   "format_type": "abridged",
+   "content_type": "Product",
+   "category_ladders": [
+    {
+     "ladder": [
+      {
+       "id": "19378253031",
+       "name": "Literature & Fiction"
+      },
+      {
+       "id": "19378316031",
+       "name": "Historical Fiction"
+      }
+     ],
+     "root": "Genres"
+    },
+    {
+     "ladder": [
+      {
+       "id": "19378442031",
+       "name": "Science Fiction & Fantasy"
+      },
+      {
+       "id": "19378443031",
+       "name": "Fantasy"
+      },
+      {
+       "id": "19378444031",
+       "name": "Action & Adventure"
+      }
+     ],
+     "root": "Genres"
+    }
+   ]
+  },
+  {
+   "asin": "B0PODCAST1",
+   "title": "Hobbit Talk",
+   "authors": [
+    {
+     "asin": "B0H8M7NMXY",
+     "name": "J. R. R. Tolkien"
+    }
+   ],
+   "publisher_name": "HarperCollins",
+   "release_date": "2005-10-11",
+   "issue_date": "2005-10-11",
+   "language": "english",
+   "publisher_summary": "<p>Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure.</p> <p>Smaug certainly looked fast asleep, when Bilbo peeped once more from the entrance. He was just about to step out on to the floor when he casught a sudden thin ray of red from under the drooping lid of Smaug’s left eye. He was only pretending to sleep! He was watching the tunnel entrance!</p> <p>Whisked from his comfortable hobbit-hole by Gandalf the wizard and a band of dwarves. Bilbo Baggins finds ...</p>",
+   "merchandising_summary": "Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure. Smaug certainly looked fast asleep, when Bilbo peeped once more from the entrance. He was just about to step...",
+   "product_images": {
+    "1000": "https://m.media-amazon.com/images/I/61giqd1Hw2L._SL1000_.jpg"
+   },
+   "runtime_length_min": 357,
+   "format_type": "abridged",
+   "content_type": "Podcast",
+   "category_ladders": [
+    {
+     "ladder": [
+      {
+       "id": "19378253031",
+       "name": "Literature & Fiction"
+      },
+      {
+       "id": "19378316031",
+       "name": "Historical Fiction"
+      }
+     ],
+     "root": "Genres"
+    },
+    {
+     "ladder": [
+      {
+       "id": "19378442031",
+       "name": "Science Fiction & Fantasy"
+      },
+      {
+       "id": "19378443031",
+       "name": "Fantasy"
+      },
+      {
+       "id": "19378444031",
+       "name": "Action & Adventure"
+      }
+     ],
+     "root": "Genres"
+    }
+   ]
+  }
+ ],
+ "total_results": 4
+}

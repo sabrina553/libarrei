@@ -26,11 +26,12 @@ export function formatDuration(seconds: number): string {
   return `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`
 }
 
-export const SOURCES = ['hardcover', 'goodreads', 'openlibrary'] as const
+export const SOURCES = ['hardcover', 'goodreads', 'openlibrary', 'audible'] as const
 export type SourceName = (typeof SOURCES)[number]
 
 export const SOURCE_LABELS: Record<SourceName, string> = {
   hardcover: 'Hardcover',
   goodreads: 'Goodreads',
   openlibrary: 'Open Library',
+  audible: 'Audible',
 }
