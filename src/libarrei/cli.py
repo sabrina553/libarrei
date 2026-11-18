@@ -104,7 +104,7 @@ def main() -> None:
     find.add_argument("--author", help="author name, narrows a title search")
     find.add_argument("--isbn", help="ISBN-10 or ISBN-13")
     find.add_argument("--no-cache", action="store_true", help="ignore cached responses and refetch")
-    find.add_argument("--editions", action="store_true", help="list every edition, aligned across sources")
+    find.add_argument("--editions", action="store_true", help="fetch and list every edition, aligned across sources (slow when uncached)")
     find.add_argument("--merged", action="store_true", help="pick one value per field and flag conflicts")
     find.add_argument("--json", action="store_true", help="print the full model as JSON")
     args = parser.parse_args()
@@ -113,7 +113,8 @@ def main() -> None:
         parser.error("give a title or --isbn")
 
     load_dotenv()
-    result = lookup(isbn=args.isbn, title=args.title, author=args.author, use_cache=not args.no_cache)
+    result = lookup(isbn=args.isbn, title=args.title, author=args.author, use_cache=not args.no_cache,
+                    all_editions=args.editions)
     if args.merged:
         merged = merge(result.works)
         if args.json:
