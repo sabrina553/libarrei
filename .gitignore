@@ -219,3 +219,6 @@ __marimo__/
 
 # Raw scraped pages (copyrighted, large): keep local only
 tests/fixtures/raw/
+
+# Claude Code agent worktrees
+.claude/worktrees/
