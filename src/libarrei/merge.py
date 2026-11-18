@@ -43,6 +43,8 @@ class Resolved(BaseModel):
     source: Source
     source_id: str
     alternatives: list[Alternative] = []
+    # Every source's value, agreeing or not, so a review grid can show each one.
+    values: list[Alternative] = []
     conflict: bool = False
     licence: str | None = None
 
@@ -109,6 +111,7 @@ def resolve(name: str, candidates: list[Candidate]) -> Resolved | None:
             alternatives.append(Alternative(value=c.value, source=c.source, source_id=c.source_id))
     return Resolved(
         value=chosen.value, source=chosen.source, source_id=chosen.source_id, alternatives=alternatives,
+        values=[Alternative(value=c.value, source=c.source, source_id=c.source_id) for c in ranked],
         conflict=conflict and name not in NEVER_CONFLICT,
         licence=LICENCES[chosen.source] if name == "description" else None,
     )

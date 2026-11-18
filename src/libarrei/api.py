@@ -4,7 +4,10 @@ Versioned under /v1 so the response shape can change without breaking callers.
 Source tokens come from the server's environment for now.
 """
 
-from fastapi import FastAPI, HTTPException, Query
+import os
+
+from fastapi import FastAPI, Header, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from libarrei import normalise
@@ -14,6 +17,17 @@ from libarrei.merge import MergedEdition, MergedWork, merge
 from libarrei.model import Source
 
 app = FastAPI(title="libarrei", version="0.1.0")
+
+# Only the Vite dev server needs cross-origin access; the built GUI is served same-origin.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv("LIBARREI_CORS_ORIGINS", "http://localhost:5173").split(","),
+    allow_methods=["GET", "POST"],
+    allow_headers=["X-Hardcover-Token", "Content-Type"],
+)
+
+# A librarian's own Hardcover token, sent per request and never stored or logged.
+TokenHeader = Header(None, alias="X-Hardcover-Token")
 
 # Which source's first edition is "the" matched edition for a title search:
 # Hardcover's search re-ranks by title and author, so it is the most reliable.
@@ -25,10 +39,12 @@ def health() -> dict:
     return {"status": "ok"}
 
 
-def _lookup(isbn: str | None, title: str | None, author: str | None, all_editions: bool) -> LookupResult:
+def _lookup(
+    isbn: str | None, title: str | None, author: str | None, all_editions: bool, token: str | None = None
+) -> LookupResult:
     if not isbn and not title:
         raise HTTPException(422, "give isbn or title")
-    result = lookup(isbn=isbn, title=title, author=author, all_editions=all_editions)
+    result = lookup(isbn=isbn, title=title, author=author, all_editions=all_editions, hardcover_token=token)
     if not result.works:
         raise HTTPException(404, {"message": "not found in any source", "notes": result.notes})
     return result
@@ -40,9 +56,10 @@ def lookup_merged(
     title: str | None = None,
     author: str | None = None,
     editions: str = Query("matched", pattern="^(matched|all)$"),
+    x_hardcover_token: str | None = TokenHeader,
 ) -> dict:
     """The full merged record: chosen values, alternatives and conflicts."""
-    result = _lookup(isbn, title, author, all_editions=editions == "all")
+    result = _lookup(isbn, title, author, all_editions=editions == "all", token=x_hardcover_token)
     merged = merge(result.works)
     return {
         "work": merged.model_dump(mode="json", exclude_defaults=True),
@@ -56,8 +73,8 @@ class JobRequest(BaseModel):
     author: str | None = None
 
 
-def _full_lookup(isbn: str | None, title: str | None, author: str | None) -> dict:
-    return lookup_merged(isbn=isbn, title=title, author=author, editions="all")
+def _full_lookup(isbn: str | None, title: str | None, author: str | None, token: str | None = None) -> dict:
+    return lookup_merged(isbn=isbn, title=title, author=author, editions="all", x_hardcover_token=token)
 
 
 jobs = JobStore(lambda **query: _full_lookup(**query))
@@ -73,11 +90,12 @@ def _job_view(job: Job) -> dict:
 
 
 @app.post("/v1/jobs", status_code=202)
-def start_job(request: JobRequest) -> dict:
+def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) -> dict:
     """Fetches every edition in the background; poll GET /v1/jobs/{id} for the result."""
     if not request.isbn and not request.title:
         raise HTTPException(422, "give isbn or title")
-    return _job_view(jobs.submit(request.model_dump()))
+    secrets = {"token": x_hardcover_token} if x_hardcover_token else {}
+    return _job_view(jobs.submit(request.model_dump(), secrets))
 
 
 @app.get("/v1/jobs/{job_id}")
@@ -88,9 +106,12 @@ def job_status(job_id: str) -> dict:
 
 
 @app.get("/v1/metadata")
-def metadata(isbn: str | None = None, title: str | None = None, author: str | None = None) -> dict:
+def metadata(
+    isbn: str | None = None, title: str | None = None, author: str | None = None,
+    x_hardcover_token: str | None = TokenHeader,
+) -> dict:
     """One flat record in Grimmory's BookMetadata field names."""
-    result = _lookup(isbn, title, author, all_editions=False)
+    result = _lookup(isbn, title, author, all_editions=False, token=x_hardcover_token)
     merged = merge(result.works)
     return to_grimmory(merged, matched_edition(result, merged, isbn))
 
