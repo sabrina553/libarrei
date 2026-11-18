@@ -1,0 +1,157 @@
+# work
+title: Convenience Store Woman [hardcover] CONFLICT
+contributors: Sayaka Murata, Ginny Tapley Takemori (translator) [hardcover] CONFLICT
+description: [goodreads description] [goodreads] CONFLICT
+genres: Fiction, Contemporary, Japan, Japanese Literature, Literary Fiction, Asia, Adult, Asian Literature [goodreads]
+original_release_date: 2016-07-27 [goodreads]
+
+# editions (149); ! marks a conflict
+goodreads:107139968,53450682 hardcover:31341914 | isbn13 DUP | 9785604458006 | physical! | ru | 2016-07-27! | 143! | Popcorn Books | Человек-комбини
+goodreads:149603562,203098198 hardcover:30441796 | isbn13 DUP | 9781846276859 | ebook | en | 2016-07-27! | 230! | Portobello Books! | Convenience Store Woman
+goodreads:157883656 | - | 9788202680657 | physical | nb | 2020-09-01 | 160 | Font forlag | Døgnåpent
+goodreads:181471132 | - | 9789617083149 | physical | sl | 2023-05-23 | 128 | VBZ | Ženska iz samopostrežne trgovine
+goodreads:199297002 | - | 9789734695355 | physical | ro | 2023-07-01 | 200 | Polirom | Femeia minimarket
+goodreads:200063000 | - | - | physical | en | 2018-01-01 | - | New York, Grove Press, [ | Convenience Store Woman
+goodreads:208541094 | - | 9788793661707 | audiobook | da | 2019 | - | Grif | Døgnkioskmennesket
+goodreads:223058136 | - | - | audiobook | no | - | - | - | Døgnåpent
+goodreads:225062228 | - | 9789951398305 | physical | sq | 2024 | 162 | Skanderbeg Books | Shitësja
+goodreads:227841932 | - | 9786161872489 | physical | th | 2025-02-08 | 180 | Page Publishing | มนุษย์ร้านสะดวกซื้อ
+goodreads:228033077 hardcover:33460957 | isbn13 | 9786151060063 | physical | hu | 2025-03-17 | 216 | Európa Kiadó | Keiko vegyesboltja: Éjjel-nappal Tokió!
+goodreads:229318369 | - | - | audiobook | es | 2020-12-31 | - | Duomo ediciones | La Dependienta
+goodreads:229596059 | - | - | audiobook | ja | 2018-01-16 | - | Audible Studios | コンビニ人間
+goodreads:231963945 | - | - | ebook | es | 2019-01-28 | 108 | Newton Compton Editores / Duomo ediciones | La dependienta
+goodreads:233637044 | - | 9786082810072 | physical | mk | 2025 | 120 | Издавачка куќа ТРИ | Продавачката
+goodreads:235604625 hardcover:33019361 | fuzzy | 9781668144954 | audiobook | en | 2025-06-17 | - | Simon & Schuster Audio | Convenience Store Woman
+goodreads:236528114 hardcover:32311271 | isbn13 | 9781803510217 | physical | en | 2016-07-27! | 176 | Granta Books | Convenience Store Woman
+goodreads:238173512 hardcover:7526847 openlibrary:OL28719876M | isbn13 | 9781846276842 | physical | en | 2016-07-27! | 176! | Granta! | Convenience Store Woman
+goodreads:238650966 hardcover:33364065 | isbn13 | 9789038815718 | physical | nl | 2025-03-28 | 144 | Nijgh & Van Ditmar | Buurtsupermens
+goodreads:240092648 | - | 9788308086582 | physical | pl | 2025-09-17 | 168 | Wydawnictwo Literackie | Dziewczyna z konbini
+goodreads:243400801 | - | 9788833578965 | physical | it | 2025-07 | 176 | Edizioni e/o | La ragazza del convenience store
+goodreads:243900839 | - | 9786052656518 | physical | tr | 2025-11-20 | 104 | İthaki Yayınları | Kasiyer
+goodreads:244469780 | - | - | physical | es | 2019-01-01 | - | Duomo ediciones. | La dependienta
+goodreads:245924863 | - | - | physical | bn | 2025-12 | 102 | উপকথা প্রকাশনী | কনভিনিয়েন্স স্টোর ওমেন
+goodreads:246406247 | - | 9789941378348 | physical | ka | 2026 | 136 | სულაკაურის გამომცემლობა | ადამიანი – კომბინი
+goodreads:249516765 | - | 9786171713413 | physical | uk | 2026 | 128 | Vivat | Дівчина з крамнички
+goodreads:254899145 | - | 9791388042652 | physical | es | 2026-09-28 | 176 | Duomo | La dependienta
+goodreads:256251348 | - | 9789373179278 | physical | ml | 2026-06-25 | 164 | Manjul Publishing House Pvt Ltd | Convenience Store woman
+goodreads:256792406 | - | - | physical | bn | 2025-12 | 102 | - | কনভিনিয়েন্স স্টোর ওম্যান
+goodreads:259056808 | - | - | physical | bn | 2026-01-01 | 127 | Rodela Prakashani | Convenience Store Woman (কনভিনিয়েন্স স্টোর ওমেন)
+goodreads:31203000 | - | - | ebook | ja | 2016-07-27 | 133 | 文藝春秋 | コンビニ人間 [Konbini ningen]
+goodreads:32281061 | - | 9784163906188 | 単行本 | ja | 2016-07-27 | 160 | 文藝春秋 | コンビニ人間
+goodreads:32929892 | - | 9788952235268 | physical | ko | 2016-11-01 | 192 | 살림 | 편의점 인간
+goodreads:36001900 hardcover:32903387 | isbn13 | 9789869509459 | physical | zh | 2016-01-01! | 223 | 悅知文化 | 便利店人間
+goodreads:36605525 | - | - | ebook | en | 2019-06-12 | 176 | Grove Press | Convenience Store Woman
+goodreads:36654319 hardcover:30742315 | isbn13 | 9782207137208 | physical | fr | 2016-07-27! | 128 | Éditions Denoël! | Konbini
+goodreads:36739755 hardcover:8466259 openlibrary:OL26957093M | isbn13 | 9780802128256 | physical | en | 2016-07-27! | 163 | Grove Press | Convenience Store Woman
+goodreads:37581577 hardcover:31533180 | isbn13 | 9780802165800 | ebook | en | 2018-06-12 | 174! | Grove Press | Convenience Store Woman
+goodreads:38094724,59561294 | isbn13 DUP | 9782207137215 | ebook | fr | 2018-01-11! | 128 | Denoël! | Konbini
+goodreads:38323482 hardcover:30488140 | isbn13 | 9783351037031 | physical | de | 2016-07-27! | 145 | Aufbau | Die Ladenhüterin
+goodreads:38357895 | - | - | physical | en | 2018-06-27 | 163 | Portobello Books | Convenience Store Woman
+goodreads:38371025 hardcover:31548847 | isbn13 | 9781538555590 | audiobook | en | 2018-06-12 | - | Blackstone Publishing | Convenience Store Woman
+goodreads:38399688 hardcover:27510700 openlibrary:OL26967306M | isbn13 | 9781538555606 | physical! | en | 2016-07-27! | 4! | Blackstone Audiobooks | Convenience Store Woman
+goodreads:38399689 hardcover:3977394 openlibrary:OL28337602M | isbn13 | 9781538555613 | physical! | en | 2016-07-27! | 4 | Blackstone Audio! | Convenience Store Woman
+goodreads:39397541 hardcover:30543939 | isbn13 | 9783841214805 | ebook | de | 2016-07-27! | 144! | Aufbau Digital! | Die Ladenhüterin
+goodreads:39696312 | - | - | physical | ro | 2018 | 168 | Polirom | Femeia minimarket
+goodreads:39703721 hardcover:30610823 | isbn13 | 9789734672233 | physical | ro | 2016-07-27! | 168 | Editura Polirom | Femeia minimarket
+goodreads:40712413 hardcover:30780872 openlibrary:OL40234151M,OL46538835M | isbn13 DUP | 9788833570020 | physical | it | 2016-07-27! | 168 | Dal mondo! | La ragazza del convenience store
+goodreads:40778245 | - | - | ebook | en | 2018-07-05 | 107 | Granta Books | Convenience Store Woman
+goodreads:41217718 hardcover:31880144 | isbn13 | 9787540485252 | physical | zh | 2016-07-27! | 208 | 湖南文艺出版社·向上文学品牌 | 人间便利店
+goodreads:41436558 hardcover:19235450 openlibrary:OL27805063M | isbn13 | 9781846276835 | physical | en | 2016-07-27! | 163 | Granta! | Convenience Store Woman
+goodreads:41543585 hardcover:32195805 | isbn13 | 9788833570167 | ebook | it | 2018-08-29 | 176 | E/O! | La ragazza del convenience store
+goodreads:41976888 | - | - | physical | pt | 2018-09 | 152 | Estação Liberdade | Querida konbini
+goodreads:42072170 hardcover:31506142 | isbn13 | 9781538555644 | audiobook | en | 2016-07-27! | - | Blackstone Publishing | Convenience Store Woman
+goodreads:42087801 | - | 9780010759907 | physical | zh | 2017-07-31 | 224 | 悅知文化 | 便利店人間
+goodreads:42357662 hardcover:24796723 openlibrary:OL28337601M | isbn13 | 9780802129628 | physical | en | 2019-09-17 | 176! | Grove Press | Convenience Store Woman
+goodreads:42427078 hardcover:32136841 | isbn13 | 9786163375414 | physical | th | 2016-07-27! | 161! | animag | มนุษย์ร้านสะดวกซื้อ
+goodreads:43195322 hardcover:30513058 openlibrary:OL62210735M | isbn13 | 9788574482958 | physical | pt | 2016-07-27! | 152 | Estação Liberdade | Querida Konbini
+goodreads:43385579 | - | - | audiobook | en | 2018-06-12 | - | Blackstone Audio, Inc. | Convenience Store Woman
+goodreads:43386807 | - | 9788417016852 | ebook | ca | 2019-01-16 | 122 | Editorial Empúries | La noia de la botiga 24 hores
+goodreads:43598479 | - | - | physical | en | 2019-05-02 | 163 | Granta Books | Convenience Store Woman
+goodreads:43599043,43764278 hardcover:30566588 openlibrary:OL28230310M | isbn13 DUP | 9788417761196! | physical! | es | 2016-07-27! | 162! | Duomo Ediciones | La dependienta
+goodreads:43715708 hardcover:30742339 openlibrary:OL39471043M | isbn13 | 9784167911300 | physical! | ja | 2016-01-01! | 160! | 文藝春秋! | コンビニ人間!
+goodreads:43726749 hardcover:30543017 | isbn13 | 9789722066631 | physical | pt | 2016-07-27! | 168 | Publicações Dom Quixote | Uma Questão de Conveniência
+goodreads:43991167 hardcover:30698529 | isbn13 | 9788323346241 | physical | pl | 2016-07-27! | 144 | Wydawnictwo Uniwersytetu Jagiellońskiego | Dziewczyna z konbini
+goodreads:44090062 hardcover:30837255 | isbn13 | 9789038806631 | physical | nl | 2016-07-27! | 143 | Singel Uitgeverijen! | Buurtsupermens
+goodreads:44094594 hardcover:31469693 | isbn13 | 9788074737466 | physical | cs | 2016-07-27! | 120 | Kniha Zlín | Za sklem
+goodreads:44104104 | - | 9789722066648 | ebook | pt | 2019-02-01 | 122 | Dom Quixote | Uma Questão de Conveniência
+goodreads:45074891 | - | 9782072798597 | ebook | fr | 2019-04-25 | 139 | Folio | La Fille de la supérette
+goodreads:45467795 | - | - | ebook | ja | 2018-09-04 | 133 | 文藝春秋 | コンビニ人間 [Konbini ningen]
+goodreads:45718295 openlibrary:OL39821450M | isbn13 | 9782072798559 | physical | fr | 2019-04-25 | 144 | Folio! | La fille de la supérette!
+goodreads:45718720 | - | - | physical | pt | 2018 | 155 | Publicações Dom Quixote | Uma Questão de Conveniência
+goodreads:46018591 | - | - | physical | en | 2019 | 163 | Granta Books | Convenience Store Woman
+goodreads:46021597 hardcover:31712785 openlibrary:OL62751534M | isbn13 | 9788793661363 | physical | da | 2016-07-27! | 150 | Grif | Døgnkioskmennesket
+goodreads:46121730 hardcover:31394589 openlibrary:OL47337753M | isbn13 | 9788417016760 | physical | ca | 2016-07-27! | 160 | Editorial Empúries | La noia de la botiga 24 hores
+goodreads:46136454 | - | 9789997875952 | physical | mn | 2019 | - | Тагтаа паблишинг | Нэрийн Дэлгүүрийн Эмэгтэй
+goodreads:48586711 hardcover:32809135 openlibrary:OL35400129M | isbn13 | 9786057717313 | physical | tr | 2016-01-01! | 126 | Turkuvaz Kitap | Kasiyer
+goodreads:48891994 | - | - | physical | he | 2019-11 | 145 | כתר | בשולי הנוחות
+goodreads:48923367 | - | 9789512414987 | physical | fi | 2020-02 | 126 | Gummerus | Lähikaupan nainen
+goodreads:49196279 hardcover:31333636 openlibrary:OL62750963M | isbn13 | 9789178616343 | physical | sv | 2016-07-27! | 163 | Lind & Co | Hur mår fröken Furukura?
+goodreads:49211985 hardcover:31707140 | isbn13 | 9786094801242 | physical | lt | 2016-07-27! | 144 | Lietuvos rašytojų sąjungos leidykla | Kombinio moteris
+goodreads:49548999 | - | - | ebook | cs | 2019 | 120 | Kniha Zlín | Za sklem
+goodreads:49802501 | - | 9781783785575 | physical | en | 2018 | 159 | GROVE/ATLANTIC, INC. | Convenience Store Woman
+goodreads:49865679 hardcover:32347782 | isbn13 | 9786004613538 | physical | fa | 2016-07-27! | 127! | کوله‌پشتی | سوپرمارکت شبانه‌روزی
+goodreads:50077439 hardcover:30698872 | isbn13 | 9788680830254 | physical | sr | 2016-07-27! | 117 | Booka | Prodavačica
+goodreads:50513298 | - | 9788281695238 | physical | no | 2020-01-06 | 156 | - | Døgnåpent
+goodreads:51031906 | - | - | ebook | en | 2019-08 | 176 | Grove Press | Convenience Store Woman
+goodreads:51110871 | - | 9788793661370 | ebook | da | 2019-05-24 | - | Grif | Døgnkioskmennesket
+goodreads:51496697 hardcover:30939339 | isbn13 | 9783746636061 | physical | de | 2016-07-27! | 145 | Aufbau Taschenbuch Verlag! | Die Ladenhüterin
+goodreads:51836492 hardcover:31106651 | isbn13 | 9789512418985 | audiobook | fi | 2016-07-27! | - | Gummerus | Lähikaupan nainen
+goodreads:51960840 hardcover:32582483 | isbn13 | 9783961051953 | physical! | de | 2016-07-27! | - | Aufbau Audio | Die Ladenhüterin
+goodreads:52040929 | - | - | audiobook | de | 2020-02-18 | - | Aufbau-Verlag | Die Ladenhüterin
+goodreads:52292854 hardcover:31101845 openlibrary:OL62751434M | isbn13 | 9786045537800 | physical | vi | 2016-07-27! | 144 | Nhã Nam & NXB Hội Nhà Văn! | Cô nàng cửa hàng tiện ích
+goodreads:52351851 | - | 9789512418206 | ebook | fi | 2020-02-19 | 71 | Gummerus | Lähikaupan nainen
+goodreads:52682951 | - | - | physical | en | 2019-05-02 | 163 | Granta Books | Convenience Store Woman
+goodreads:53243162 hardcover:33062181 | isbn13 | 9789669820990 | physical | uk | 2016-01-01! | 144 | Vivat | Дівчина з крамнички
+goodreads:53358907 | - | - | audiobook | en | 2020-03-09 | - | Granta Books | Convenience Store Woman
+goodreads:53407179 | - | - | ebook | en | 2018-07 | 176 | Granta Books | Convenience Store Woman
+goodreads:53470472 | - | - | ebook | sv | - | - | - | Hur mår fröken Furukura?
+goodreads:54260476 hardcover:31694925 | isbn13 | 9786020644394 | physical | id | 2016-07-27! | 160 | Gramedia Pustaka Utama | Convenience Store Woman - Gadis Minimarket
+goodreads:54551177 | - | - | ebook | zh | 2018-04-01 | 140 | 湖南文艺出版社 | 人间便利店（"荣获芥川奖，引起日本社会集体沉思的现实主义话题之作！我们努力模仿，只为扮演大家心目中的普通人。 "） (博集外国文学书榜系列)
+goodreads:54757597 | - | - | ebook | fr | 2018-01-11 | 103 | Denoël | Konbini, la fille de la superette
+goodreads:54921975 | - | 9788417423124 | physical | ca | 2020-01-15 | 160 | labutxaca | La noia de la botiga 24 hores
+goodreads:55017769 openlibrary:OL62751273M | isbn13 | 9786226983167 | physical | fa | 2020 | 102 | خوب! | زن فروشنده
+goodreads:55821760 | - | 9789939766041 | physical | hy | 2020 | 180 | Antares | Կոնբինիի մարդը
+goodreads:56241440 | - | - | ebook | zh | 2020-10-10 | 109 | - | 人間便利店（榮獲芥川獎，引起日本社會集體沉思的現實主義話題之作！我們努力模仿，只為扮演大家心目中的普通人。）
+goodreads:56657816 hardcover:32803792 | isbn13 | 9786190207542 | physical | bg | 2016-01-01! | 160 | Colibri | Жената конбини
+goodreads:57616175 | - | - | audiobook | ru | 2021-04-01 | - | Popcorn Books | Человек-комбини
+goodreads:57800084 | - | - | physical | sv | - | 159 | Lind&Co | Hur mår fröken Furukura?
+goodreads:57860030 | - | - | physical | ca | 2020-01-15 | 160 | Labutxaca | La noia de la botiga 24 hores
+goodreads:57969473 | - | 9789949858149 | physical | et | 2021-05 | 128 | Tänapäev | Inimene helendavast klaaskastist
+goodreads:58040270 | - | - | physical | en | 2018 | 163 | Granta Books | Convenience Store Woman
+goodreads:58360668 hardcover:31544985 | isbn13 | 9788833573267 | physical | it | 2016-07-27! | 176 | e/o | La ragazza del convenience store
+goodreads:58488688 | - | - | ebook | en | 2018-07-05 | 163 | Portobello Books | Convenience Store Woman
+goodreads:58509034 | - | 9789038810782 | audiobook | nl | 2021-05-04 | - | Nijgh & Van Ditmar | Buurtsupermens
+goodreads:58560381 | - | - | ebook | en | - | 89 | - | Convenience Store Woman
+goodreads:58922557 | - | - | physical | hr | 2021 | 140 | V.B.Z. | Žena iz prodavaonice mješovite robe
+goodreads:59724792 | - | - | audiobook | ru | - | - | - | Человек-комбини
+goodreads:59781079 | - | - | physical | ko | 2016-11-01 | 204 | 살림 | 편의점 인간
+goodreads:60308446 | - | 9789849951353 | physical | bn | 2025 | 127 | রোদেলা প্রকাশনী | কনভিনিয়েন্স স্টোর ওমেন
+goodreads:60316636 openlibrary:OL62751120M | isbn13 | 9789179034511 | physical | sv | 2021-02-09 | - | Lind & Co | Hur mår fröken Furukura?
+goodreads:60555100 hardcover:30400953 | isbn13 | 9781783785636 | audiobook | en | 2020-02-10 | - | Granta Books | Convenience Store Woman
+goodreads:60578621 | - | - | physical | es | 2020-02 | 162 | Duomo Nefelibata | La dependienta
+goodreads:60741900 | - | 9782207163276 | physical | fr | 2021-05-19 | 128 | DENOEL | Konbini
+goodreads:60807907 | - | 9789935523389 | physical | is | 2022 | 150 | Angústúra | Kjörbúðarkonan
+goodreads:61078256 | - | 9781538555651 | audiobook | en | 2019-09-11 | - | Blackstone Publishing | Convenience Store Woman
+goodreads:61122377 | - | - | physical | en | 2019-05-02 | 176 | Granta Publications Ltd | Convenience Store Woman
+goodreads:61310528 hardcover:33457826 | isbn13 | 9789038806648 | physical! | nl | 2019-08-21 | - | Nijgh & Van Ditmar | Buurtsupermens
+goodreads:62960463 | - | 9786039185727 | physical | ar | 2022 | 135 | دار أثر للنشر والتوزيع | عاملة متجر البقالة
+goodreads:63222160 hardcover:30560593 | isbn13 | 9782072999390 | physical | fr | 2016-07-27! | 142! | Éditions Gallimard! | La fille de la supérette
+goodreads:63282871 | - | - | physical | en | 2019-05-02 | 163 | Granta Books | Convenience Store Woman
+goodreads:69717731 | - | 9783961051946 | audiobook | de | 2020-02-18 | - | Aufbau Audio | Die Ladenhüterin
+hardcover:30633344 openlibrary:OL39690880M | isbn13 | 9781538584552 | audiobook | en | 2018-01-01 | - | Blackstone Pub | Convenience Store Woman
+hardcover:31001902 | - | 9786020644400 | physical | id | 2020-08-03 | 160 | Gramedia Pustaka Utama | Gadis Minimarket
+hardcover:31258363 | - | - | physical | en | 2016-07-27 | - | Grove Press | Convenience Store Woman
+hardcover:31269519 | - | - | physical | - | - | - | - | Человек-комбини
+hardcover:31501584 | - | - | audiobook | - | - | - | - | Convience Store Woman
+hardcover:31508238 | - | - | ebook | - | - | 72 | - | La Dependienta
+hardcover:31563357 | - | - | physical | es | 2016-07-27 | 162 | Duomo Ediciones | La dependienta
+hardcover:31693231 | - | - | audiobook | en | 2022-12-11 | - | BBC Radio 4 | Working Titles, Convenience Store Woman - BBC Radio 4
+hardcover:31712403 | - | - | ebook | - | 2019-08-01 | 176 | Grove Press | Convenience Store Woman
+hardcover:32266285 | - | - | physical | - | - | - | - | Convenience Store Woman
+hardcover:32292360 | - | - | physical | - | - | - | - | Buurtsupermens
+hardcover:32292664 | - | - | physical | - | - | - | - | コンビニ人間
+hardcover:32575969 | - | - | ebook | ja | - | - | 文藝春秋 / Bungei Shunjū | コンビニエンスストア様
+hardcover:32982417 | - | - | physical | - | - | - | - | Convenience Store Woman: Library Edition
+hardcover:33061953 | - | - | physical | - | - | - | - | Convenience Store Woman
+openlibrary:OL56965583M | - | 9789939766294 | - | hy | 2020 | - | Անտարես | Կոնբինիի մարդը
+openlibrary:OL62751045M | - | 9789178616619 | ebook | sv | 2019 | - | Lind & Co Förlag | Hur mår fröken Furukura?

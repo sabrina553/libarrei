@@ -1,0 +1,263 @@
+# work
+title: Mistborn: The Final Empire [hardcover] CONFLICT
+subtitle: The Final Empire [hardcover]
+contributors: Brandon Sanderson [hardcover]
+description: [goodreads description] [goodreads] CONFLICT
+series: The Mistborn Saga: The Original Trilogy #1 [hardcover] CONFLICT
+genres: Fantasy, Fiction, High Fantasy, Epic Fantasy, Magic, Adult, Science Fiction Fantasy, Young Adult, Adventure [goodreads]
+original_release_date: 2006-07-17 [hardcover]
+
+# editions (253); ! marks a conflict
+goodreads:104421851 | - | 9788380820630 | audiobook | pl | 2016-11-09 | - | MAG | Z mgły zrodzony
+goodreads:10629601,52292053 hardcover:31333409 | isbn13 DUP | 9789546551238! | physical | bg | 2006-07-17! | 656! | Бард! | Последната империя
+goodreads:123224254 | - | - | ebook | en | 2010-04-01 | 558 | Tor Books | Mistborn
+goodreads:123402624 | - | - | physical | es | 2022-07-07 | 680 | B de Bolsillo | El imperio final
+goodreads:12353158 | - | - | physical | fr | 2011-10-12 | 928 | Le Livre de Poche | L'Empire ultime
+goodreads:126691186 | - | - | physical | - | 2006-01-01 | - | Tom Doherty | Mistborn
+goodreads:126691190 | - | - | physical | - | 2008-01-01 | - | Tom Doherty | Mistborn
+goodreads:12968705 | - | - | ebook | en | 2010-03-30 | 884 | Gollancz | The Final Empire
+goodreads:13014258 hardcover:31148372 | isbn13 | 9788652105083 | physical | sr | 2006-07-17! | 645 | Laguna | Poslednje carstvo
+goodreads:13075998 | - | 9782702150290 | ebook | fr | 2010-03-17 | 603 | Orbit | L'Empire ultime
+goodreads:13141623 hardcover:30550950 openlibrary:OL28761377M | isbn13 | 9788498726138 | physical | en! | 2006-07-17! | 686! | National Geographic Books! | El imperio final
+goodreads:13380705 hardcover:30800010 | isbn13 | 9788071973317 | physical | cs | 2006-07-17! | 622! | Talpress | Mistborn: Finální říše!
+goodreads:13386971 | - | - | ebook | - | 2011-11-10 | 896 | Heyne Verlag | Kinder des Nebels
+goodreads:136778220 | - | - | physical | en | 2007-01-01 | - | Tor Fantasy | The Final Empire
+goodreads:14865396 | - | - | audiobook | de | 2012-04-06 | - | Random House Audio | Kinder des Nebels
+goodreads:156991663 hardcover:30953268 | isbn13 | 9788804778769 | physical | it | 2006-07-17! | 696 | Mondadori | L'ultimo impero. Mistborn
+goodreads:157121802 | - | - | physical | en | 2022-01-01 | 300 | Efinito | The Final Empire
+goodreads:15777049 | - | 9787552000320 | physical | zh | 2012-05 | 606 | 上海社会科学院出版社 | 最后帝国
+goodreads:170539806 | - | - | physical | zh | 2016-03-01 | - | 重庆出版社，重庆出版集团 | 迷雾之子卷一：最后帝国
+goodreads:171657146 | - | - | physical | en | 2010-01-01 | 720 | CITE城邦 | 迷霧之子 首部曲：最後帝國
+goodreads:171667489 | - | - | physical | zh | 2020-01-01 | 728 | CITE城邦 | 迷霧之子首部曲：最後帝國
+goodreads:17186424 hardcover:32137995 | isbn13 | 9789024558834 | physical | nl | 2006-07-17! | 639 | Uitgeverij Luitingh | Het Laatste Rijk
+goodreads:17190004 hardcover:31660362 | isbn13 | 9780792771357 | audiobook | en | 2010-04-27 | - | BBC Audiobooks America | Mistborn: The Final Empire!
+goodreads:17190009 | - | - | audiobook | en | 2009-06-19 | - | Macmillian Audio | The Final Empire
+goodreads:17282489 hardcover:30500344 openlibrary:OL48138652M | isbn13 | 9780575097742 | ebook | en | 2006-07-17! | 672! | Hachette UK! | The Final Empire!
+goodreads:17667041 hardcover:30501714 openlibrary:OL47318250M | isbn13 | 9788490192955 | ebook | es | 2015-01-01! | 816! | Nova | El imperio final
+goodreads:17973722 hardcover:31083171 | isbn13 | 9788834721360 | physical | it | 2006-07-17! | 696! | Fanucci | Mistborn. L'ultimo impero
+goodreads:179962173 | - | 9786191933167 | physical | bg | 2023-07 | 672 | Artline Studios | Последната империя
+goodreads:18490585 hardcover:30432878 openlibrary:OL27959083M | isbn13 | 9780765377135 | physical | en | 2006-07-17! | 672! | Tor Teen! | The Final Empire!
+goodreads:18789931 hardcover:31521152 | isbn13 | 9785699461103 | physical | ru | 2006-07-17! | 736 | Эксмо | Пепел и сталь
+goodreads:19140285 | - | 9788834722107 | ebook | it | 2012-12-10 | 608 | Fanucci | L'ultimo impero
+goodreads:19295025 hardcover:30512443 openlibrary:OL59199388M | isbn13 | 9788580448641 | physical! | pb! | 2006-07-17! | 608 | LeYa! | Mistborn: O Império Final!
+goodreads:19432259 | - | - | physical | en | - | - | - | Mistborn
+goodreads:200331545 | - | 9788682518082 | physical | sr | 2023-10 | 670 | Pridemage games - MIPL | Maglorodni
+goodreads:201772093 hardcover:31959646 | isbn13 | 9788419260246 | physical | es | 2006-07-17! | 672 | Nova | Nacidos de la bruma
+goodreads:201795312 hardcover:32113613 | isbn13 | 9785389243750 | physical | ru | 2006-07-17! | 800 | Азбука | Рожденный туманом. Книга 1. Пепел и сталь!
+goodreads:204649558 | - | - | ebook | en | 2024-01 | 647 | Gollancz | The Final Empire
+goodreads:204780305 hardcover:31597332 openlibrary:OL51627540M | isbn13 | 9788419260444 | physical | es | 2006-07-17! | 672 | Nova! | Nacidos de la Bruma: El Imperio Final!
+goodreads:204780324 | - | 9788419260451 | physical | es | 2024-04-25 | 672 | Nova | Nacidos de la bruma
+goodreads:212257993 | - | - | audiobook | en | 2011-03-18 | - | Orion Publishing Group Limited | The Final Empire
+goodreads:21462006 | - | - | physical | en | 2009-10-01 | 647 | Gollancz | The Final Empire
+goodreads:219393469 | - | 9789464304121 | audiobook | nl | 2022 | - | Storytel Publishing NL | Het laatste rijk
+goodreads:22092442 hardcover:30478610 | isbn13 | 9789896376383 | physical | pt | 2014-06-06 | 624! | Saída de Emergência | O Império Final
+goodreads:221060881 hardcover:33434397 | isbn13 | 9782253243489 | ebook | fr | 2024-10-29 | 917! | Le Livre de Poche | Fils-des-Brumes
+goodreads:221111665 hardcover:31897364 | isbn13 | 9789778201734 | physical! | ar | 2006-07-17! | 1004! | دار كيان للنشر و التوزيع! | ملحمة وليدو الضباب: الإمبراطوية النهائية!
+goodreads:221119492 | - | - | ebook | fr | 2024-10-29 | 899 | Le Livre de Poche | Fils-des-Brumes
+goodreads:221750388 hardcover:33323485 | isbn13 | 9788413149813 | physical | es | 2024-03-06! | 680 | B de Bolsillo | Nacidos de la bruma!
+goodreads:221768133 | - | - | physical | es | 2012 | - | Ediciones B | El Imperio Final
+goodreads:222693181 | - | 9788055195742 | physical | sk | 2025-01-28 | 584 | Ikar | Zrodení z hmly
+goodreads:222717525 | - | - | ebook | fr | 2024-10-29 | 899 | Le Livre de Poche | Fils-des-Brumes
+goodreads:223111967 hardcover:1257855 openlibrary:OL28684446M | isbn13 | 9780575089914 | physical | en | 2006-07-17! | 647 | Gollancz | The Final Empire!
+goodreads:223249979 hardcover:32974801 | isbn13 | 9788410381513 | physical | es | 2006-07-17! | 680 | Penguin Bolsillo | El imperio final
+goodreads:22369449 hardcover:30500337 | fuzzy | 9786067191196! | physical | ro | 2014-08-19! | 816 | Trei | Ultimul imperiu
+goodreads:22401526 | - | - | physical | he | 2011-06-02 | 592 | אופוס | האימפריה האחרונה
+goodreads:224106365 hardcover:32883565 openlibrary:OL60671300M | isbn13 | 9788410254145 | physical | ca | 2006-01-01! | 688 | Mai Més | Fills de la boira
+goodreads:224106443 | - | 9788410254121 | physical | ca | 2025-02-05 | 688 | Mai Més | Fills de la boira
+goodreads:22736374 | - | - | ebook | fr | 2010-03-17 | 603 | Orbit | L'Empire ultime
+goodreads:228517251 | - | - | audiobook | de | 2024-08-30 | - | OSTERWOLDaudio | Kinder des Nebels
+goodreads:228627241 | - | - | physical | cs | 2024-10-01 | 590 | Talpress | Mistborn
+goodreads:228670341 | - | - | audiobook | fr | 2022-07-20 | - | Audiolib | Fils des brumes
+goodreads:22884563 | - | - | audiobook | en | 2009-01-22 | - | Macmillan Audio | Mistborn
+goodreads:229502579 | - | - | audiobook | ru | 2023-07-17 | - | Азбука | Пепел и сталь
+goodreads:230090494 hardcover:32316857 | isbn13 | 9788367793063 | physical | pl | 2023-05-22 | 690 | MAG | Z mgły zrodzony
+goodreads:231074234 hardcover:33390797 | isbn13 | 9786178383114 | physical | uk | 2024-05-01 | 704 | Nebo BookLab Publishing | З-імли-народжені
+goodreads:23198165 | - | 9789024565306 | physical | nl | 2014-09-05 | 640 | Luitingh-Sijthoff | Het laatste rijk
+goodreads:23359366 hardcover:31058951 | isbn13 | 9789896376857 | ebook | pt | 2014-07-17! | 822 | LeYa! | O Império Final
+goodreads:233793105 hardcover:32948821 | isbn13 | 9786581339135 | physical | pb! | 2006-07-17! | 720 | Trama | Mistborn
+goodreads:233793129 | - | 9786581339180 | physical | pt | 2025-06-30 | 716 | Trama | Mistborn
+goodreads:23445843 hardcover:31729050 | isbn13 | 9789176450802 | physical | sv | 2006-07-17! | 743 | Modernista | Sista riket
+goodreads:23447186 hardcover:30904054 | isbn13 | 9786055069445 | physical | tr | 2006-07-17! | 544 | Akilcelen Kitaplar! | Sissoylu: Son İmparatorluk!
+goodreads:234982676 | - | - | ebook | pt | 2025-06-30 | 863 | Trama | Mistborn
+goodreads:23558790 | - | - | 11 | en | 2006 | 100 | TOR | Mistborn
+goodreads:23641744 openlibrary:OL27117591M | isbn13 | 9789866712982 | physical | zh | 2010-01-26 | 726! | 奇幻基地出版! | 最後帝國!
+goodreads:239940243 hardcover:33465819 | isbn13 | 9791387652029 | physical | es | 2026-03-24 | 680 | B de Bolsillo | Nacidos de la Bruma!
+goodreads:242448291 | - | - | audiobook | cs | 2025-10 | - | OneHotBook | Mistborn
+goodreads:242969924 hardcover:33403050 | isbn13 | 9789518876994 | physical | fi | 2025-08-31 | 612 | Jalava | Usvasyntyinen
+goodreads:243272 hardcover:11581193 openlibrary:OL24945060M,OL61173763M,OL8054112M | isbn13 DUP | 9780765350381 | physical! | en | 2006-07-17! | 686! | Macmillan! | Mistborn!
+goodreads:244389907 hardcover:33124874 | isbn13 | 9788368591071 | physical | pl | 2025-08-22 | 690 | MAG | Z mgły zrodzony
+goodreads:24479436 hardcover:30550949 | isbn13 | 9788580448634 | physical! | pb! | 2006-07-17! | 766! | LeYa! | Mistborn: primeira era: Nascidos da bruma: O império final!
+goodreads:244986138 | - | 9786178446161 | physical | uk | 2025 | 704 | Nebo BookLab Publishing | З-імли-народжені
+goodreads:245757659 | - | - | - | - | - | - | Bibliapolis Books | Mistborn
+goodreads:247469163 hardcover:32306766 openlibrary:OL32203270M | isbn13 | 9786052382462 | physical | tr | 2006-07-17! | 668! | Akilcelen Kitaplar! | Sissoylu 1 - Son İmparatorluk!
+goodreads:247558029 openlibrary:OL62594701M | isbn13 | 9781938570599 | physical | en | 2025 | 534! | Dragonsteel, LLC | Mistborn!
+goodreads:249428407 hardcover:30654942 | isbn13 | 9781427222411 | audiobook | en | 2006-07-17! | - | Macmillan Audio! | The Final Empire
+goodreads:251284155 hardcover:30668434 openlibrary:OL37859800M | isbn13 | 9782253023609 | physical | fr | 2006-07-17! | 913! | Le Livre de Poche! | L'Empire ultime!
+goodreads:252930121 | - | 9789610181101 | physical | sl | 2026-06-01 | 760 | Mladinska knjiga | Meglovni rod
+goodreads:25378090 hardcover:31342063 | isbn13 | 9785389090682 | physical | ru | 2006-07-17! | 640 | Азбука-Аттикус | Пепел и сталь
+goodreads:25399081 | - | - | audiobook | en | 2011-03-21 | - | Orion Publishing Group Limited | The Final Empire
+goodreads:254865814 | - | - | ebook | it | 2021-11-23 | 706 | Mondadori | Mistborn #1. L'ultimo impero
+goodreads:25687063 hardcover:31264161 openlibrary:OL32575441M | isbn13 | 9788374805537 | physical | pl | 2015-06-15 | 689! | MAG | Z mgły zrodzony!
+goodreads:26105581 | - | - | ebook | en | 2010-04-01 | 580 | Tor Books | The Final Empire
+goodreads:26156998 hardcover:32057873 openlibrary:OL27513437M | isbn13 | 9781427275103 | physical! | en | 2006-07-17! | - | Macmillan Audio | Mistborn: The Final Empire!
+goodreads:264006902 | - | - | physical | ka | 2026 | 648 | - | ნისლშობილი
+goodreads:2705034 hardcover:30660652 openlibrary:OL26156063M,OL53422614M | isbn13 DUP | 9780765360960 | physical | en | 2006-07-17! | 676! | Macmillan! | Mistborn: The Final Empire!
+goodreads:27847423 | - | 9785389100411 | ebook | ru | 2015-04-23 | 923 | Азбука | Пепел и сталь
+goodreads:28371649 | - | 9786006225807 | physical | fa | 2016 | 835 | Azarbad | آخرین امپراطوری
+goodreads:28381900 | - | - | ebook | pl | 2008 | 836 | Wydawnictwo MAG | Z mgły zrodzony
+goodreads:29979241 | - | - | ebook | fr | 2010-03-17 | 616 | Orbit | L'Empire Ultime
+goodreads:30056164 | - | - | physical | es | 2016-09-07 | 663 | Nova | El imperio final
+goodreads:30323463 hardcover:31794359 openlibrary:OL28866183M | isbn13 | 9788466658898 | physical | es | 2006-07-17! | 663 | Nova! | El imperio final
+goodreads:30736883 hardcover:30431573 openlibrary:OL27279908M | isbn13 | 9781473216815 | physical | en | 2006-07-01! | 352! | Gollancz | The Final Empire!
+goodreads:30780798 | - | 9787229105136 | physical | zh | 2016-03 | 617 | 重庆出版集团 重庆出版社 | 迷雾之子 卷一：最后帝国
+goodreads:31754188 | - | - | physical | es | 2016-09-07 | 688 | - | El imperio final
+goodreads:33006696 hardcover:31560992 | isbn13 | 9789518875454 | physical | fi | 2006-07-17! | 608 | Jalava | Viimeinen valtakunta
+goodreads:33796436 | - | - | physical | en | 2016-12-01 | 672 | Dragonsteel Entertainment LLC | Mistborn
+goodreads:34096459 | - | - | ebook | es | 2012-12-20 | 688 | Ediciones B | El imperio final
+goodreads:34677567 | - | - | - | pt | 2014 | 576 | Leya | Mistborn - Nascidos da Bruma
+goodreads:35456080 | - | - | physical | fr | - | 905 | Le livre de poche, Orbit | The Final Empire
+goodreads:35615025 hardcover:30870871 openlibrary:OL35625507M | isbn13 | 9788466659949 | physical | es | 2006-07-17! | 663! | Nova | El Imperio Final
+goodreads:35657342 | - | - | audiobook | en | 2011-03-21 | - | Orion Publishing Group Limited | The Final Empire
+goodreads:36149270 | - | 9789941467936 | physical | ka | 2017-08 | 892 | წიგნები ბათუმში | უკანასკნელი იმპერია
+goodreads:36169817 | - | 9789518875621 | ebook | fi | 2017 | 608 | Jalava | Viimeinen valtakunta
+goodreads:36191758 hardcover:30391598 | isbn13 | 9781409141143 | physical! | en | 2006-07-17! | 676 | Gollancz! | The Final Empire
+goodreads:36229369 | - | 9788380820647 | audiobook | pl | 2016-11-09 | - | Biblioteka Akustyczna | Z mgły zrodzony
+goodreads:36560888 hardcover:31335589 openlibrary:OL57502463M | isbn13 | 9783492704793 | physical! | de | 2018-03-01 | 894! | Piper | Kinder des Nebels
+goodreads:38886047 hardcover:32383456 | isbn13 | 9783492990868 | ebook | de | 2018-03-01 | 897 | Piper ebooks | Kinder des Nebels
+goodreads:39334546 | - | - | ebook | en | - | 664 | - | The Final Empire
+goodreads:39991426 | - | 9788834731925 | physical | it | 2016-08-01 | 704 | Fanucci Editore | L'ultimo impero
+goodreads:40241649 hardcover:32299712 | isbn13 | 9780792771340 | audiobook | en | 2010-01-01 | - | BBC Audiobooks America! | Mistborn: The Final Empire!
+goodreads:40549532 | - | - | ebook | - | 2018-03-01 | 896 | Piper ebooks | Kinder des Nebels
+goodreads:40864775 hardcover:30616735 openlibrary:OL27314368M | isbn13 | 9781250318541 | physical | en | 2006-07-17! | 672! | Tor Fantasy! | Mistborn: The Final Empire!
+goodreads:40884332 hardcover:31707097 | isbn13 | 9786090133675 | physical | lt | 2006-07-17! | 744 | Alma Littera | Miglos vaikai. Paskutinė imperija
+goodreads:41013604 hardcover:30501711 openlibrary:OL29791801M,OL32600208M | isbn13 DUP | 9788417347291 | physical | es | 2006-07-17! | 672 | National Geographic Books! | El imperio final!
+goodreads:41557810 | - | - | audiobook | en | 2009-01-22 | - | Macmillan Audio | The Final Empire
+goodreads:41586421 | - | - | ebook | en | 2017-05-13 | 735 | Tor Books | The Final Empire
+goodreads:42267450 | - | - | physical | es | 2018-08 | 669 | Ediciones B | El imperio final
+goodreads:43329845 | - | - | audiobook | pl | 2017-05-31 | - | Mag | Z mgły zrodzony
+goodreads:43443574 | - | 9789024581269 | physical | nl | 2017-11 | 640 | Luitingh-Sijthoff | Het Laatste Rijk
+goodreads:43601994 hardcover:30572581 | isbn13 | 9789024558841 | ebook | nl | 2006-07-17! | 692 | Luitingh Sijthoff Fantasy! | Het laatste rijk
+goodreads:43685352 | - | - | ebook | zh | 2016-03-01 | 640 | 重庆出版社 | 最后帝国
+goodreads:45418511 | - | - | physical | en | 2007 | 672 | Tor Books | Mistborn
+goodreads:45997765 hardcover:30598862 | isbn13 | 9789176450819 | ebook | sv | 2006-07-17! | 578 | Modernista | Sista riket
+goodreads:46036841 | - | - | ebook | zh | 2010-01-26 | 740 | 奇幻基地 | 最後帝國 (迷霧之子, #1)
+goodreads:49002028 hardcover:32301093 | isbn13 | 9789639890275 | physical | hu | 2006-07-17! | 922 | Delta Vision | A ​Végső Birodalom 1-2
+goodreads:50212784 | - | - | - | hu | 2024 | 922 | Delta Vision | A ​Végső Birodalom 1-2.
+goodreads:51096102 | - | - | physical | hu | 2024 | 898 | DeltaVision | A ​Végső Birodalom
+goodreads:52069298 | - | - | audiobook | en | - | - | - | The Final Empire
+goodreads:52264112 hardcover:31802980 | isbn13 | 9781427206374 | audiobook | en | 2008-12-23 | - | Macmillan Audio | The Final Empire
+goodreads:52957312 | - | 9786168175095 | physical | th | 2019-10 | 776 | เวิร์ดส์วอนเดอร์ (Words Wonder Publishing) | มิสต์บอร์น
+goodreads:53026977 hardcover:31516510 | isbn13 | 9788374803168 | ebook | pl | 2006-07-17! | 624 | MAG | Z mgły zrodzony
+goodreads:53057583 | - | - | physical | en | 2009-10-01 | 647 | Gollancz | The Final Empire
+goodreads:53112193 | - | - | physical | sr | 2011-10-10 | 645 | Laguna | Poslednje carstvo
+goodreads:53321665 | - | - | ebook | en | 2010-04-01 | 676 | Tor Books | Mistborn
+goodreads:53859864 | - | - | ebook | es | - | 541 | - | El Imperio Final
+goodreads:54267819 hardcover:30432884 openlibrary:OL27098447M | isbn13 | 9781938570131 | physical | en | 2006-07-17! | 696 | Dragonsteel Entertainment, LLC | Mistborn: The Final Empire!
+goodreads:54358913 | - | - | physical | en | 2006-07-17 | 669 | Tom Doherty Associates | Mistborn
+goodreads:54467065 | - | - | physical | - | - | - | - | The Final Empire
+goodreads:54504571 hardcover:31256917 | isbn13 | 9789538048883 | physical | hr | 2006-07-17! | 614 | Hangar 7 | Konačno carstvo!
+goodreads:54640430 | - | - | physical | tr | 2020-01-01 | 668 | Akılçelen Kitaplar | Sissoylu 1 - Son İmparatorluk
+goodreads:54737283 | - | - | physical | tr | - | 644 | - | Sissoylu
+goodreads:54737286 | - | - | physical | tr | - | 644 | - | Sissoylu
+goodreads:54737288 | - | - | physical | tr | - | 644 | - | Sissoylu
+goodreads:55852724 | - | - | - | - | - | - | - | The Final Empire
+goodreads:56358287 | - | 9789152108376 | audiobook | bg | 2020-11-20 | - | Storyside | Последната империя
+goodreads:56654984 | - | 9788417347635 | audiobook | es | 2020-07-23 | - | Penguin Random House Grupo Editorial | El imperio final
+goodreads:56758679 | - | - | physical | en | 2019-10 | 647 | Tor | Mistborn
+goodreads:58066129 hardcover:30501719 openlibrary:OL34155923M,OL36655516M | isbn13 DUP | 9788413143194 | physical | es | 2006-07-17! | 680 | B de Bolsillo! | El imperio final!
+goodreads:58403727 hardcover:30425202 | isbn13 | 9788804733843 | physical | it | 2006-07-17! | 696 | Mondadori | L'ultimo impero
+goodreads:58477819 hardcover:30420807 openlibrary:OL47142113M | isbn13 | 9788418037214 | physical | es | 2006-07-17! | 670! | Nova | El imperio final
+goodreads:58890650 | - | - | ebook | he | 2011 | 592 | אופוס | האימפריה האחרונה
+goodreads:58921971 hardcover:30602509 | isbn13 | 9788418037221 | ebook | en! | 2006-07-17! | 672! | Nova | El imperio final
+goodreads:59419366 | - | 9789843511768 | physical | bn | 2021-10-18 | 741 | ভূমিপ্রকাশ | দ্য ফাইনাল এম্পায়ার
+goodreads:59425571 | - | - | ebook | zh | 2012-01-21 | 664 | 奇幻基地 | 迷霧之子 首部曲：最後帝國
+goodreads:59457794 hardcover:30953266 | isbn13 | 9788835711124 | physical! | it | 2006-07-17! | 774! | Edizioni Mondadori! | Mistborn #1. L'ultimo impero - The Final Empire!
+goodreads:59844959 hardcover:32230916 | isbn13 | 9788804748809 | physical | it | 2021-10-28 | 696 | Mondadori | Mistborn. L'ultimo impero
+goodreads:59922055 hardcover:32106670 | isbn13 | 9786222041946 | physical | fa | 2006-07-17! | 728 | Hoopa | امپراتوری نهایی
+goodreads:60226675 | - | - | - | pt | 2014-06 | 621 | Saída de Emergência | The Final Empire
+goodreads:60483807 | - | - | physical | - | - | 667 | - | El imperio final
+goodreads:60572764 | - | 9789518876116 | physical | fi | 2020 | 608 | Jalava | Viimeinen valtakunta
+goodreads:60636976 | - | 9788367023283 | physical | pl | 2022-05-25 | 672 | MAG | Z mgły zrodzony
+goodreads:60784489 hardcover:30661331 openlibrary:OL38122529M,OL60101225M | isbn13 DUP | 9781250868282 | physical! | en | 2006-07-17! | 534! | Tor Books! | Mistborn: The Final Empire!
+goodreads:61034164 | - | - | - | en | - | 540 | - | The Final Empire
+goodreads:61185434 | - | - | physical | en | 2009 | 643 | Gollancz | The Final Empire
+goodreads:61376394 hardcover:31934161 | isbn13 | 9783837143966 | audiobook | de | 2006-07-17! | - | Random House Audio | Kinder des Nebels
+goodreads:61434734 hardcover:32124613 | isbn13 | 9788413145495 | physical | es | 2006-07-17! | 680 | B de Bolsillo | El imperio final
+goodreads:62841073 | - | - | audiobook | es | 2020-07-23 | - | Penguin Random House Grupo Editorial | El imperio final
+goodreads:63332796 | - | 9787229150211 | physical | zh | 2020-09-01 | 621 | Chongqing Press | Mistborn
+goodreads:6425811 hardcover:31760152 openlibrary:OL33980107M | isbn13 | 9781429914567 | ebook | en | 2010-04-01 | 554! | Tor Books! | Mistborn!
+goodreads:6474126 hardcover:30795878 openlibrary:OL27066685M | isbn13 | 9783453523364 | physical | de | 2006-07-17! | 894! | Heyne Verlag! | Kinder des Nebels
+goodreads:6547258 | - | - | physical | en | 2009-10-01 | 647 | Gollancz | The Final Empire
+goodreads:6568794 | - | - | ebook | en | 2007-04-01 | 672 | Tor | Mistborn
+goodreads:6605316 | - | - | ebook | en | 2010-04-01 | 676 | Tor Books | Mistborn
+goodreads:6651588 hardcover:32349854 | isbn13 | 9788374800808 | physical | pl | 2006-07-17! | 630! | GARDNERS VI BOOKS AMS006! | Z mgły zrodzony
+goodreads:6656935 | - | - | audiobook | en | 2011-03-18 | - | Orion Publishing Group Limited | Mistborn
+goodreads:68428 hardcover:5195452 openlibrary:OL3418158M,OL8053528M | isbn13 DUP | 9780765311788 | physical | en | 2006-07-17! | 541! | Tor Books! | Mistborn: The Final Empire!
+goodreads:7037744 | - | - | physical | en | 2007-07-21 | 655 | Tor Fantasy | Mistborn
+goodreads:70523707 | - | - | physical | zh | 2020-09-01 | 621 | Chongqing Press | Mistborn
+goodreads:7183286 hardcover:30652515 | isbn13 | 9788466631990 | physical | es | 2006-07-17! | 688! | EDB FICCION! | El imperio final
+goodreads:75430357 hardcover:31973247 | isbn13 | 9786177914470 | physical | uk | 2006-07-17! | 704 | Nebo BookLab Publishing | Остання імперія
+goodreads:8197174 hardcover:31580280 openlibrary:OL28155920M | isbn13 | 9782360510108 | physical | fr | 2006-07-17! | 606! | Orbit | L'Empire ultime
+goodreads:9725647 hardcover:30780165 | isbn13 | 9788834715123 | physical | it | 2006-07-17! | 608! | Fanucci | L'ultimo impero
+hardcover:30405361 | - | - | audiobook | en | 2006-07-17 | - | Orion Publishing Group Limited | Mistborn: The Final Empire
+hardcover:30432877 | - | - | ebook | en | 2010-04-01 | 558 | Tor Books | Mistborn: The Final Empire
+hardcover:30550953 | - | 9788544104156 | physical | pb | 2008-10-14 | 823 | LeYa | O herói das eras
+hardcover:30670202 openlibrary:OL28345173M | isbn13 | 9784150204952 | physical! | ja | 2006-07-17! | 429 | ToÌ„kyoÌ„ : Hayakawa ShoboÌ„, 2009. | ミストボーン 霧の落とし子 1: 灰色の帝国!
+hardcover:30670255 | - | 9784150205027 | physical | ja | 2006-07-17 | 415 | - | ミストボーン 霧の落とし子 3: 白き海の踊り手
+hardcover:30670256 openlibrary:OL26880818M | isbn13 | 9784150204990 | physical | ja | 2006-07-17! | 447 | ToÌ"kyoÌ" : Hayakawa ShoboÌ", 2009. | ミストボーン 霧の落とし子 2: 赤き血の太陽!
+hardcover:31104010 | - | 9789639890367 | physical | hu | 2006-01-01 | 381 | Delta Vision | Ködszerzet: A Végső Birodalom 1.
+hardcover:31104011 | - | 9789639890374 | physical | hu | 2006-01-01 | 539 | Delta Vision | Ködszerzet: A Végső Birodalom 2.
+hardcover:31273669 | - | - | physical | de | 2006-07-17 | - | Heyne Verlag | Kinder des Nebels
+hardcover:31379363 | - | - | physical | pt | 2006-07-17 | 608 | LeYa | Mistborn: primeira era: Nascidos da bruma: O império final
+hardcover:31440008 | - | - | ebook | en | 2010-04-01 | 554 | Tor Books | Mistborn: The Final Empire
+hardcover:31478724 | - | - | audiobook | en | 2006-07-17 | - | Macmillan Audio | The Final Empire
+hardcover:31482157 | - | 9789606868573 | physical | el | 2006-01-01 | 424 | Φανταστικός Κόσμος | Η ύστατη αυτοκρατορία, Τόμος Α'
+hardcover:31482323 | - | 9789606868580 | physical | el | 2006-01-01 | 424 | Φανταστικός Κόσμος | Η ύστατη αυτοκρατορία, Τόμος Β'
+hardcover:31505140 | - | - | physical | - | - | - | - | Sissoylu: Son İmparatorluk
+hardcover:31675736 | - | - | physical | tr | 2006-07-17 | 544 | Akilcelen Kitaplar | Sissoylu: Son İmparatorluk
+hardcover:31945593 | - | - | ebook | en | 2010-04-01 | 544 | Macmillan | Mistborn
+hardcover:31950466 | - | - | ebook | en | 2006-07-17 | 686 | Macmillan | Mistborn
+hardcover:31965395 | - | - | audiobook | en | 2008-12-28 | - | Macmillan Audio | Mistborn: The Final Empire
+hardcover:32116786 | - | - | ebook | pb | 2025-06-30 | - | Trama | Mistborn: O Império Final
+hardcover:32145956 | - | - | physical | es | - | - | B de Bolsillo | Nacidos de la Bruma (1) - El Imperio Final
+hardcover:32193374 | - | - | physical | en | 2006-07-17 | 680 | B de Bolsillo | Nacidos de la Bruma: El Imperio Final
+hardcover:32307201 | - | - | audiobook | en | 2006-07-17 | - | Graphic Audio LLC | The Final Empire, Part 2
+hardcover:32307202 | - | - | audiobook | en | 2006-07-17 | - | GraphicAudio | The Final Empire, Part 3
+hardcover:32307424 | - | - | audiobook | en | 2013-12-01 | - | Graphic Audio LLC | The Final Empire (1 of 3)
+hardcover:32308888 openlibrary:OL30922876M | isbn13 | 9781628510218 | audiobook | en | 2013-12-01 | - | GraphicAudio | The Final Empire!
+hardcover:32308891 | - | 9781648817120 | audiobook | en | 2013-12-01 | - | Graphic Audio LLC | The Final Empire (1 of 3)
+hardcover:32309745 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32468840 | - | - | audiobook | en | 2011-03-03 | - | Orion | Mistborn: The Final Empire
+hardcover:32714075 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32753077 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32761779 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32766305 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32766867 | - | - | audiobook | fr | - | - | Audiolib | L'empire final
+hardcover:32766868 | - | - | audiobook | fr | - | - | Audiolib | L'empire final
+hardcover:32891750 | - | - | audiobook | en | 2011-03-18 | - | Gollancz | Mistborn: The Final Empire
+hardcover:32929013 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32929399 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32929418 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32929419 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32942043 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32947764 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32961730 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32981899 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:32983284 | - | 9786581339241 | ebook | pb | 2025-06-30 | 864 | Trama | Mistborn: O Império Final
+hardcover:33082947 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33108119 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33131795 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33131881 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33150047 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33156025 | - | - | physical | fr | 2006-07-17 | 905 | Le Livre de Poche | The Final Empire
+hardcover:33162387 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33275757 | - | - | physical | en | 2006-07-17 | - | Tor Books | Mistborn: The Final Empire
+hardcover:33392269 | - | - | ebook | en | 2010-03-18 | 647 | Orion | Mistborn: The Final Empire
+hardcover:33394954 | - | - | audiobook | - | - | - | - | Mistborn: The Final Empire (GraphicAudio)
+hardcover:33394955 | - | - | audiobook | - | - | - | GraphicAudio | Mistborn: The Final Empire (GraphicAudio)
+hardcover:33471688 | - | - | physical | - | 2023-09-05 | 2700 | mukawa | Brandon Sanderson’s Mistborn Series – 6 Book Collection Box Set
+openlibrary:OL26852778M | - | 9784150205096 | - | - | 2010-02-15 | - | ToÌ"kyoÌ" : Hayakawa ShoboÌ", 2010. | Nokosareshi Chikara
+openlibrary:OL32047482M | - | 9781427227959 | audiobook | - | 2012-05-01 | - | Macmillan Audio | Mistborn
+openlibrary:OL38632348M | - | - | - | - | 2006 | - | Tor | The Final Empire (Mistborn, Book 1)
+openlibrary:OL39620261M | - | 9781484428627 | - | en | 2014 | 672 | Doherty Associates, LLC, Tom | Mistborn
+openlibrary:OL57498437M | - | - | audible eaudiobook | en | 2008-12-28 | - | Macmillan Audio | Mistborn: The Final Empire
