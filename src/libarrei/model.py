@@ -16,6 +16,7 @@ class Source(StrEnum):
     GOODREADS = "goodreads"
     HARDCOVER = "hardcover"
     OPENLIBRARY = "openlibrary"
+    AUDIBLE = "audible"
 
 
 class Candidate[T](BaseModel):
@@ -45,7 +46,8 @@ class Identifier(BaseModel):
 
 class Record(BaseModel):
     ids: dict[Source, str] = {}
-    # For sources whose pages are addressed by slug rather than id: Hardcover's book slug.
+    # For sources whose pages are addressed by slug rather than id: Hardcover's book slug,
+    # or the store domain ("co.uk") for stores whose pages differ per region, such as Audible.
     slugs: dict[Source, str] = {}
 
     def add(self, field: str, value, source: Source, source_id: str) -> None:

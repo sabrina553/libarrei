@@ -13,6 +13,8 @@ export function recordUrl(level: Level, source: SourceName, id: string, slugs: S
   const path = encodeURIComponent(id)
   if (source === 'openlibrary') return `https://openlibrary.org/${level === 'work' ? 'works' : 'books'}/${path}`
   if (source === 'goodreads') return `https://www.goodreads.com/${level === 'work' ? 'work/editions' : 'book/show'}/${path}`
+  // Audible's store domain comes from the record, since each region has its own pages.
+  if (source === 'audible') return slugs.audible ? `https://www.audible.${slugs.audible}/pd/${path}` : undefined
   // Hardcover pages hang off the book's slug, never its numeric id.
   const slug = slugs.hardcover
   if (!slug) return undefined

@@ -2,7 +2,7 @@
 /ˈlaɪ.bə.ræɪ/
 
 A book metadata engine. It fetches every edition of a book from Goodreads,
-Hardcover and Open Library, aligns the editions across sources, and merges them
+Hardcover, Open Library and Audible, aligns the editions across sources, and merges them
 into one record per field while keeping every alternative and flagging conflicts.
 
 Planned front-ends: an HTTP API for apps such as Grimmory, and a review GUI for
@@ -19,7 +19,12 @@ cp .env.example .env   # then add your tokens
 - `HARDCOVER_TOKEN`: from Settings → API on hardcover.app.
 - `GOODREADS_TOKEN`: the public AppSync key used by the Goodreads web app.
 
-A source without a token is skipped; Open Library needs none.
+- `AUDIBLE_REGION`: which Audible store to search, as its domain (`co.uk` by default;
+  also `com`, `de`, `fr`, `it`, `es`, `ca`, `com.au`, `co.jp`, `in`).
+
+A source without a token is skipped; Open Library and Audible need none. Audible
+is searched after the others, by the title and author they found (so ISBN-only
+lookups work too), and by the ASINs of any audiobook editions they listed.
 
 ## Usage
 ```sh

@@ -10,7 +10,7 @@ from datetime import date
 
 import pycountry
 
-from libarrei.model import Contributor, Edition, Work
+from libarrei.model import Contributor, Edition, Source, Work
 
 MONTH_NAMES = ["january", "february", "march", "april", "may", "june",
                "july", "august", "september", "october", "november", "december"]
@@ -101,6 +101,10 @@ def _isbn13_check(stem: str) -> str:
     return str((10 - total % 10) % 10)
 
 
+# Stores whose own product ids are ASINs, even when one looks like an ISBN-10.
+ASIN_STORES = {Source.AUDIBLE}
+
+
 def asin(raw: str | None) -> str | None:
     """Drops "ASINs" that are really ISBN-10s, as Goodreads shows for print books."""
     if not raw or not raw.strip():
@@ -185,7 +189,7 @@ def contributors(raw: list[Contributor] | None) -> list[Contributor] | None:
     return sorted(people, key=lambda c: rank.get(c.role, len(rank))) or None
 
 
-EDITION_FIELDS = {"contributors": contributors, "pages": pages, "release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn, "asin": asin}
+EDITION_FIELDS = {"contributors": contributors, "pages": pages, "release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn}
 
 
 def work(record: Work) -> None:
@@ -196,6 +200,7 @@ def work(record: Work) -> None:
     for edition in record.editions:
         for name, normaliser in EDITION_FIELDS.items():
             setattr(edition, name, _apply(getattr(edition, name), normaliser))
+        edition.asin = [kept for c in edition.asin if (kept := _asin(c))]
         _derive_isbn13(edition)
         _drop_audiobook_pages(edition)
 
@@ -206,6 +211,11 @@ def _apply(candidates: list, normaliser) -> list:
         if (value := normaliser(c.value)) is not None:
             kept.append(c.model_copy(update={"value": value}))
     return kept
+
+
+def _asin(c):
+    value = c.value.strip().upper() if c.source in ASIN_STORES else asin(c.value)
+    return c.model_copy(update={"value": value}) if value else None
 
 
 def _derive_isbn13(edition: Edition) -> None:

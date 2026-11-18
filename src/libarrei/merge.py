@@ -12,24 +12,26 @@ from libarrei.description import Block, parse_description, plain_text
 from libarrei.match import EditionGroup, align
 from libarrei.model import Candidate, Source, Work
 
-GR, HC, OL = Source.GOODREADS, Source.HARDCOVER, Source.OPENLIBRARY
+GR, HC, OL, AU = Source.GOODREADS, Source.HARDCOVER, Source.OPENLIBRARY, Source.AUDIBLE
 
 # Goodreads carries the richest blurbs and reader-voted genres; Hardcover's
 # librarian-edited structured data is the most reliable for everything else.
-TEXT_PRIORITY = [GR, HC, OL]
-DATA_PRIORITY = [HC, GR, OL]
+TEXT_PRIORITY = [GR, HC, OL, AU]
+DATA_PRIORITY = [HC, GR, OL, AU]
 TEXT_FIELDS = {"description", "genres"}
 
 # Fields that legitimately differ between sources, so differences aren't conflicts.
 NEVER_CONFLICT = {"genres", "cover_url", "identifiers"}
 
 # Placeholders until each source's terms are confirmed.
-LICENCES = {OL: "CC0-1.0", GR: "publisher copyright", HC: "see Hardcover terms"}
+LICENCES = {OL: "CC0-1.0", GR: "publisher copyright", HC: "see Hardcover terms", AU: "publisher copyright"}
 
 WORK_FIELDS = ["title", "subtitle", "contributors", "description", "series", "genres", "original_release_date"]
 EDITION_FIELDS = ["title", "subtitle", "edition_statement", "contributors", "isbn13", "isbn10", "asin",
                   "identifiers", "publisher", "release_date", "pages", "format", "format_detail",
                   "duration_seconds", "language", "cover_url", "series"]
+# Sources whose descriptions are HTML; the others send Markdown with the odd inline HTML tag.
+HTML_DESCRIPTIONS = {GR, AU}
 DATE_FIELDS = {"release_date", "original_release_date"}
 
 
@@ -171,8 +173,7 @@ def _resolve_date(ranked: list[Candidate]) -> tuple[Candidate, bool]:
 
 
 def description_blocks(source: Source, raw: str) -> list[Block]:
-    # Goodreads sends HTML; the others send Markdown with the odd inline HTML tag.
-    return parse_description(raw, markdown=source != GR)
+    return parse_description(raw, markdown=source not in HTML_DESCRIPTIONS)
 
 
 def clean_description(raw: str, source: Source = GR) -> str | None:

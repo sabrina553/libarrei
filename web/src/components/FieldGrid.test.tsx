@@ -47,7 +47,7 @@ test('highlights where a value departs from the majority', () => {
 test('only problems hides rows where every source agrees', () => {
   const language: Resolved = {
     value: 'en', source: 'hardcover', source_id: '1', conflict: false, alternatives: [],
-    values: (['hardcover', 'goodreads', 'openlibrary'] as const).map((source) => ({ value: 'en', source, source_id: '1' })),
+    values: (['hardcover', 'goodreads', 'openlibrary', 'audible'] as const).map((source) => ({ value: 'en', source, source_id: '1' })),
   }
   render(<FieldGrid fields={{ pages, language }} order={['pages', 'language']} level="edition" />)
 
@@ -60,12 +60,12 @@ test('shows every field and tells unsupported fields apart from empty ones', () 
   render(<FieldGrid fields={{ pages }} order={['title', 'duration_seconds', 'pages']} level="edition" />)
 
   expect(screen.getByText('Title')).toBeInTheDocument()
-  // Only Hardcover gives an audiobook length, so the other two cells are greyed out.
+  // Only Hardcover and Audible give an audiobook length, and Audible gives no page count.
   const unsupported = screen.getAllByText('not provided')
-  expect(unsupported).toHaveLength(2)
+  expect(unsupported).toHaveLength(3)
   expect(unsupported[0]).toHaveAttribute('title', 'Goodreads does not provide this field')
-  // Empty: title on all three sources, duration on Hardcover, pages on Goodreads.
-  expect(screen.getAllByText('—')).toHaveLength(5)
+  // Empty: title on all four sources, duration on Hardcover and Audible, pages on Goodreads.
+  expect(screen.getAllByText('—')).toHaveLength(7)
 })
 
 test('picking a value stages a correction for the source that disagrees', async () => {

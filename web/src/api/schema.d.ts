@@ -260,7 +260,7 @@ export interface components {
          * Source
          * @enum {string}
          */
-        Source: "goodreads" | "hardcover" | "openlibrary";
+        Source: "goodreads" | "hardcover" | "openlibrary" | "audible";
         /** ValidationError */
         ValidationError: {
             /** Location */
