@@ -24,3 +24,25 @@ test('filters editions and opens one for detail', () => {
   fireEvent.click(screen.getByText('9780000000001'))
   expect(screen.getByText('Pages')).toBeInTheDocument()
 })
+
+test('a header click sorts, a second reverses and a third restores the default', () => {
+  render(<EditionsTable editions={editions} book="Test" />)
+  const isbns = () => screen.getAllByText(/^97800000000\d\d$/).map((e) => e.textContent)
+  const header = screen.getByRole('button', { name: 'ISBN-13' })
+
+  fireEvent.click(header)
+  expect(isbns()).toEqual(['9780000000001', '9780000000002'])
+  expect(header).toHaveTextContent('ISBN-13 ▲')
+  fireEvent.click(header)
+  expect(isbns()).toEqual(['9780000000002', '9780000000001'])
+  expect(header).toHaveTextContent('ISBN-13 ▼')
+  fireEvent.click(header)
+  expect(header).toHaveTextContent(/^ISBN-13$/)
+})
+
+test('sorting keeps the filter', () => {
+  render(<EditionsTable editions={editions} book="Test" />)
+  fireEvent.click(screen.getByText('Conflicts (1)'))
+  fireEvent.click(screen.getByRole('button', { name: 'ISBN-13' }))
+  expect(screen.queryByText('9780000000002')).toBeNull()
+})

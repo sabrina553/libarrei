@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { conflictCount, duplicateLabel, editionKey, FILTERS, isSparse, lowestQuality, stubLabel, type FilterName, type MergedEdition } from '../lib/editions'
+import { conflictCount, duplicateLabel, editionKey, FILTERS, isSparse, lowestQuality, nextSort, sortEditions, stubLabel, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
 import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
 import { SlugsContext } from '../lib/links'
 import { FieldGrid } from './FieldGrid'
@@ -9,12 +9,18 @@ const PAGE = 100
 const EDITION_FIELDS = ['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin',
   'identifiers', 'publisher',
   'release_date', 'pages', 'format', 'format_detail', 'duration_seconds', 'language', 'series', 'cover_url']
+// Column headers; null marks one that cannot be sorted.
+const HEADERS: [SortColumn | null, string][] = [
+  ['isbn13', 'ISBN-13'], ['format', 'Format'], ['language', 'Language'], ['release_date', 'Released'],
+  ['publisher', 'Publisher'], [null, 'Sources'], ['match', 'Match'], ['conflicts', 'Conflicts'], ['quality', 'Quality'],
+]
 
 export function EditionsTable({ editions, book }: { editions: MergedEdition[]; book: string }) {
   const [filter, setFilter] = useState<FilterName>('all')
   const [open, setOpen] = useState<string | null>(null)
   const [limit, setLimit] = useState(PAGE)
-  const shown = editions.filter(FILTERS[filter].test)
+  const [sort, setSort] = useState<Sort>(null)
+  const shown = sortEditions(editions.filter(FILTERS[filter].test), sort)
 
   return (
     <section>
@@ -27,7 +33,16 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
       </div>
       <table className="editions">
         <thead>
-          <tr><th>ISBN-13</th><th>Format</th><th>Language</th><th>Released</th><th>Publisher</th><th>Sources</th><th>Match</th><th>Conflicts</th><th>Quality</th></tr>
+          <tr>
+            {HEADERS.map(([column, label]) => column === null ? <th key={label}>{label}</th> : (
+              <th key={label} aria-sort={sort?.column === column ? (sort.descending ? 'descending' : 'ascending') : undefined}>
+                <button type="button" className="sort" onClick={() => setSort(nextSort(sort, column))}
+                  title="Sort by this column; click again to reverse, a third time for the default order">
+                  {label}{sort?.column === column && (sort.descending ? ' ▼' : ' ▲')}
+                </button>
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody>
           {shown.slice(0, limit).map((edition) => {

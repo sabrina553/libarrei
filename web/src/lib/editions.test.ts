@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { conflictCount, duplicateLabel, editionKey, FILTERS, type MergedEdition } from './editions'
+import { conflictCount, duplicateLabel, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
 
 const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   ids: { hardcover: ['2'], goodreads: ['1'] },
@@ -36,4 +36,33 @@ test('duplicate badges say which identifier the records share', () => {
 test('edition keys ignore source order', () => {
   expect(editionKey(edition({ ids: { hardcover: ['2'], goodreads: ['1'] } })))
     .toBe(editionKey(edition({ ids: { goodreads: ['1'], hardcover: ['2'] } })))
+})
+
+const field = (value: unknown) => ({ value, source: 'hardcover' as const, source_id: '1', conflict: false, alternatives: [], values: [] })
+
+test('default order: language, then best quality, then release date, gaps last', () => {
+  const rows = [
+    edition({ ids: { hardcover: ['none'] }, quality: { hardcover: 99 } }),
+    edition({ ids: { hardcover: ['fr'] }, fields: { language: field('fr') }, quality: { hardcover: 90 } }),
+    edition({ ids: { hardcover: ['en-later'] }, fields: { language: field('en'), release_date: field('2024') }, quality: { hardcover: 50 } }),
+    edition({ ids: { hardcover: ['en-sparse'] }, fields: { language: field('en') }, quality: { hardcover: 20, goodreads: 30 } }),
+    edition({ ids: { hardcover: ['en-earlier'] }, fields: { language: field('en'), release_date: field('2020') }, quality: { hardcover: 50 } }),
+    edition({ ids: { hardcover: ['en-best'] }, fields: { language: field('en') }, quality: { hardcover: 10, goodreads: 95 } }),
+  ]
+  expect(sortEditions(rows, null).map((e) => e.ids.hardcover![0]))
+    .toEqual(['en-best', 'en-earlier', 'en-later', 'en-sparse', 'fr', 'none'])
+})
+
+test('column sorts are numeric for numbers and keep gaps last both ways', () => {
+  const rows = [
+    edition({ ids: { hardcover: ['a'] }, quality: { hardcover: 9 } }),
+    edition({ ids: { hardcover: ['b'] }, quality: { hardcover: 80 } }),
+    edition({ ids: { hardcover: ['c'] } }),
+  ]
+  const order = (descending: boolean) => sortEditions(rows, { column: 'quality', descending }).map((e) => e.ids.hardcover![0])
+  expect(order(false)).toEqual(['a', 'b', 'c'])
+  expect(order(true)).toEqual(['b', 'a', 'c'])
+  expect(nextSort(null, 'quality')).toEqual({ column: 'quality', descending: false })
+  expect(nextSort({ column: 'quality', descending: false }, 'quality')).toEqual({ column: 'quality', descending: true })
+  expect(nextSort({ column: 'quality', descending: true }, 'quality')).toBeNull()
 })
