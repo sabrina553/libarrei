@@ -7,7 +7,7 @@ Field reference: https://openlibrary.org/dev/docs/api/books
 
 import re
 
-from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
+from libarrei.model import Contributor, Edition, Identifier, SeriesEntry, Source, Work
 from libarrei.sources.formats import detail, normalise_format
 
 OL = Source.OPENLIBRARY
@@ -76,6 +76,23 @@ def series(doc: dict) -> list[SeriesEntry]:
     return entries
 
 
+# ISBNs already have their own fields.
+SKIPPED_SCHEMES = {"isbn_10", "isbn_13"}
+
+
+def identifiers(doc: dict) -> list[Identifier]:
+    ids = [Identifier(scheme=scheme, value=str(v).strip())
+           for scheme, values in (doc.get("identifiers") or {}).items() if scheme not in SKIPPED_SCHEMES
+           for v in values or [] if str(v).strip()]
+    for scheme, field in (("oclc", "oclc_numbers"), ("lccn", "lccn")):
+        ids += [Identifier(scheme=scheme, value=str(v).strip()) for v in doc.get(field) or [] if str(v).strip()]
+    unique: list[Identifier] = []
+    for i in ids:
+        if i not in unique:
+            unique.append(i)
+    return unique
+
+
 def pages(doc: dict) -> int | None:
     if doc.get("number_of_pages"):
         return doc["number_of_pages"]
@@ -100,6 +117,11 @@ def to_edition(doc: dict, names: dict[str, str]) -> Edition:
         edition.add("isbn13", isbn, OL, sid)
     for isbn in doc.get("isbn_10") or []:
         edition.add("isbn10", isbn, OL, sid)
+    for identifier in identifiers(doc):
+        # Open Library's "amazon" ids are ASINs (or ISBN-10s, which normalising drops).
+        if identifier.scheme == "amazon":
+            edition.add("asin", identifier.value, OL, sid)
+    edition.add("identifiers", identifiers(doc), OL, sid)
     for publisher in doc.get("publishers") or []:
         edition.add("publisher", publisher, OL, sid)
     edition.add("release_date", doc.get("publish_date"), OL, sid)

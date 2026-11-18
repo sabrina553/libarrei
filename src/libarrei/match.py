@@ -12,13 +12,23 @@ from difflib import SequenceMatcher
 
 from libarrei.model import Edition, Source, Work
 
-KEYS = ("isbn13", "asin")
+KEYS = ("isbn13", "asin", "goodreads_id")
+
+
+def _keys(source: Source, edition: Edition) -> list[tuple[str, str]]:
+    """Identifiers that mark the same real-world edition, wherever they were recorded."""
+    keys = [(key, c.value) for key in ("isbn13", "asin") for c in getattr(edition, key)]
+    # Open Library editions often cite their Goodreads edition, a link as firm as an ISBN.
+    if source == Source.GOODREADS and source in edition.ids:
+        keys.append(("goodreads_id", edition.ids[source]))
+    keys += [("goodreads_id", i.value) for c in edition.identifiers for i in c.value if i.scheme == "goodreads"]
+    return keys
 
 
 @dataclass
 class EditionGroup:
     members: list[tuple[Source, Edition]] = field(default_factory=list)
-    # How the group was formed: "isbn13", "asin", "fuzzy", or None for a lone edition.
+    # How the group was formed: "isbn13", "asin", "goodreads_id", "fuzzy", or None for a lone edition.
     reason: str | None = None
     confidence: float = 1.0
 
@@ -52,17 +62,16 @@ def _by_identifier(editions: list[tuple[Source, Edition]]) -> list[EditionGroup]
 
     reasons: dict[int, str] = {}
     owner: dict[tuple[str, str], int] = {}
-    for i, (_, edition) in enumerate(editions):
-        for key in KEYS:
-            for c in getattr(edition, key):
-                if (key, c.value) in owner:
-                    a, b = root(owner[(key, c.value)]), root(i)
-                    if a != b:
-                        parent[b] = a
-                        # ISBN outranks ASIN as the reason when both linked the group.
-                        reasons[a] = min(reasons.get(a, key), reasons.pop(b, key), key, key=KEYS.index)
-                else:
-                    owner[(key, c.value)] = i
+    for i, (source, edition) in enumerate(editions):
+        for key, value in _keys(source, edition):
+            if (key, value) in owner:
+                a, b = root(owner[(key, value)]), root(i)
+                if a != b:
+                    parent[b] = a
+                    # ISBN outranks ASIN, which outranks a cross-source id, as the reason.
+                    reasons[a] = min(reasons.get(a, key), reasons.pop(b, key), key, key=KEYS.index)
+            else:
+                owner[(key, value)] = i
 
     members = defaultdict(list)
     for i, pair in enumerate(editions):

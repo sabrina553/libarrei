@@ -17,3 +17,7 @@ test('formats a duration as hours and minutes', () => {
   expect(formatDuration(300)).toBe('0:05')
   expect(formatDuration(0)).toBe('—')
 })
+
+test('formats identifiers with their scheme', () => {
+  expect(formatValue([{ scheme: 'goodreads', value: '123' }, { scheme: 'oclc', value: '9' }])).toBe('goodreads: 123, oclc: 9')
+})

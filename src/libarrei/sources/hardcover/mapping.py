@@ -50,6 +50,7 @@ def to_edition(raw: dict) -> Edition:
     edition.add("contributors", contributors(raw.get("cached_contributors")), HC, sid)
     edition.add("isbn13", raw.get("isbn_13"), HC, sid)
     edition.add("isbn10", raw.get("isbn_10"), HC, sid)
+    edition.add("asin", raw.get("asin"), HC, sid)
     edition.add("publisher", (raw.get("publisher") or {}).get("name"), HC, sid)
     edition.add("release_date", raw.get("release_date"), HC, sid)
     edition.add("pages", raw.get("pages"), HC, sid)
