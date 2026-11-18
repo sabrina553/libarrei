@@ -49,7 +49,9 @@ def from_openlibrary(cache, isbn: str | None, title: str | None, author: str | N
     # The ISBN's own edition stays first so it remains the best match.
     seen = {e["key"] for e in editions}
     editions += [e for e in ol.all_editions(work_key) if e["key"] not in seen]
-    names = ol.author_names(list(dict.fromkeys(author_keys(work) + [k for e in editions for k in author_keys(e)])))
+    # Only the work's authors: edition-level keys across hundreds of editions
+    # would cost one request each on a cold cache.
+    names = ol.author_names(author_keys(work))
     return openlibrary_work(work, editions, names)
 
 
