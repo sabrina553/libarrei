@@ -28,7 +28,7 @@ LICENCES = {OL: "CC0-1.0", GR: "publisher copyright", HC: "see Hardcover terms"}
 
 WORK_FIELDS = ["title", "subtitle", "contributors", "description", "series", "genres", "original_release_date"]
 EDITION_FIELDS = ["title", "subtitle", "edition_statement", "contributors", "isbn13", "isbn10", "asin", "publisher",
-                  "release_date", "pages", "format", "language", "cover_url", "series"]
+                  "release_date", "pages", "format", "format_detail", "duration_seconds", "language", "cover_url", "series"]
 DATE_FIELDS = {"release_date", "original_release_date"}
 
 

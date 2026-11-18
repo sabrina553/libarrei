@@ -1,6 +1,6 @@
 import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
-import { formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
+import { formatDuration, formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
 import { provides, type Level } from './capabilities'
 import { splitKey, titleSplits, type TitleSplit } from './titleSplit'
 
@@ -13,6 +13,8 @@ const LABELS: Record<string, string> = {
   isbn13: 'ISBN-13',
   isbn10: 'ISBN-10',
   asin: 'ASIN',
+  format_detail: 'Format (as given)',
+  duration_seconds: 'Duration',
 }
 
 export function fieldLabel(name: string): string {
@@ -117,7 +119,8 @@ function Cell({ name, source, level, resolved, picked, onPick, splitFor, onSplit
     <td className={classes} title={chosen ? 'Chosen value' : undefined}>
       {values.map((v, i) => (
         <div key={i} className={name === 'description' ? 'long' : undefined}>
-          {name === 'cover_url' ? <img src={String(v.value)} alt="" loading="lazy" /> : formatValue(v.value)}
+          {name === 'cover_url' ? <img src={String(v.value)} alt="" loading="lazy" />
+            : name === 'duration_seconds' ? formatDuration(Number(v.value)) : formatValue(v.value)}
           {duplicated && <RecordLink level={level} value={v} />}
           <SplitHint value={v} split={splitFor?.(v)} onPick={onSplitPick} isStaged={isStaged} />
         </div>

@@ -4,6 +4,7 @@ Field names follow the BookSearch query in client.py.
 """
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
+from libarrei.sources.formats import detail, normalise_format
 
 # Hardcover's reading_formats table: 1 Read, 2 Listened, 3 Both, 4 Ebook.
 # "Both" says nothing about the edition itself, so it maps to no format.
@@ -52,7 +53,11 @@ def to_edition(raw: dict) -> Edition:
     edition.add("publisher", (raw.get("publisher") or {}).get("name"), HC, sid)
     edition.add("release_date", raw.get("release_date"), HC, sid)
     edition.add("pages", raw.get("pages"), HC, sid)
-    edition.add("format", READING_FORMATS.get(raw.get("reading_format_id")), HC, sid)
+    # The reading format is curated; the free-text edition format only fills in when it is missing.
+    coarse = READING_FORMATS.get(raw.get("reading_format_id")) or normalise_format(raw.get("edition_format"))
+    edition.add("format", coarse, HC, sid)
+    edition.add("format_detail", detail(raw.get("edition_format")), HC, sid)
+    edition.add("duration_seconds", raw.get("audio_seconds") or None, HC, sid)
     edition.add("language", (raw.get("language") or {}).get("code2"), HC, sid)
     edition.add("cover_url", (raw.get("image") or {}).get("url"), HC, sid)
     return edition

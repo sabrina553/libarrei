@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { formatValue } from './format'
+import { formatDuration, formatValue } from './format'
 
 test('formats each kind of field value', () => {
   expect(formatValue('Dune')).toBe('Dune')
@@ -9,4 +9,11 @@ test('formats each kind of field value', () => {
   expect(formatValue([{ name: 'Ann Napolitano', role: 'author' }, { name: 'Jane Doe', role: 'narrator' }]))
     .toBe('Ann Napolitano, Jane Doe (narrator)')
   expect(formatValue([{ name: 'Mistborn', position: '1' }])).toBe('Mistborn #1')
+})
+
+test('formats a duration as hours and minutes', () => {
+  expect(formatDuration(37800)).toBe('10:30')
+  expect(formatDuration(3599)).toBe('1:00')
+  expect(formatDuration(300)).toBe('0:05')
+  expect(formatDuration(0)).toBe('—')
 })

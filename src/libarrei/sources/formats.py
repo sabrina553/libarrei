@@ -57,3 +57,9 @@ def normalise_format(raw: str | None) -> str | None:
     if key in UNKNOWN:
         return None
     return FORMATS.get(key, key)
+
+
+def detail(raw: str | None) -> str | None:
+    """The source's own format wording, tidied but otherwise as given."""
+    text = " ".join((raw or "").split())
+    return None if not text or text.lower() in UNKNOWN else text

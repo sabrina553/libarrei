@@ -60,7 +60,11 @@ class Edition(Record):
     # Free text, because sources disagree on precision ("2026", "April 28th 2026").
     release_date: list[Candidate[str]] = []
     pages: list[Candidate[int]] = []
+    # Coarse bucket for matching: physical, ebook or audiobook.
     format: list[Candidate[str]] = []
+    # The source's own wording, such as "Mass Market Paperback".
+    format_detail: list[Candidate[str]] = []
+    duration_seconds: list[Candidate[int]] = []
     language: list[Candidate[str]] = []
     cover_url: list[Candidate[str]] = []
     # Some series exist only for one edition, such as a publisher's numbered imprint line.

@@ -7,11 +7,11 @@ export type Level = 'work' | 'edition'
 const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
   edition: {
     hardcover: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'publisher',
-      'release_date', 'pages', 'format', 'language', 'cover_url']),
+      'release_date', 'pages', 'format', 'format_detail', 'duration_seconds', 'language', 'cover_url']),
     goodreads: new Set(['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher',
-      'release_date', 'pages', 'format', 'language', 'cover_url']),
+      'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url']),
     openlibrary: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'publisher',
-      'release_date', 'pages', 'format', 'language', 'cover_url', 'series']),
+      'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url', 'series']),
   },
   work: {
     hardcover: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',

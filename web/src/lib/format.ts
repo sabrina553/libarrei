@@ -14,6 +14,13 @@ export function formatValue(value: unknown): string {
   return String(value)
 }
 
+/** A length in seconds as h:mm, e.g. 37800 → "10:30". */
+export function formatDuration(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds <= 0) return '—'
+  const minutes = Math.round(seconds / 60)
+  return `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`
+}
+
 export const SOURCES = ['hardcover', 'goodreads', 'openlibrary'] as const
 export type SourceName = (typeof SOURCES)[number]
 
