@@ -3,51 +3,13 @@ import random
 import re
 from bs4 import BeautifulSoup
 
+from libarrei.sources.goodreads.titles import parse_title_and_series
+
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/121.0.0.0 Safari/537.36",
     "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/121.0",
 ]
-
-def parse_title_and_series(raw_title):
-    """
-    Splits a Goodreads edition title into (title, subtitle, series_name, series_position).
-
-    e.g. "How to Cheat Your Own Death (Castle Knoll Files, #3)"
-      -> title="How to Cheat Your Own Death", subtitle=None,
-         series_name="Castle Knoll Files", series_position="3"
-
-    The trailing "(...)" on an edition title isn't always a series - Goodreads
-    sometimes puts a format/edition note there instead (e.g. "(Hardcover)",
-    "(Audible Audio)", "(LA)"). There's no reliable way to tell those apart
-    from a real series name by text alone, so we only trust it as a series
-    when it ends in "#<number>"; otherwise we discard it (both series_name
-    and series_position come back None) and just strip it off the title.
-    """
-    raw_title = " ".join(raw_title.split())
-    series_name = None
-    series_position = None
-
-    series_match = re.search(r"\(([^()]+)\)\s*$", raw_title)
-    if series_match:
-        series_text = series_match.group(1).strip()
-        title = raw_title[: series_match.start()].strip()
-
-        pos_match = re.search(r"#([\w.\-]+)\s*$", series_text)
-        if pos_match:
-            series_position = pos_match.group(1)
-            series_name = series_text[: pos_match.start()].rstrip(", ").strip()
-        # else: no "#N" order present -> discard, not a trustworthy series name
-    else:
-        title = raw_title
-
-    subtitle = None
-    if ":" in title:
-        main, sub = title.split(":", 1)
-        title, subtitle = main.strip(), sub.strip()
-
-    return title, subtitle, series_name, series_position
-
 
 def parse_publish_row(text):
     """Parses "Published April 28th 2026 by Dutton" -> (publish_date, publisher)."""

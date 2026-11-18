@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
 from libarrei.sources.formats import normalise_format
+from libarrei.sources.goodreads.titles import split_title
 
 GR = Source.GOODREADS
 
@@ -45,7 +46,9 @@ def edition_from_graphql(book: dict) -> Edition:
     details = book.get("details") or {}
     edition = Edition()
     sid = str(book["legacyId"])
-    edition.add("title", book.get("title"), GR, sid)
+    title, subtitle = split_title(book.get("title"))
+    edition.add("title", title, GR, sid)
+    edition.add("subtitle", subtitle, GR, sid)
     edition.add("contributors", contributors(book), GR, sid)
     edition.add("isbn13", details.get("isbn13"), GR, sid)
     edition.add("isbn10", details.get("isbn"), GR, sid)
@@ -64,7 +67,9 @@ def work_from_graphql(book: dict) -> Work:
     work_details = raw_work.get("details") or {}
     work = Work()
     sid = str(raw_work.get("legacyId") or book["legacyId"])
-    work.add("title", work_details.get("originalTitle") or book.get("title"), GR, sid)
+    title, subtitle = split_title(work_details.get("originalTitle") or book.get("title"))
+    work.add("title", title, GR, sid)
+    work.add("subtitle", subtitle, GR, sid)
     work.add("contributors", contributors(book), GR, sid)
     work.add("description", book.get("description"), GR, sid)
     work.add("series", series(book), GR, sid)
