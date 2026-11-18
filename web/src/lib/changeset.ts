@@ -20,7 +20,8 @@ type SourceValue = { value: unknown; source: SourceName; source_id: string }
 /**
  * Picking a value stages a correction for every other source whose record
  * disagrees with it or lacks the field entirely. Reference-only stores are
- * never corrected, though their values can still be picked.
+ * never corrected, though their values can still be picked. Picking no value
+ * (null) only corrects records that hold one.
  */
 export function buildChange(
   book: string, scope: string, field: string, pick: SourceValue,
@@ -32,11 +33,15 @@ export function buildChange(
     if (source === pick.source || REFERENCE_SOURCES.has(source)) continue
     for (const record of records[source] ?? []) {
       const current = values.find((v) => v.source === source && v.source_id === record)
-      if (!current || formatValue(current.value) !== wanted)
+      if (pick.value === null ? isFilled(current?.value) : !current || formatValue(current.value) !== wanted)
         corrections.push({ source, record, current: current?.value ?? null })
     }
   }
   return { id: `${scope}::${field}`, book, scope, field, value: pick.value, chosenFrom: pick.source, corrections }
+}
+
+function isFilled(value: unknown): boolean {
+  return value !== null && value !== undefined && value !== '' && !(Array.isArray(value) && !value.length)
 }
 
 // A tiny store kept in localStorage so staged work survives a reload.

@@ -107,6 +107,9 @@ button.active { background: var(--accent); }
 .grid td.pickable:hover, .grid td.pickable:focus-visible { box-shadow: inset 0 0 0 1px var(--accent); outline: none; }
 .grid td.picked { box-shadow: inset 0 0 0 2px var(--good); }
 .grid .tick { position: absolute; top: 0.3rem; right: 0.4rem; color: var(--good); font-weight: 700; }
+/* A suggestion is outlined, so it reads as an offer rather than something already staged. */
+.grid .tick.suggested { padding: 0 0.2rem; border: 1px solid var(--good); border-radius: 50%; background: none; font-weight: 400; font-size: 0.7rem; line-height: 1.2; }
+button.accept { margin-top: 0.5rem; }
 .badge.differs { background: var(--differs-mark); color: var(--text); }
 .badge.missing { background: var(--bad); }
 .only-problems { display: flex; gap: 0.4rem; align-items: center; margin-top: 1rem; font-size: 0.875rem; color: var(--muted); }

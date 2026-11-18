@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { inlineDiff, missingColumns, rowStates } from './cellStates'
+import { inlineDiff, missingColumns, rowStates, suggestion } from './cellStates'
 
 const all = () => true
 
@@ -83,4 +83,28 @@ test('a reference store with a record but no value is not missing, yet still vot
     { value: 464, source: 'hardcover' }, { value: 465, source: 'goodreads' }, { value: 464, source: 'amazon' },
   ], all)
   expect(voted.modal).toBe('464')
+})
+
+test('suggests the value most columns hold, crediting an editable source over a store', () => {
+  const values = [
+    { value: 310, source: 'amazon' as const, source_id: 'B1' },
+    { value: 310, source: 'goodreads' as const, source_id: '2' },
+    { value: 320, source: 'hardcover' as const, source_id: '1' },
+  ]
+  expect(suggestion('pages', values)).toEqual(values[1])
+})
+
+test('no suggestion without a majority of at least two columns', () => {
+  expect(suggestion('pages', [{ value: 1, source: 'hardcover' }, { value: 2, source: 'goodreads' }])).toBeNull()
+  expect(suggestion('pages', [{ value: 1, source: 'hardcover' }])).toBeNull()
+  expect(suggestion('cover_url', [{ value: 'a', source: 'hardcover' }, { value: 'a', source: 'goodreads' }])).toBeNull()
+})
+
+test('contributors are suggested by their authors alone', () => {
+  const values = [
+    { value: [{ name: 'Ann', role: 'author' }, { name: 'Ned', role: 'narrator' }], source: 'audible' as const },
+    { value: [{ name: 'Ann', role: 'author' }], source: 'hardcover' as const },
+    { value: [{ name: 'Bob', role: 'author' }], source: 'goodreads' as const },
+  ]
+  expect(suggestion('contributors', values)).toEqual(values[1])
 })
