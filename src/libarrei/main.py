@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 
 from libarrei.sources.hardcover.client import Hardcover
 from libarrei.sources.hardcover.transport import TransportLayer as TransportLayerHC
-from libarrei.models.goodreads.goodreads import Goodreads
-from libarrei.models.goodreads.transport import TransportLayer as TransportLayerGR
+from libarrei.sources.goodreads.client import Goodreads
+from libarrei.sources.goodreads.transport import TransportLayer as TransportLayerGR
 
 # Load the environment variables
 load_dotenv()

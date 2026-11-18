@@ -1,0 +1,16 @@
+{
+  "legacyId": 61771675,
+  "title": "Hello Beautiful",
+  "imageUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1687803098i/61771675.jpg",
+  "description": "<b>Test description.</b>",
+  "primaryContributorEdge": {"node": {"legacyId": 347770, "name": "Ann Napolitano"}},
+  "secondaryContributorEdges": [],
+  "bookSeries": [{"userPosition": "2", "series": {"title": "Test Series"}}],
+  "bookGenres": [{"genre": {"name": "Fiction"}}, {"genre": {"name": "Historical Fiction"}}],
+  "details": {
+    "asin": "B0B7R4Q5DJ", "format": "Kindle Edition", "numPages": 594,
+    "publicationTime": 1678777200000.0, "publisher": "The Dial Press",
+    "isbn": null, "isbn13": null, "language": {"name": "English"}
+  },
+  "work": {"legacyId": 97397727, "details": {"publicationTime": 1678777200000.0, "originalTitle": "Hello Beautiful"}}
+}
