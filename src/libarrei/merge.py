@@ -63,6 +63,8 @@ class MergedEdition(BaseModel):
     # Which identifiers each duplicated source's records share, e.g. {"openlibrary": ["isbn13"]}.
     duplicate_reasons: dict[Source, list[str]] = {}
     fields: dict[str, Resolved]
+    # Catalogue ASINs checked against the store: same_product, other_product or not_found.
+    asin_checks: dict[str, str] = {}
     # Page slugs for sources that address records by slug, such as Hardcover's book slug.
     slugs: dict[Source, str] = {}
 

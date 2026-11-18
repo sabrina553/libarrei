@@ -8,10 +8,12 @@ cookie, runs in that round too.
 """
 
 import os
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 
 from libarrei import normalise
+from libarrei.asin_check import Unavailable
 from libarrei.cache import Cache, NoCache
 from libarrei.merge import text_key
 from libarrei.model import Edition, Source, Work
@@ -48,6 +50,36 @@ class LookupResult:
     works: dict[Source, Work] = field(default_factory=dict)
     # Why a source returned nothing: missing token, not found, or an error.
     notes: dict[Source, str] = field(default_factory=dict)
+    # Looks an ASIN up on a store, for checking catalogue ASINs once editions are merged.
+    probe: Callable[[Source, str], dict | None] | None = None
+
+
+def make_probe(audible: Audible, amazon: Amazon | None) -> Callable[[Source, str], dict | None]:
+    """A store lookup returning {"title", "authors"}, memoised; raises Unavailable when it cannot ask."""
+    seen: dict[tuple[Source, str], dict | None] = {}
+
+    def probe(store: Source, asin: str) -> dict | None:
+        if (store, asin) not in seen:
+            try:
+                seen[(store, asin)] = _probe(store, asin)
+            except OSError as error:  # requests errors are OSErrors; a failed check says nothing
+                raise Unavailable() from error
+        return seen[(store, asin)]
+
+    def _probe(store: Source, asin: str) -> dict | None:
+        if store == Source.AUDIBLE:
+            product = audible.product(asin)
+            return product and {"title": product.get("title"),
+                                "authors": [a.get("name") for a in product.get("authors") or []]}
+        if amazon is None:
+            raise Unavailable()
+        try:
+            product = parse_product(amazon.product(asin) or "")
+        except AmazonBlocked as blocked:
+            raise Unavailable() from blocked
+        return product and {"title": product.get("title"), "authors": [n for n, _ in product.get("authors") or []]}
+
+    return probe
 
 
 @dataclass
@@ -269,15 +301,23 @@ def lookup(
     region = os.getenv("AUDIBLE_REGION") or AUDIBLE_DEFAULT_REGION
     later = {Source.AUDIBLE: lambda: from_audible(cache, region, found, all_editions)}
     # Off unless someone supplies a cookie: scraping Amazon is opt-in.
+    amazon = None
     if cookie := amazon_cookie or os.getenv("AMAZON_COOKIE"):
-        domain = os.getenv("AMAZON_DOMAIN") or AMAZON_DEFAULT_DOMAIN
-        # Built inside the job so a bad domain or cookie becomes a note, not a failed lookup.
-        later[Source.AMAZON] = lambda: from_amazon(
-            Amazon(cookie, domain, cache=cache), isbn, found, all_editions,
-            lambda note: result.notes.__setitem__(Source.AMAZON, note))
+        try:
+            amazon = Amazon(cookie, os.getenv("AMAZON_DOMAIN") or AMAZON_DEFAULT_DOMAIN, cache=cache)
+        except ValueError as error:  # a bad domain or cookie is a note, not a failed lookup
+            result.notes[Source.AMAZON] = f"error: {error}"
+        else:
+            later[Source.AMAZON] = lambda: from_amazon(
+                amazon, isbn, found, all_editions, lambda note: result.notes.__setitem__(Source.AMAZON, note))
     else:
         result.notes[Source.AMAZON] = "AMAZON_COOKIE not set"
     run_parallel(later, attempt)
+    try:
+        # The same clients, so ASIN checks share the stores' cache, rate limits and block state.
+        result.probe = make_probe(Audible(region, cache=cache), amazon)
+    except ValueError:
+        pass
 
     # Fixed source order keeps output stable whichever source finished first.
     result.works = {s: result.works[s] for s in Source if s in result.works}

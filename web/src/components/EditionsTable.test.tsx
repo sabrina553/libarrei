@@ -9,8 +9,8 @@ const field = (value: unknown, conflict = false) => ({
 })
 
 const editions: MergedEdition[] = [
-  { ids: { hardcover: ['1'] }, match_reason: null, confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, fields: { isbn13: field('9780000000001'), pages: field(300, true) } },
-  { ids: { hardcover: ['2'], goodreads: ['3'], openlibrary: ['OL4M'] }, match_reason: 'isbn13', confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, fields: { isbn13: field('9780000000002') } },
+  { ids: { hardcover: ['1'] }, match_reason: null, confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, fields: { isbn13: field('9780000000001'), pages: field(300, true) } },
+  { ids: { hardcover: ['2'], goodreads: ['3'], openlibrary: ['OL4M'] }, match_reason: 'isbn13', confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, fields: { isbn13: field('9780000000002') } },
 ]
 
 test('filters editions and opens one for detail', () => {
