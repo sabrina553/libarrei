@@ -15,15 +15,23 @@ CANDIDATES_PER_SEARCH = 10
 
 
 def title_similarity(wanted: str, title: str) -> float:
-    """Also compares the main title alone ("The Hobbit, or There and Back Again", "Dune: Deluxe")."""
-    main_title = re.split(r"[:,(]", title, maxsplit=1)[0]
-    return max(SequenceMatcher(None, wanted.lower(), t.lower().strip()).ratio() for t in (title, main_title))
+    """Also compares the main title alone ("The Hobbit, or There and Back Again", "Dune: Deluxe")
+    and the part after a series prefix ("Mistborn: The Final Empire")."""
+    variants = [title, re.split(r"[:,(]", title, maxsplit=1)[0]]
+    if ":" in title:
+        variants.append(re.sub(r"\s*\(.*?\)", "", title.split(":", 1)[1]))
+    return max(SequenceMatcher(None, wanted.lower(), t.lower().strip()).ratio() for t in variants)
 
 
 def rank_hits(hits: list[dict], title: str, author: str | None = None) -> list[int]:
     """Orders search hits by title match, plus a bonus for the author, then popularity."""
     def score(document: dict) -> tuple[float, int]:
-        points = title_similarity(title, document.get("title") or "")
+        found = document.get("title") or ""
+        points = title_similarity(title, found)
+        # Without this, split volumes such as "The Final Empire (2 of 3)" tie with
+        # the real book on their main title and win on popularity.
+        if found.strip().lower() == title.strip().lower():
+            points += 0.1
         if author and any(author.lower() in name.lower() for name in document.get("author_names") or []):
             points += 0.5
         return round(points, 2), document.get("users_count") or 0
