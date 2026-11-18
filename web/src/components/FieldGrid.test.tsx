@@ -47,6 +47,23 @@ test('picking a value stages a correction for the source that disagrees', async 
   expect(change.corrections).toEqual([{ source: 'openlibrary', record: 'OL1M', current: 320 }])
 })
 
+test('labels values from duplicate records with a link to each record', () => {
+  const isbn13: Resolved = {
+    value: '9780000000001', source: 'openlibrary', source_id: 'OL1M', conflict: false, alternatives: [],
+    values: [
+      { value: '9780000000001', source: 'openlibrary', source_id: 'OL1M' },
+      { value: '9780000000001', source: 'openlibrary', source_id: 'OL2M' },
+      { value: '9780000000001', source: 'hardcover', source_id: '5' },
+    ],
+  }
+  render(<FieldGrid fields={{ isbn13 }} order={['isbn13']} level="edition" />)
+
+  expect(screen.getByText('OL1M')).toHaveAttribute('href', 'https://openlibrary.org/books/OL1M')
+  expect(screen.getByText('OL2M')).toHaveAttribute('href', 'https://openlibrary.org/books/OL2M')
+  // A single record needs no label.
+  expect(screen.queryByText('5')).toBeNull()
+})
+
 test('flags a title holding the subtitle and stages the split parts', async () => {
   const { changeset } = await import('../lib/changeset')
   changeset.clear()
