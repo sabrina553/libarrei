@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { api, type LookupResponse } from '../api/client'
+import { EditionsTable } from '../components/EditionsTable'
 import { FieldGrid } from '../components/FieldGrid'
 import { formatValue } from '../lib/format'
 import { queryFromParams } from '../lib/query'
@@ -55,6 +56,7 @@ export function Book() {
           <JobStatus status={job.data?.status} error={job.data?.error ?? start.error?.message} />
         </p>
       )}
+      <EditionsTable editions={shown.work.editions} />
     </section>
   )
 }
