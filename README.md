@@ -42,6 +42,21 @@ Responses are cached for a week in `~/.cache/libarrei/` and requests are
 rate-limited per source, so a book with hundreds of editions takes a minute or
 two the first time and seconds afterwards.
 
+## HTTP API
+```sh
+uv run libarrei serve            # http://127.0.0.1:8000, docs at /docs
+uv run libarrei serve --host 0.0.0.0 --port 8000   # reachable from other machines
+```
+
+| Endpoint | Returns |
+|---|---|
+| `GET /health` | `{"status": "ok"}` |
+| `GET /v1/metadata?isbn=…` or `?title=…&author=…` | One flat record in Grimmory's `BookMetadata` field names, plus `conflicts`. |
+| `GET /v1/lookup?isbn=…` or `?title=…&author=…` | The full merged record with alternatives; add `&editions=all` for every edition (slow when uncached). |
+
+`publishedDate` keeps the source's precision, so it may be `1976` or `1976-08`
+rather than a full date.
+
 ## Tests
 ```sh
 uv run pytest -q
