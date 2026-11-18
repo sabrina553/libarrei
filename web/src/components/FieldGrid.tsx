@@ -1,8 +1,8 @@
 import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
-import { columnOf, COLUMN_LABELS, COLUMNS, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
+import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMNS, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
-import { inlineDiff, rowStates, type CellState } from '../lib/cellStates'
+import { inlineDiff, missingColumns, rowStates, type CellState } from '../lib/cellStates'
 import { columnProvides, type Level } from './capabilities'
 import { DescriptionValue } from './DescriptionValue'
 import { RecordLink } from './RecordLink'
@@ -54,9 +54,10 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
   })
   const isStaged = (field: string, value: string) =>
     !!staging && staged.some((c) => c.id === `${staging.scope}::${field}` && c.value === value)
+  const hasRecord = recordCheck(fields, staging?.records)
   const rows = order.map((name) => {
     const resolved = fields[name]
-    return { name, resolved, ...rowStates(name, resolved?.values ?? [], (c) => columnProvides(level, c, name)) }
+    return { name, resolved, ...rowStates(name, resolved?.values ?? [], (c) => columnProvides(level, c, name), hasRecord) }
   })
   // Each record's format, so values in the shared Amazon column can say which listing they came from.
   const formats = new Map((fields.format?.values ?? []).map((v) => [`${v.source}:${v.source_id}`, v.value]))
@@ -72,14 +73,15 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
         <thead>
           <tr>
             <th>Field</th>
-            {COLUMNS.map((c) => <th key={c}>{COLUMN_LABELS[c]}</th>)}
+            {COLUMNS.map((c) => hasRecord(c)
+              ? <th key={c}>{COLUMN_LABELS[c]}</th>
+              : <th key={c} className="norecord">{COLUMN_LABELS[c]} <span className="note">no record</span></th>)}
           </tr>
         </thead>
         <tbody>
           {rows.filter((r) => !onlyProblems || r.problem).map(({ name, resolved, states, modal }) => {
-            const counts = Object.values(states)
-            const differs = counts.includes('differs')
-            const missing = counts.includes('missing')
+            const differs = Object.values(states).includes('differs')
+            const missing = missingColumns(states)
             const id = staging && `${staging.scope}::${name}`
             const pick = staged.find((c) => c.id === id)
             return (
@@ -87,10 +89,16 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
                 <th scope="row">
                   {fieldLabel(name)}
                   {differs && <span className="badge differs" title="Sources disagree">differs</span>}
-                  {missing && <span className="badge missing" title="Some sources have no value">missing</span>}
+                  {missing.length > 0 && (
+                    <span className="badge missing" title={`No value from ${missing.map((c) => COLUMN_LABELS[c]).join(', ')}`}>
+                      missing: {missing.map((c) => COLUMN_ABBREVIATIONS[c]).join(', ')}
+                    </span>
+                  )}
                 </th>
                 {COLUMNS.map((source) => {
                   const state = states[source]
+                  if (state === 'norecord')
+                    return <td key={source} className="norecord" title={`${COLUMN_LABELS[source]} has no record here`}>—</td>
                   if (state === 'unsupported')
                     return <td key={source} className="unsupported" title={`${COLUMN_LABELS[source]} does not provide this field`}>not provided</td>
                   if (state === 'missing' || state === 'empty' || !resolved)
@@ -119,6 +127,19 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
 }
 
 type SourceValue = Resolved['values'][number]
+
+/**
+ * Whether a column has a record here: from the staging records when known,
+ * otherwise from whether it gave a value for any field.
+ */
+function recordCheck(fields: Record<string, Resolved>, records?: Partial<Record<SourceName, string[]>>) {
+  const seen = new Set<ColumnName>()
+  if (records) {
+    for (const [source, ids] of Object.entries(records)) if (ids?.length) seen.add(columnOf(source as SourceName))
+  }
+  for (const f of Object.values(fields)) for (const v of f.values ?? []) seen.add(columnOf(v.source))
+  return (column: ColumnName) => seen.has(column)
+}
 
 type CellProps = {
   name: string

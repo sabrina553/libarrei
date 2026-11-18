@@ -56,6 +56,14 @@ export const COLUMN_LABELS: Record<ColumnName, string> = {
   amazon: 'Amazon',
 }
 
+// Short labels for compact badges such as "missing: HC, GR".
+export const COLUMN_ABBREVIATIONS: Record<ColumnName, string> = {
+  hardcover: 'HC',
+  goodreads: 'GR',
+  openlibrary: 'OL',
+  amazon: 'AMZ',
+}
+
 export function columnOf(source: SourceName): ColumnName {
   return COLUMNS.find((c) => COLUMN_SOURCES[c].includes(source))!
 }

@@ -8,8 +8,9 @@ import { columnOf, COLUMNS, formatValue, type ColumnName, type SourceName } from
  * - missing: holds nothing although another source has a value
  * - empty: holds nothing, and neither does any other source
  * - unsupported: this source never provides the field
+ * - norecord: this source has no record at all here, so a gap says nothing about its data
  */
-export type CellState = 'agrees' | 'differs' | 'missing' | 'empty' | 'unsupported'
+export type CellState = 'agrees' | 'differs' | 'missing' | 'empty' | 'unsupported' | 'norecord'
 
 export type RowStates = {
   states: Record<ColumnName, CellState>
@@ -27,7 +28,10 @@ export function compareKey(value: unknown): string {
   return formatValue(value).replace(/\s+/g, ' ').trim().toLowerCase()
 }
 
-export function rowStates(field: string, values: Value[], provides: (column: ColumnName) => boolean): RowStates {
+export function rowStates(
+  field: string, values: Value[], provides: (column: ColumnName) => boolean,
+  hasRecord: (column: ColumnName) => boolean = () => true,
+): RowStates {
   const bySource = new Map<ColumnName, Set<string>>()
   for (const v of values) {
     if (v.value === null || v.value === undefined || v.value === '') continue
@@ -39,7 +43,8 @@ export function rowStates(field: string, values: Value[], provides: (column: Col
   const states = {} as Record<ColumnName, CellState>
   for (const source of COLUMNS) {
     const keys = bySource.get(source)
-    if (!provides(source)) states[source] = 'unsupported'
+    if (!hasRecord(source) && !keys) states[source] = 'norecord'
+    else if (!provides(source)) states[source] = 'unsupported'
     else if (!keys) states[source] = bySource.size ? 'missing' : 'empty'
     else if (NOT_COMPARED.has(field) || bySource.size < 2) states[source] = 'agrees'
     // Duplicate records that disagree among themselves are a problem even when one matches.
@@ -68,4 +73,9 @@ export function inlineDiff(text: string, reference: string): [string, string, st
   // A shared ending only lines up when the lengths match; "2020" against "2025-12-30" ending in 0 is chance.
   while (t.length === r.length && end < t.length - start && end < r.length - start && t[t.length - 1 - end] === r[r.length - 1 - end]) end++
   return [text.slice(0, start), text.slice(start, text.length - end), text.slice(text.length - end)]
+}
+
+/** Columns whose cell in this row is a real gap, for the row's compact "missing: HC, GR" badge. */
+export function missingColumns(states: Record<ColumnName, CellState>): ColumnName[] {
+  return COLUMNS.filter((c) => states[c] === 'missing')
 }

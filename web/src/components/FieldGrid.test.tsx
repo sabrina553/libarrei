@@ -15,8 +15,11 @@ const pages: Resolved = {
   ],
 }
 
+// Every source has a record, so gaps are real gaps rather than absent records.
+const everyRecord = { book: 'B', scope: 'ed', records: { hardcover: ['1'], goodreads: ['2'], openlibrary: ['OL1M'], amazon: ['B0'] } }
+
 test('colours cells that differ or are missing, with no majority to pick from', () => {
-  render(<FieldGrid fields={{ pages }} order={['pages']} level="edition" />)
+  render(<FieldGrid fields={{ pages }} order={['pages']} level="edition" staging={everyRecord} />)
 
   // One source each for 310 and 320, so neither is the majority and both differ.
   expect(screen.getByText('310').closest('td')).toHaveClass('differs')
@@ -24,7 +27,29 @@ test('colours cells that differ or are missing, with no majority to pick from', 
   // Goodreads and Amazon give page counts but have none here.
   for (const gap of screen.getAllByText('—')) expect(gap.closest('td')).toHaveClass('missing')
   expect(screen.getByText('differs')).toBeInTheDocument()
-  expect(screen.getByText('missing')).toBeInTheDocument()
+  expect(screen.getByText('missing: GR, AMZ')).toBeInTheDocument()
+})
+
+test('greys out a source with no record instead of marking its cells missing', () => {
+  render(<FieldGrid fields={{ pages }} order={['pages', 'publisher']} level="edition"
+    staging={{ book: 'B', scope: 'ed', records: { hardcover: ['1'], openlibrary: ['OL1M'], goodreads: ['2'] } }} />)
+
+  // Amazon has no record: one note in its header, plain cells, and no "missing" for it.
+  expect(screen.getAllByText('no record')).toHaveLength(1)
+  expect(screen.getByText('no record').closest('th')).toHaveClass('norecord')
+  const amazon = [...document.querySelectorAll('tbody tr')].map((r) => r.querySelectorAll('td')[3])
+  for (const cell of amazon) expect(cell).toHaveClass('norecord')
+  // Goodreads has a record but no page count, so that gap is still missing.
+  expect(screen.getByText('missing: GR')).toBeInTheDocument()
+})
+
+test('only problems ignores sources with no record', () => {
+  const language: Resolved = {
+    value: 'en', source: 'hardcover', source_id: '1', conflict: false, alternatives: [],
+    values: [{ value: 'en', source: 'hardcover', source_id: '1' }],
+  }
+  render(<FieldGrid fields={{ language }} order={['language']} level="edition" />)
+  expect(screen.getByText(/0 of 1 fields/)).toBeInTheDocument()
 })
 
 test('highlights where a value departs from the majority', () => {
@@ -57,7 +82,7 @@ test('only problems hides rows where every source agrees', () => {
 })
 
 test('shows every field and tells unsupported fields apart from empty ones', () => {
-  render(<FieldGrid fields={{ pages }} order={['title', 'duration_seconds', 'pages']} level="edition" />)
+  render(<FieldGrid fields={{ pages }} order={['title', 'duration_seconds', 'pages']} level="edition" staging={everyRecord} />)
 
   expect(screen.getByText('Title')).toBeInTheDocument()
   // Only Hardcover and Audible (in the Amazon column) give an audiobook length.
