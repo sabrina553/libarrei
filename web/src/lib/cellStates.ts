@@ -1,11 +1,11 @@
-import { columnOf, COLUMNS, formatValue, type ColumnName, type SourceName } from './format'
+import { columnOf, COLUMNS, formatValue, isReference, type ColumnName, type SourceName } from './format'
 
 /**
  * How one column's cell compares with the other columns in the same row.
  * Sources sharing a column (Amazon and Audible) count as one.
  * - agrees: holds the most common value (or is the only value)
  * - differs: holds a value, but not the most common one
- * - missing: holds nothing although another source has a value
+ * - missing: holds nothing although another source has a value (never for reference-only stores)
  * - empty: holds nothing, and neither does any other source
  * - unsupported: this source never provides the field
  * - norecord: this source has no record at all here, so a gap says nothing about its data
@@ -45,7 +45,7 @@ export function rowStates(
     const keys = bySource.get(source)
     if (!hasRecord(source) && !keys) states[source] = 'norecord'
     else if (!provides(source)) states[source] = 'unsupported'
-    else if (!keys) states[source] = bySource.size ? 'missing' : 'empty'
+    else if (!keys) states[source] = bySource.size && !isReference(source) ? 'missing' : 'empty'
     else if (NOT_COMPARED.has(field) || bySource.size < 2) states[source] = 'agrees'
     // Duplicate records that disagree among themselves are a problem even when one matches.
     else states[source] = modal !== null && keys.has(modal) && keys.size === 1 ? 'agrees' : 'differs'

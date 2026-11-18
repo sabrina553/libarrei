@@ -24,10 +24,14 @@ test('colours cells that differ or are missing, with no majority to pick from', 
   // One source each for 310 and 320, so neither is the majority and both differ.
   expect(screen.getByText('310').closest('td')).toHaveClass('differs')
   expect(screen.getByText('320').closest('td')).toHaveClass('differs')
-  // Goodreads and Amazon give page counts but have none here.
-  for (const gap of screen.getAllByText('—')) expect(gap.closest('td')).toHaveClass('missing')
+  // Goodreads gives page counts but has none here; Amazon is only a reference, so its gap is plain.
+  const [goodreads, amazon] = screen.getAllByText('—').map((gap) => gap.closest('td'))
+  expect(goodreads).toHaveClass('missing')
+  expect(amazon).not.toHaveClass('missing')
+  expect(amazon).toHaveClass('reference')
+  expect(screen.getByText('reference')).toBeInTheDocument()
   expect(screen.getByText('differs')).toBeInTheDocument()
-  expect(screen.getByText('missing: GR, AMZ')).toBeInTheDocument()
+  expect(screen.getByText('missing: GR')).toBeInTheDocument()
 })
 
 test('greys out a source with no record instead of marking its cells missing', () => {

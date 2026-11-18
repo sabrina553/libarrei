@@ -56,6 +56,14 @@ export const COLUMN_LABELS: Record<ColumnName, string> = {
   amazon: 'Amazon',
 }
 
+// Stores whose listings libarrei only reads for reference: their values vote and can be
+// picked, but gaps in them are not flagged and no corrections are staged against them.
+export const REFERENCE_SOURCES: ReadonlySet<SourceName> = new Set(['amazon', 'audible'])
+
+export function isReference(column: ColumnName): boolean {
+  return COLUMN_SOURCES[column].every((s) => REFERENCE_SOURCES.has(s))
+}
+
 // Short labels for compact badges such as "missing: HC, GR".
 export const COLUMN_ABBREVIATIONS: Record<ColumnName, string> = {
   hardcover: 'HC',

@@ -11,7 +11,7 @@ test('the most common value across sources wins, counted once per source', () =>
     { value: 465, source: 'openlibrary' },
   ], all)
   expect(modal).toBe('464')
-  expect(states).toEqual({ hardcover: 'agrees', goodreads: 'agrees', openlibrary: 'differs', amazon: 'missing' })
+  expect(states).toEqual({ hardcover: 'agrees', goodreads: 'agrees', openlibrary: 'differs', amazon: 'empty' })
 })
 
 test('duplicate records that disagree among themselves differ', () => {
@@ -26,7 +26,7 @@ test('duplicate records that disagree among themselves differ', () => {
 test('a gap only counts as missing when another source has a value', () => {
   expect(rowStates('asin', [], all).states.hardcover).toBe('empty')
   expect(rowStates('asin', [{ value: 'B0X', source: 'goodreads' }], all).states)
-    .toEqual({ hardcover: 'missing', goodreads: 'agrees', openlibrary: 'missing', amazon: 'missing' })
+    .toEqual({ hardcover: 'missing', goodreads: 'agrees', openlibrary: 'missing', amazon: 'empty' })
 })
 
 test('covers are not compared, since every source hosts its own copy', () => {
@@ -68,4 +68,19 @@ test('a source with no record is norecord, not missing, and raises no problem', 
 test('missing columns lists only real gaps', () => {
   const { states } = rowStates('pages', [{ value: 1, source: 'hardcover' }], all, (c) => c !== 'amazon')
   expect(missingColumns(states)).toEqual(['goodreads', 'openlibrary'])
+})
+
+test('a reference store with a record but no value is not missing, yet still votes', () => {
+  const { states, modal, problem } = rowStates('pages', [
+    { value: 464, source: 'hardcover' },
+    { value: 465, source: 'goodreads' },
+    { value: 465, source: 'openlibrary' },
+  ], all)
+  expect(states.amazon).toBe('empty')
+  expect(modal).toBe('465')
+  expect(problem).toBe(true)
+  const voted = rowStates('pages', [
+    { value: 464, source: 'hardcover' }, { value: 465, source: 'goodreads' }, { value: 464, source: 'amazon' },
+  ], all)
+  expect(voted.modal).toBe('464')
 })

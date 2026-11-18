@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react'
-import { formatValue, SOURCES, type SourceName } from './format'
+import { formatValue, REFERENCE_SOURCES, SOURCES, type SourceName } from './format'
 
 /** One field on one source's record that should be changed to the staged value. */
 export type Correction = { source: SourceName; record: string; current: unknown }
@@ -19,7 +19,8 @@ type SourceValue = { value: unknown; source: SourceName; source_id: string }
 
 /**
  * Picking a value stages a correction for every other source whose record
- * disagrees with it or lacks the field entirely.
+ * disagrees with it or lacks the field entirely. Reference-only stores are
+ * never corrected, though their values can still be picked.
  */
 export function buildChange(
   book: string, scope: string, field: string, pick: SourceValue,
@@ -28,7 +29,7 @@ export function buildChange(
   const wanted = formatValue(pick.value)
   const corrections: Correction[] = []
   for (const source of SOURCES) {
-    if (source === pick.source) continue
+    if (source === pick.source || REFERENCE_SOURCES.has(source)) continue
     for (const record of records[source] ?? []) {
       const current = values.find((v) => v.source === source && v.source_id === record)
       if (!current || formatValue(current.value) !== wanted)
