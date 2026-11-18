@@ -57,6 +57,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 .grid td { width: 30%; }
 .grid td.chosen { outline: 2px solid var(--accent); outline-offset: -2px; }
 .grid td.empty { color: var(--muted); }
+.grid td.unsupported { color: var(--muted); background: var(--border); font-size: 0.75rem; font-style: italic; opacity: 0.6; }
 .grid tr.conflict th, .grid tr.conflict td { background: var(--conflict-bg); }
 .grid img { max-height: 8rem; }
 /* Descriptions are long; cap them and let the cell scroll. */

@@ -1,6 +1,7 @@
 import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
+import { provides, type Level } from './capabilities'
 
 export type Resolved = components['schemas']['Resolved']
 
@@ -19,15 +20,16 @@ export function fieldLabel(name: string): string {
 
 type Props = {
   fields: Record<string, Resolved>
-  // Fields in display order; ones the record lacks are skipped.
+  // Fields in display order; every one gets a row, even when no source filled it.
   order: string[]
+  // Decides which fields each source can provide at all.
+  level: Level
   // When given, values can be picked to stage corrections.
   staging?: { book: string; scope: string; records: Partial<Record<SourceName, string[]>> }
 }
 
 /** Fields down the side, sources across the top, like a side-by-side diff. */
-export function FieldGrid({ fields, order, staging }: Props) {
-  const rows = order.filter((name) => name in fields)
+export function FieldGrid({ fields, order, level, staging }: Props) {
   const staged = useChangeset()
   return (
     <table className="grid">
@@ -38,17 +40,20 @@ export function FieldGrid({ fields, order, staging }: Props) {
         </tr>
       </thead>
       <tbody>
-        {rows.map((name) => {
+        {order.map((name) => {
           const resolved = fields[name]
           return (
-            <tr key={name} className={resolved.conflict ? 'conflict' : undefined}>
+            <tr key={name} className={resolved?.conflict ? 'conflict' : undefined}>
               <th scope="row">
                 {fieldLabel(name)}
-                {resolved.conflict && <span className="badge" title="Sources disagree">conflict</span>}
+                {resolved?.conflict && <span className="badge" title="Sources disagree">conflict</span>}
               </th>
               {SOURCES.map((source) => {
                 const id = staging && `${staging.scope}::${name}`
                 const pick = staged.find((c) => c.id === id)
+                if (!provides(level, source, name))
+                  return <td key={source} className="unsupported" title={`${SOURCE_LABELS[source]} does not provide this field`}>not provided</td>
+                if (!resolved) return <td key={source} className="empty" title="No value on this record">—</td>
                 return (
                   <Cell
                     key={source} name={name} source={source} resolved={resolved}
@@ -77,7 +82,7 @@ type CellProps = {
 
 function Cell({ name, source, resolved, picked, onPick }: CellProps) {
   const values = (resolved.values ?? []).filter((v) => v.source === source)
-  if (!values.length) return <td className="empty">—</td>
+  if (!values.length) return <td className="empty" title="No value on this record">—</td>
   const chosen = resolved.source === source
   const classes = [chosen && 'chosen', picked && 'picked'].filter(Boolean).join(' ') || undefined
   return (
