@@ -1,6 +1,6 @@
 # work
 title: Convenience Store Woman [hardcover] CONFLICT
-contributors: Sayaka Murata, Ginny Tapley Takemori (translator) [hardcover] CONFLICT
+contributors: Sayaka Murata [hardcover] CONFLICT
 description: [goodreads description] [goodreads] CONFLICT
 genres: Fiction, Contemporary, Japan, Japanese Literature, Literary Fiction, Asia, Adult, Asian Literature [goodreads]
 original_release_date: 2016-07-27 [goodreads]

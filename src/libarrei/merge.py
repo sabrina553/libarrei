@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from libarrei.description import Block, parse_description, plain_text
 from libarrei.match import EditionGroup, align
 from libarrei.model import Candidate, Source, Work
+from libarrei.normalise import is_edition_statement
 
 GR, HC, OL, AU, AZ = Source.GOODREADS, Source.HARDCOVER, Source.OPENLIBRARY, Source.AUDIBLE, Source.AMAZON
 
@@ -76,7 +77,7 @@ class MergedWork(BaseModel):
 def merge(works: dict[Source, Work]) -> MergedWork:
     work_fields = {}
     for name in WORK_FIELDS:
-        candidates = [c for w in works.values() for c in getattr(w, name)]
+        candidates = work_candidates(name, [c for w in works.values() for c in getattr(w, name)])
         if resolved := resolve(name, candidates):
             work_fields[name] = resolved
     return MergedWork(
@@ -85,6 +86,26 @@ def merge(works: dict[Source, Work]) -> MergedWork:
         editions=[merge_group(g) for g in align(works)],
         slugs={s: w.slugs[s] for s, w in works.items() if s in w.slugs},
     )
+
+
+def work_candidates(name: str, candidates: list[Candidate]) -> list[Candidate]:
+    """Drops what belongs to an edition rather than the work.
+
+    Done here rather than in each source's mapping so every source, present and
+    future, is treated alike. Translators, narrators, illustrators and the like
+    belong to a particular edition, so the work keeps its authors only. A
+    "subtitle" such as "Deluxe Edition" is an edition statement, not the work's.
+    """
+    if name == "contributors":
+        kept = []
+        for c in candidates:
+            authors = [p for p in c.value if p.role == "author"]
+            if authors:
+                kept.append(c.model_copy(update={"value": authors}))
+        return kept
+    if name == "subtitle":
+        return [c for c in candidates if not is_edition_statement(c.value)]
+    return candidates
 
 
 def merge_group(group: EditionGroup) -> MergedEdition:

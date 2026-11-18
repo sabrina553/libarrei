@@ -232,3 +232,28 @@ def _drop_audiobook_pages(edition: Edition) -> None:
     # means nothing reliable once every source agrees the edition is audio.
     if edition.format and all(c.value == "audiobook" for c in edition.format):
         edition.pages = []
+
+
+# Only these words may qualify "edition", so a real subtitle such as "The Last Edition" stays a subtitle.
+# Kept in step with web/src/components/titleSplit.ts.
+_EDITION_QUALIFIERS = {
+    "deluxe", "anniversary", "collector's", "collectors", "special", "limited", "illustrated", "revised", "expanded",
+    "updated", "annotated", "abridged", "unabridged", "new", "first", "second", "third", "definitive", "gift",
+    "commemorative", "complete", "uncut", "international", "movie", "tie-in", "tv", "media", "slipcase", "hardcover",
+    "paperback", "large", "print", "and", "silver", "golden", "jubilee", "author's", "authors", "preferred", "text",
+    "ed.", "ed",
+}
+# Words that are an edition statement on their own.
+_EDITION_ALONE = {"revised", "unabridged", "abridged", "illustrated", "annotated", "expanded"}
+
+
+def is_edition_statement(text: str) -> bool:
+    """"Deluxe Edition", "2nd ed.", "50th Anniversary Edition", "Collector's Edition", "Revised"."""
+    words = text.strip().lower().replace("\u2019", "'").split()
+    if not words:
+        return False
+    if len(words) == 1:
+        return words[0] in _EDITION_ALONE
+    if words[-1] not in {"edition", "ed.", "ed", "version"}:
+        return False
+    return all(w in _EDITION_QUALIFIERS or re.fullmatch(r"\d+(st|nd|rd|th)?", w) for w in words[:-1])

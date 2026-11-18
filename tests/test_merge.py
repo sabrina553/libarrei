@@ -83,3 +83,28 @@ def test_merge_carries_hardcover_slugs():
     work = Work(editions=[edition], slugs={HC: "the-hobbit"})
     merged = merge({HC: work})
     assert merged.slugs == {HC: "the-hobbit"} and merged.editions[0].slugs == {HC: "the-hobbit"}
+
+
+def _work(source, **fields):
+    return Work(ids={source: "1"}, **{k: [Candidate(value=v, source=source, source_id="1")] for k, v in fields.items()})
+
+
+def test_work_contributors_keep_authors_only():
+    from libarrei.model import Contributor
+
+    people = [Contributor(name="Ann Author"), Contributor(name="Co Author"),
+              Contributor(name="Tia Translator", role="translator"), Contributor(name="Nel Narrator", role="narrator")]
+    merged = merge({HC: _work(HC, contributors=people)})
+    assert [p.name for p in merged.fields["contributors"].value] == ["Ann Author", "Co Author"]
+
+
+def test_work_contributors_with_no_author_are_dropped():
+    from libarrei.model import Contributor
+
+    merged = merge({HC: _work(HC, contributors=[Contributor(name="Ivy Illustrator", role="illustrator")])})
+    assert "contributors" not in merged.fields
+
+
+def test_work_subtitle_drops_edition_statements():
+    merged = merge({HC: _work(HC, subtitle="Deluxe Edition"), GR: _work(GR, subtitle="A Novel")})
+    assert [v.value for v in merged.fields["subtitle"].values] == ["A Novel"]
