@@ -43,6 +43,9 @@ def from_openlibrary(isbn: str | None, title: str | None, author: str | None) ->
     work = ol.document(work_key)
     if not work:
         return None
+    # The ISBN's own edition stays first so it remains the best match.
+    seen = {e["key"] for e in editions}
+    editions += [e for e in ol.all_editions(work_key) if e["key"] not in seen]
     names = ol.author_names(list(dict.fromkeys(author_keys(work) + [k for e in editions for k in author_keys(e)])))
     return openlibrary_work(work, editions, names)
 

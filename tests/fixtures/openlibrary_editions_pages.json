@@ -1,0 +1,9 @@
+[
+  {"size": 3, "entries": [
+    {"key": "/books/OL1M", "title": "The Hobbit", "languages": [{"key": "/languages/eng"}], "number_of_pages": 310},
+    {"key": "/books/OL2M", "title": "Der Hobbit", "languages": [{"key": "/languages/ger"}]}
+  ]},
+  {"size": 3, "entries": [
+    {"key": "/books/OL3M", "title": "Hobit ali Tja in spet nazaj", "languages": [{"key": "/languages/slv"}], "physical_format": "paperback"}
+  ]}
+]
