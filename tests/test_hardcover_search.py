@@ -30,3 +30,15 @@ def test_main_title_is_compared_without_subtitle():
 def test_missing_results_give_no_hits():
     assert hits_from_search({}) == []
     assert hits_from_search({"search": {"results": None}}) == []
+
+
+def test_exact_title_beats_a_more_popular_split_volume():
+    hits = [
+        {"document": {"id": 1, "title": "The Final Empire (2 of 3)", "author_names": ["Brandon Sanderson"], "users_count": 900}},
+        {"document": {"id": 2, "title": "The Final Empire", "author_names": ["Brandon Sanderson"], "users_count": 500}},
+    ]
+    assert rank_hits(hits, "the final empire", "sanderson")[0] == 2
+
+
+def test_series_prefixed_title_matches():
+    assert title_similarity("the final empire", "Mistborn: The Final Empire") == 1.0
