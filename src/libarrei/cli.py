@@ -111,7 +111,14 @@ def main() -> None:
     # Loopback by default so the API is only reachable from this machine unless asked.
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8000)
+    commands.add_parser("openapi", help="print the API's OpenAPI schema (used to generate GUI types)")
     args = parser.parse_args()
+
+    if args.command == "openapi":
+        from libarrei.api import app
+
+        print(json.dumps(app.openapi(), indent=2))
+        return
 
     load_dotenv()
     if args.command == "serve":

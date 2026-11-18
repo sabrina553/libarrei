@@ -5,6 +5,7 @@ Source tokens come from the server's environment for now.
 """
 
 import os
+from typing import Literal
 
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -50,21 +51,23 @@ def _lookup(
     return result
 
 
-@app.get("/v1/lookup")
+class LookupResponse(BaseModel):
+    work: MergedWork
+    # Why a source returned nothing, keyed by source name.
+    notes: dict[str, str] = {}
+
+
+@app.get("/v1/lookup", response_model=LookupResponse, response_model_exclude_defaults=True)
 def lookup_merged(
     isbn: str | None = None,
     title: str | None = None,
     author: str | None = None,
     editions: str = Query("matched", pattern="^(matched|all)$"),
     x_hardcover_token: str | None = TokenHeader,
-) -> dict:
+) -> LookupResponse:
     """The full merged record: chosen values, alternatives and conflicts."""
     result = _lookup(isbn, title, author, all_editions=editions == "all", token=x_hardcover_token)
-    merged = merge(result.works)
-    return {
-        "work": merged.model_dump(mode="json", exclude_defaults=True),
-        "notes": {s.value: n for s, n in result.notes.items()},
-    }
+    return LookupResponse(work=merge(result.works), notes={s.value: n for s, n in result.notes.items()})
 
 
 class JobRequest(BaseModel):
@@ -74,23 +77,29 @@ class JobRequest(BaseModel):
 
 
 def _full_lookup(isbn: str | None, title: str | None, author: str | None, token: str | None = None) -> dict:
-    return lookup_merged(isbn=isbn, title=title, author=author, editions="all", x_hardcover_token=token)
+    response = lookup_merged(isbn=isbn, title=title, author=author, editions="all", x_hardcover_token=token)
+    return response.model_dump(mode="json", exclude_defaults=True)
 
 
 jobs = JobStore(lambda **query: _full_lookup(**query))
 
 
-def _job_view(job: Job) -> dict:
-    view = {"id": job.id, "status": job.status, "query": job.query}
-    if job.status == "done":
-        view["result"] = job.result
-    if job.status == "failed":
-        view["error"] = job.error
-    return view
+class JobView(BaseModel):
+    id: str
+    status: Literal["queued", "running", "done", "failed"]
+    query: JobRequest
+    result: LookupResponse | None = None
+    error: str | None = None
 
 
-@app.post("/v1/jobs", status_code=202)
-def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) -> dict:
+def _job_view(job: Job) -> JobView:
+    return JobView(id=job.id, status=job.status, query=JobRequest(**job.query),
+                   result=job.result if job.status == "done" else None,
+                   error=job.error if job.status == "failed" else None)
+
+
+@app.post("/v1/jobs", status_code=202, response_model=JobView, response_model_exclude_defaults=True)
+def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) -> JobView:
     """Fetches every edition in the background; poll GET /v1/jobs/{id} for the result."""
     if not request.isbn and not request.title:
         raise HTTPException(422, "give isbn or title")
@@ -98,8 +107,8 @@ def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) 
     return _job_view(jobs.submit(request.model_dump(), secrets))
 
 
-@app.get("/v1/jobs/{job_id}")
-def job_status(job_id: str) -> dict:
+@app.get("/v1/jobs/{job_id}", response_model=JobView, response_model_exclude_defaults=True)
+def job_status(job_id: str) -> JobView:
     if not (job := jobs.get(job_id)):
         raise HTTPException(404, "no such job, or it expired")
     return _job_view(job)
