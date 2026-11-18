@@ -42,6 +42,17 @@ class OpenLibrary:
         """Fetches any keyed document, e.g. "/works/OL28723763W" or "/authors/OL1515577A"."""
         return self._get(f"{key}.json")
 
+    def all_editions(self, work_key: str, page_size: int = 50) -> list[dict]:
+        """Every edition of a work in all languages, e.g. all_editions("/works/OL27482W")."""
+        editions: list[dict] = []
+        while True:
+            page = self._get(f"{work_key}/editions.json", {"limit": page_size, "offset": len(editions)})
+            entries = (page or {}).get("entries") or []
+            editions += entries
+            # A short page also ends the loop, in case "size" overstates what is served.
+            if len(entries) < page_size or len(editions) >= page["size"]:
+                return editions
+
     def search(self, title: str, author: str | None = None, limit: int = 5) -> list[dict]:
         params = {"title": title, "limit": limit, "fields": "key,title,author_name,first_publish_year,isbn"}
         if author:
