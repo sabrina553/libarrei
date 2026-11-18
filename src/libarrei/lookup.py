@@ -7,6 +7,7 @@ returned side by side so the results can be compared.
 import os
 from dataclasses import dataclass, field
 
+from libarrei import normalise
 from libarrei.cache import Cache, NoCache
 from libarrei.model import Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
@@ -49,7 +50,9 @@ def from_openlibrary(cache, isbn: str | None, title: str | None, author: str | N
     # The ISBN's own edition stays first so it remains the best match.
     seen = {e["key"] for e in editions}
     editions += [e for e in ol.all_editions(work_key) if e["key"] not in seen]
-    names = ol.author_names(list(dict.fromkeys(author_keys(work) + [k for e in editions for k in author_keys(e)])))
+    # Only the work's authors: edition-level keys across hundreds of editions
+    # would cost one request each on a cold cache.
+    names = ol.author_names(author_keys(work))
     return openlibrary_work(work, editions, names)
 
 
@@ -103,6 +106,7 @@ def lookup(
             result.notes[source] = f"error: {error}"
             return
         if work:
+            normalise.work(work)
             result.works[source] = work
         else:
             result.notes.setdefault(source, "not found")
