@@ -62,6 +62,8 @@ class Edition(Record):
     format: list[Candidate[str]] = []
     language: list[Candidate[str]] = []
     cover_url: list[Candidate[str]] = []
+    # Some series exist only for one edition, such as a publisher's numbered imprint line.
+    series: list[Candidate[list[SeriesEntry]]] = []
 
 
 class Work(Record):

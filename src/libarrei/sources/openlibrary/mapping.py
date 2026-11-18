@@ -7,7 +7,7 @@ Field reference: https://openlibrary.org/dev/docs/api/books
 
 import re
 
-from libarrei.model import Contributor, Edition, Source, Work
+from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
 from libarrei.sources.formats import normalise_format
 
 OL = Source.OPENLIBRARY
@@ -58,6 +58,24 @@ def other_contributors(doc: dict) -> list[Contributor]:
     return people
 
 
+# "Name ; 3", "Name, #3", "Name #3" or "Name, 3"; anything else is kept whole as the name.
+SERIES_POSITION = re.compile(r"^(.+?)\s*(?:;|,\s*#?|#)\s*(\d+(?:\.\d+)?)\s*$")
+
+
+def series(doc: dict) -> list[SeriesEntry]:
+    # Entries shaped {"series": {"key": ...}} carry no name, only a key, so are skipped.
+    entries = []
+    for raw in doc.get("series") or []:
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        text = raw.strip()
+        if m := SERIES_POSITION.match(text):
+            entries.append(SeriesEntry(name=m.group(1).strip(), position=m.group(2)))
+        else:
+            entries.append(SeriesEntry(name=text))
+    return entries
+
+
 def pages(doc: dict) -> int | None:
     if doc.get("number_of_pages"):
         return doc["number_of_pages"]
@@ -89,6 +107,7 @@ def to_edition(doc: dict, names: dict[str, str]) -> Edition:
     for language in doc.get("languages") or []:
         edition.add("language", short_key(language["key"]), OL, sid)
     edition.add("cover_url", cover(doc), OL, sid)
+    edition.add("series", series(doc), OL, sid)
     return edition
 
 
@@ -99,6 +118,7 @@ def to_work(work: dict, editions: list[dict], names: dict[str, str]) -> Work:
     result.add("subtitle", work.get("subtitle"), OL, sid)
     result.add("contributors", contributors(work, names), OL, sid)
     result.add("description", text(work.get("description")), OL, sid)
+    result.add("series", series(work), OL, sid)
     result.add("genres", work.get("subjects"), OL, sid)
     result.add("original_release_date", work.get("first_publish_date"), OL, sid)
     result.editions = [to_edition(e, names) for e in editions]

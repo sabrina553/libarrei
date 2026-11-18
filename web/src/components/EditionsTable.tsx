@@ -6,7 +6,7 @@ import { FieldGrid } from './FieldGrid'
 // Rendering thousands of rows at once is slow; show a page and let the librarian ask for more.
 const PAGE = 100
 const EDITION_FIELDS = ['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher',
-  'release_date', 'pages', 'format', 'language', 'cover_url']
+  'release_date', 'pages', 'format', 'language', 'series', 'cover_url']
 
 export function EditionsTable({ editions, book }: { editions: MergedEdition[]; book: string }) {
   const [filter, setFilter] = useState<FilterName>('all')
