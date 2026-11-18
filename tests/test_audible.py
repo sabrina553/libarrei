@@ -127,13 +127,14 @@ def test_clues_take_title_author_and_audiobook_asins():
                      asin=[Candidate(value="B000PRINT1", source=Source.HARDCOVER, source_id="2")])
     work = Work(title=[Candidate(value="The Hobbit", source=Source.HARDCOVER, source_id="9")], editions=[audio, print_])
     found = clues({Source.HARDCOVER: work}, None, "Tolkien")
-    assert found == Clues("The Hobbit", "Tolkien", ["B004EW5KKU"])
+    assert (found.title, found.author) == ("The Hobbit", "Tolkien")
+    assert found.asins[AU] == ["B004EW5KKU"]
 
 
 def test_known_asin_wins_and_search_fills_in_all_editions(monkeypatch):
     session = FakeSession()
     monkeypatch.setattr("libarrei.lookup.Audible", lambda region, cache: client(session))
-    found = Clues("The Hobbit", "J.R.R. Tolkien", ["B004EW5KKU"])
+    found = Clues("The Hobbit", "J.R.R. Tolkien", {AU: ["B004EW5KKU"], Source.AMAZON: []})
 
     matched = from_audible(None, "co.uk", found, all_editions=False)
     assert [e.ids[AU] for e in matched.editions] == ["B004EW5KKU"]
@@ -151,3 +152,18 @@ def test_search_hits_by_other_authors_are_dropped():
 
 def test_page_url():
     assert page_url("co.uk", "B004EW5KKU") == "https://www.audible.co.uk/pd/B004EW5KKU"
+
+
+def test_search_hits_must_be_the_same_work_not_a_sequel():
+    from libarrei.lookup import Clues, audible_is_work
+
+    found = Clues(title="Dungeon Crawler Carl", author="Matt Dinniman", series_position="1")
+    book = {"title": "Dungeon Crawler Carl", "series": [{"title": "Dungeon Crawler Carl", "sequence": "1"}]}
+    sequel = {"title": "Carl's Doomsday Scenario", "series": [{"title": "Dungeon Crawler Carl", "sequence": "2"}]}
+    translated = {"title": "Carl, o explorador de masmorras",
+                  "series": [{"title": "Dungeon Crawler Carl (Portuguese Edition)", "sequence": "1"}]}
+    novella = {"title": "Operation Bounce House", "series": []}
+    assert audible_is_work(book, found)
+    assert audible_is_work(translated, found)
+    assert not audible_is_work(sequel, found)
+    assert not audible_is_work(novella, found)

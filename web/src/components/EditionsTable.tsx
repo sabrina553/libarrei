@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 import { conflictCount, duplicateLabel, editionKey, FILTERS, type FilterName, type MergedEdition } from '../lib/editions'
-import { formatValue, SOURCE_LABELS, SOURCES } from '../lib/format'
+import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
 import { SlugsContext } from '../lib/links'
 import { FieldGrid } from './FieldGrid'
 
@@ -43,8 +43,8 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                   <td>{value('release_date')}</td>
                   <td>{value('publisher')}</td>
                   <td>
-                    {SOURCES.map((s) => (
-                      <span key={s} className={edition.ids[s] ? 'src on' : 'src'} title={SOURCE_LABELS[s]}>{SOURCE_LABELS[s][0]}</span>
+                    {COLUMNS.map((c) => (
+                      <span key={c} className={COLUMN_SOURCES[c].some((s) => edition.ids[s]) ? 'src on' : 'src'} title={COLUMN_LABELS[c]}>{COLUMN_LABELS[c][0]}</span>
                     ))}
                     {duplicateLabel(edition) && <span className="badge">{duplicateLabel(edition)}</span>}
                   </td>

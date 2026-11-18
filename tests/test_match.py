@@ -75,3 +75,47 @@ def test_duplicates_joined_only_through_another_source_share_nothing():
         edition(OL, "OL2M", asin="B007978NPG"),
     ], hardcover=[edition(HC, "9", isbn13="9780547951966", asin="B007978NPG")]))
     assert group.duplicate_reasons == {OL: []}
+
+
+AU, AZ = Source.AUDIBLE, Source.AMAZON
+
+
+def test_a_store_confirmed_asin_is_strong_evidence():
+    [group] = align(works(
+        goodreads=[edition(GR, "1", asin="B004EW5KKU", format="audiobook")],
+        audible=[edition(AU, "B004EW5KKU", asin="B004EW5KKU", format="audiobook")],
+    ))
+    assert group.reason == "store_asin" and group.confidence == 1.0
+
+
+def test_a_catalogue_only_asin_is_weaker():
+    [group] = align(works(
+        goodreads=[edition(GR, "1", asin="B002GYI9C4", format="ebook")],
+        hardcover=[edition(HC, "2", asin="B002GYI9C4", format="ebook")],
+    ))
+    assert group.reason == "asin" and group.confidence < 1.0
+
+
+def test_a_catalogue_only_asin_cannot_join_clashing_formats():
+    # Goodreads often shows the Kindle ASIN on a paperback edition.
+    groups = align(works(
+        goodreads=[edition(GR, "1", asin="B002GYI9C4", format="physical")],
+        hardcover=[edition(HC, "2", asin="B002GYI9C4", format="ebook")],
+    ))
+    assert len(groups) == 2
+
+
+def test_a_store_confirmed_asin_still_refuses_a_misattributed_print_edition():
+    groups = align(works(
+        goodreads=[edition(GR, "1", asin="B002GYI9C4", format="physical")],
+        amazon=[edition(AZ, "B002GYI9C4", asin="B002GYI9C4", format="ebook")],
+    ))
+    assert len(groups) == 2
+
+
+def test_duplicates_sharing_a_store_confirmed_asin_say_so():
+    [group] = align(works(
+        goodreads=[edition(GR, "1", asin="B002GYI9C4"), edition(GR, "2", asin="B002GYI9C4")],
+        amazon=[edition(AZ, "B002GYI9C4", asin="B002GYI9C4")],
+    ))
+    assert group.duplicate_reasons == {GR: ["store_asin"]}

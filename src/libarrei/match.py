@@ -1,6 +1,11 @@
 """Aligns editions across sources so each group is one real-world edition.
 
-Shared identifiers decide most groups. Editions without one are paired only when
+Shared identifiers decide most groups. An ASIN links editions only when their
+formats agree, since catalogues (Goodreads especially) often cite a Kindle ASIN
+on a print edition. One that Amazon or Audible itself reported is as firm as an
+ISBN ("store_asin"); one only catalogues cite is the weaker reason "asin".
+
+Editions without an identifier are paired only when
 every available signal agrees and the pair is each other's clear best match:
 in a correction tool a wrong merge spreads one edition's data onto another,
 while a missed match merely shows up as "missing from source X".
@@ -12,12 +17,27 @@ from difflib import SequenceMatcher
 
 from libarrei.model import Edition, Source, Work
 
-KEYS = ("isbn13", "asin", "goodreads_id")
-DUPLICATE_KEYS = ("isbn13", "isbn10", "asin")
+# Strongest first: the order decides which reason a group reports.
+KEYS = ("isbn13", "store_asin", "asin", "goodreads_id")
+DUPLICATE_KEYS = ("isbn13", "isbn10", "store_asin", "asin")
+# Stores whose own product ids are ASINs, so the ASINs they report are confirmed.
+STORES = {Source.AMAZON, Source.AUDIBLE}
+# A group joined only by an unconfirmed ASIN is likelier to be wrong than one joined by an ISBN.
+WEAK_ASIN_CONFIDENCE = 0.8
 
 
-def _shared_keys(edition: Edition) -> set[tuple[str, str]]:
-    return {(kind, c.value) for kind in DUPLICATE_KEYS for c in getattr(edition, kind)}
+def confirmed_asins(edition: Edition) -> set[str]:
+    return {c.value for c in edition.asin if c.source in STORES}
+
+
+def _shared_keys(edition: Edition, confirmed: set[str]) -> set[tuple[str, str]]:
+    keys = {(kind, c.value) for kind in ("isbn13", "isbn10") for c in getattr(edition, kind)}
+    return keys | {("store_asin" if c.value in confirmed else "asin", c.value) for c in edition.asin}
+
+
+def _formats_agree(a: Edition, b: Edition) -> bool:
+    formats_a, formats_b = {c.value for c in a.format}, {c.value for c in b.format}
+    return not formats_a or not formats_b or bool(formats_a & formats_b)
 
 
 def _keys(source: Source, edition: Edition) -> list[tuple[str, str]]:
@@ -56,11 +76,12 @@ class EditionGroup:
         Empty when the records were only linked through other sources' editions.
         """
         reasons = {}
+        confirmed = set().union(*(confirmed_asins(e) for _, e in self.members))
         for source in self.duplicates:
             seen: dict[tuple[str, str], int] = defaultdict(int)
             for s, edition in self.members:
                 if s == source:
-                    for key in _shared_keys(edition):
+                    for key in _shared_keys(edition, confirmed):
                         seen[key] += 1
             reasons[source] = sorted({kind for (kind, _), n in seen.items() if n > 1}, key=DUPLICATE_KEYS.index)
         return reasons
@@ -86,18 +107,27 @@ def _by_identifier(editions: list[tuple[Source, Edition]]) -> list[EditionGroup]
     for i, (source, edition) in enumerate(editions):
         for key, value in _keys(source, edition):
             if (key, value) in owner:
+                first = editions[owner[(key, value)]][1]
+                reason = key
+                if key == "asin":
+                    # One ASIN is one product, so a clashing format means someone cited it wrongly.
+                    if not _formats_agree(edition, first):
+                        continue
+                    if value in confirmed_asins(edition) | confirmed_asins(first):
+                        reason = "store_asin"
                 a, b = root(owner[(key, value)]), root(i)
                 if a != b:
                     parent[b] = a
-                    # ISBN outranks ASIN, which outranks a cross-source id, as the reason.
-                    reasons[a] = min(reasons.get(a, key), reasons.pop(b, key), key, key=KEYS.index)
+                    # ISBN outranks a store's ASIN, then a catalogue's ASIN, then a cross-source id.
+                    reasons[a] = min(reasons.get(a, reason), reasons.pop(b, reason), reason, key=KEYS.index)
             else:
                 owner[(key, value)] = i
 
     members = defaultdict(list)
     for i, pair in enumerate(editions):
         members[root(i)].append(pair)
-    return [EditionGroup(m, reasons.get(r)) for r, m in members.items()]
+    return [EditionGroup(m, reasons.get(r), WEAK_ASIN_CONFIDENCE if reasons.get(r) == "asin" else 1.0)
+            for r, m in members.items()]
 
 
 def _value(candidates: list):

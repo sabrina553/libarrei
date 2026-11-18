@@ -1,14 +1,14 @@
 import type { components } from '../api/schema'
-import { SOURCES } from './format'
+import { COLUMN_SOURCES, COLUMNS } from './format'
 
 export type MergedEdition = components['schemas']['MergedEdition']
 
 export const FILTERS = {
   all: { label: 'All', test: () => true },
   conflicts: { label: 'Conflicts', test: (e: MergedEdition) => conflictCount(e) > 0 },
-  missing: { label: 'Missing from a source', test: (e: MergedEdition) => Object.keys(e.ids).length < SOURCES.length },
+  missing: { label: 'Missing from a source', test: (e: MergedEdition) => COLUMNS.some((c) => !COLUMN_SOURCES[c].some((s) => e.ids[s])) },
   duplicates: { label: 'Duplicates', test: (e: MergedEdition) => (e.duplicates ?? []).length > 0 },
-  duplicateAsin: { label: 'Duplicate ASIN', test: (e: MergedEdition) => sharedIdentifiers(e).has('asin') },
+  duplicateAsin: { label: 'Duplicate ASIN', test: (e: MergedEdition) => sharedIdentifiers(e).has('asin') || sharedIdentifiers(e).has('store_asin') },
   fuzzy: { label: 'Fuzzy matches', test: (e: MergedEdition) => e.match_reason === 'fuzzy' },
 } as const
 
@@ -26,7 +26,11 @@ function sharedIdentifiers(edition: MergedEdition): Set<string> {
 export function duplicateLabel(edition: MergedEdition): string | null {
   if (!(edition.duplicates ?? []).length) return null
   const shared = sharedIdentifiers(edition)
-  const kinds = [(shared.has('isbn13') || shared.has('isbn10')) && 'ISBN', shared.has('asin') && 'ASIN'].filter(Boolean)
+  const kinds = [
+    (shared.has('isbn13') || shared.has('isbn10')) && 'ISBN',
+    // An ASIN the store itself reported is firm evidence; one only catalogues cite may be misattributed.
+    shared.has('store_asin') ? 'ASIN (store confirmed)' : shared.has('asin') && 'ASIN',
+  ].filter(Boolean)
   return ['duplicate', ...kinds].join(' · ')
 }
 
