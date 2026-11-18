@@ -13,6 +13,11 @@ from difflib import SequenceMatcher
 from libarrei.model import Edition, Source, Work
 
 KEYS = ("isbn13", "asin", "goodreads_id")
+DUPLICATE_KEYS = ("isbn13", "isbn10", "asin")
+
+
+def _shared_keys(edition: Edition) -> set[tuple[str, str]]:
+    return {(kind, c.value) for kind in DUPLICATE_KEYS for c in getattr(edition, kind)}
 
 
 def _keys(source: Source, edition: Edition) -> list[tuple[str, str]]:
@@ -43,6 +48,22 @@ class EditionGroup:
         for source, _ in self.members:
             counts[source] += 1
         return sorted(s for s, n in counts.items() if n > 1)
+
+    @property
+    def duplicate_reasons(self) -> dict[Source, list[str]]:
+        """For each duplicated source, the identifier kinds its records share.
+
+        Empty when the records were only linked through other sources' editions.
+        """
+        reasons = {}
+        for source in self.duplicates:
+            seen: dict[tuple[str, str], int] = defaultdict(int)
+            for s, edition in self.members:
+                if s == source:
+                    for key in _shared_keys(edition):
+                        seen[key] += 1
+            reasons[source] = sorted({kind for (kind, _), n in seen.items() if n > 1}, key=DUPLICATE_KEYS.index)
+        return reasons
 
 
 def align(works: dict[Source, Work]) -> list[EditionGroup]:

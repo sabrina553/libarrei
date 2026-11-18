@@ -58,3 +58,20 @@ def test_same_source_twice_is_flagged_as_duplicate():
         edition(HC, "5", isbn13="9780547951966"),
     ]))
     assert groups[0].duplicates == [HC]
+    assert groups[0].duplicate_reasons == {HC: ["isbn13"]}
+
+
+def test_duplicate_reasons_name_every_shared_identifier():
+    groups = align(works(openlibrary=[
+        edition(OL, "OL1M", isbn13="9780547951966", isbn10="0547951965", asin="B007978NPG"),
+        edition(OL, "OL2M", isbn13="9780547951966", isbn10="0547951965", asin="B007978NPG"),
+    ]))
+    assert groups[0].duplicate_reasons == {OL: ["isbn13", "isbn10", "asin"]}
+
+
+def test_duplicates_joined_only_through_another_source_share_nothing():
+    [group] = align(works(openlibrary=[
+        edition(OL, "OL1M", isbn13="9780547951966"),
+        edition(OL, "OL2M", asin="B007978NPG"),
+    ], hardcover=[edition(HC, "9", isbn13="9780547951966", asin="B007978NPG")]))
+    assert group.duplicate_reasons == {OL: []}

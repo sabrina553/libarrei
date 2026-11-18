@@ -161,6 +161,13 @@ export interface components {
             confidence: number;
             /** Duplicates */
             duplicates: components["schemas"]["Source"][];
+            /**
+             * Duplicate Reasons
+             * @default {}
+             */
+            duplicate_reasons: {
+                [key: string]: string[];
+            };
             /** Fields */
             fields: {
                 [key: string]: components["schemas"]["Resolved"];
