@@ -2,7 +2,8 @@ import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, isReference, REFERENCE_SOURCES, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
-import { inlineDiff, missingColumns, rowStates, suggestion, type CellState } from '../lib/cellStates'
+import { columnQuality, inlineDiff, missingColumns, rowStates, suggestion, type CellState, type Quality } from '../lib/cellStates'
+import { SPARSE } from '../lib/editions'
 import { asinNotes, editionFormat, storeAsin, type AsinNote } from '../lib/asin'
 import { columnProvides, type Level } from './capabilities'
 import { DescriptionValue } from './DescriptionValue'
@@ -36,10 +37,12 @@ type Props = {
   staging?: { book: string; scope: string; records: Partial<Record<SourceName, string[]>> }
   // Catalogue ASINs checked against the store, from the API's per-edition asin_checks.
   asinChecks?: Record<string, string>
+  // Each source record's completeness (0–100), shown in the column header and used to break ties.
+  quality?: Quality
 }
 
 /** Fields down the side, sources across the top, like a side-by-side diff. */
-export function FieldGrid({ fields, order, level, staging, asinChecks = {} }: Props) {
+export function FieldGrid({ fields, order, level, staging, asinChecks = {}, quality = {} }: Props) {
   const staged = useChangeset()
   const [onlyProblems, setOnlyProblems] = useState(false)
   const splits = titleSplits(fields)
@@ -64,7 +67,7 @@ export function FieldGrid({ fields, order, level, staging, asinChecks = {} }: Pr
   const tag = (v: SourceValue) => storeTag(v.source, recordFormat(v))
   const format = editionFormat(fields.format?.values ?? [])
   const suggest = (name: string, values: SourceValue[]) =>
-    (name === 'asin' ? storeAsin(values, format, recordFormat) : null) ?? suggestion(name, values)
+    (name === 'asin' ? storeAsin(values, format, recordFormat) : null) ?? suggestion(name, values, quality)
   const notesFor = (v: SourceValue) => asinNotes(String(v.value), fields.asin?.values ?? [], asinChecks, format)
   const rows = order.map((name) => {
     const resolved = fields[name]
@@ -106,9 +109,9 @@ export function FieldGrid({ fields, order, level, staging, asinChecks = {} }: Pr
               ? <th key={c} className="norecord">{COLUMN_LABELS[c]} <span className="note">no record</span></th>
               : isReference(c)
                 ? <th key={c} className="reference" title="A store listing, read for reference: it votes but is never corrected">
-                    {COLUMN_LABELS[c]} <span className="note">reference</span>
+                    {COLUMN_LABELS[c]} <QualityScore score={columnQuality(c, quality)} /> <span className="note">reference</span>
                   </th>
-                : <th key={c}>{COLUMN_LABELS[c]}</th>)}
+                : <th key={c}>{COLUMN_LABELS[c]} <QualityScore score={columnQuality(c, quality)} /></th>)}
           </tr>
         </thead>
         <tbody>
@@ -258,6 +261,11 @@ function Cell({ name, source, level, resolved, state, modal, suggested, picked, 
       {suggested && !picked && <span className="tick suggested" title="Suggested: most sources agree">✓</span>}
     </td>
   )
+}
+
+function QualityScore({ score }: { score: number | undefined }) {
+  if (score === undefined) return null
+  return <span className={score < SPARSE ? 'quality low' : 'quality'} title="How complete this source's record is">{score} %</span>
 }
 
 function isInner(target: EventTarget, cell: Element): boolean {

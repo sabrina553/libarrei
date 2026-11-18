@@ -268,6 +268,12 @@ test('an empty cell can be picked to say no value is correct', async () => {
   expect(changeset.all()).toEqual([])
 })
 
+test('column headers show each record’s completeness, low scores marked', () => {
+  render(<FieldGrid fields={{ pages }} order={['pages']} level="edition" quality={{ hardcover: 32, openlibrary: 88 }} />)
+  expect(screen.getByText('32 %')).toHaveClass('quality', 'low')
+  expect(screen.getByText('88 %')).not.toHaveClass('low')
+})
+
 test("audible's asin is suggested on an audiobook and the catalogue's is flagged", () => {
   const asin: Resolved = {
     value: 'B0DM64FRQW', source: 'hardcover', source_id: '32146161', conflict: true, alternatives: [],

@@ -6,6 +6,7 @@ const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   match_reason: 'isbn13',
   confidence: 1,
   asin_checks: {},
+  quality: {},
   duplicates: [],
   duplicate_reasons: {},
   slugs: {},

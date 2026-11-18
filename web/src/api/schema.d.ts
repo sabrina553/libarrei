@@ -196,6 +196,17 @@ export interface components {
                 [key: string]: string;
             };
             /**
+             * Quality
+             * @default {}
+             */
+            quality: {
+                [key: string]: number;
+            };
+            /** Stub Of */
+            stub_of?: {
+                [key: string]: string[];
+            } | null;
+            /**
              * Slugs
              * @default {}
              */
@@ -215,6 +226,13 @@ export interface components {
             };
             /** Editions */
             editions: components["schemas"]["MergedEdition"][];
+            /**
+             * Quality
+             * @default {}
+             */
+            quality: {
+                [key: string]: number;
+            };
             /**
              * Slugs
              * @default {}

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { conflictCount, duplicateLabel, editionKey, FILTERS, type FilterName, type MergedEdition } from '../lib/editions'
+import { conflictCount, duplicateLabel, editionKey, FILTERS, isSparse, lowestQuality, stubLabel, type FilterName, type MergedEdition } from '../lib/editions'
 import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
 import { SlugsContext } from '../lib/links'
 import { FieldGrid } from './FieldGrid'
@@ -27,13 +27,15 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
       </div>
       <table className="editions">
         <thead>
-          <tr><th>ISBN-13</th><th>Format</th><th>Language</th><th>Released</th><th>Publisher</th><th>Sources</th><th>Match</th><th>Conflicts</th></tr>
+          <tr><th>ISBN-13</th><th>Format</th><th>Language</th><th>Released</th><th>Publisher</th><th>Sources</th><th>Match</th><th>Conflicts</th><th>Quality</th></tr>
         </thead>
         <tbody>
           {shown.slice(0, limit).map((edition) => {
             const key = editionKey(edition)
             const value = (name: string) => formatValue(edition.fields[name]?.value)
             const conflicts = conflictCount(edition)
+            const lowest = lowestQuality(edition)
+            const stub = stubLabel(edition, editions)
             return (
               <Fragment key={key}>
                 <tr className="row" onClick={() => setOpen(open === key ? null : key)} aria-expanded={open === key}>
@@ -47,12 +49,16 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                       <span key={c} className={COLUMN_SOURCES[c].some((s) => edition.ids[s]) ? 'src on' : 'src'} title={COLUMN_LABELS[c]}>{COLUMN_LABELS[c][0]}</span>
                     ))}
                     {duplicateLabel(edition) && <span className="badge">{duplicateLabel(edition)}</span>}
+                    {stub && <span className="badge hint" title="No identifiers, and its title, format, language and publisher or year match a fuller edition">{stub}</span>}
                   </td>
                   <td>{edition.match_reason === 'fuzzy' ? `fuzzy ${edition.confidence}` : edition.match_reason ?? '—'}</td>
                   <td>{conflicts || ''}</td>
+                  <td className={isSparse(edition) ? 'quality low' : 'quality'} title="Completeness of the weakest source record">
+                    {lowest === null ? '—' : `${lowest} %`}
+                  </td>
                 </tr>
                 {open === key && (
-                  <tr><td colSpan={8}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" asinChecks={edition.asin_checks} staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
+                  <tr><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" asinChecks={edition.asin_checks} quality={edition.quality} staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
                 )}
               </Fragment>
             )
