@@ -1,7 +1,10 @@
 """Fetches Amazon search and product pages with the user's own cookie.
 
-Amazon has no public book API and blocks obvious robots, so requests look like
-a browser's, carry a signed-in user's cookie, and are spaced out with jitter.
+Amazon has no public book API and blocks obvious robots: it answers Python's
+own HTTP client with a "continue shopping" check whatever headers it sends, as
+it recognises the TLS handshake. curl_cffi reproduces a real browser's
+handshake and headers, so requests carry a signed-in user's cookie, look like
+that browser's, and are spaced out with jitter.
 The cookie is a credential: it never reaches cache keys, errors or reprs.
 """
 
@@ -9,7 +12,7 @@ import random
 import time
 from urllib.parse import quote_plus
 
-import requests
+from curl_cffi import requests
 
 from libarrei.cache import NoCache
 from libarrei.ratelimit import INTERVALS, RateLimiter
@@ -18,12 +21,10 @@ from libarrei.sources.amazon.scraper import is_captcha
 DOMAINS = ("com", "co.uk", "de", "fr", "it", "es", "ca", "com.au", "co.jp", "in", "nl", "se", "com.mx", "com.br")
 DEFAULT_DOMAIN = "co.uk"
 BLOCKED_NOTE = "Amazon blocked the request; update your cookie"
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-GB,en;q=0.8",
-    "Upgrade-Insecure-Requests": "1",
-}
+# The browser whose handshake and default headers curl_cffi copies; its own User-Agent must
+# not be overridden, or the headers and the handshake would disagree.
+IMPERSONATE = "chrome"
+HEADERS = {"Accept-Language": "en-GB,en;q=0.9"}
 
 
 class AmazonBlocked(Exception):
@@ -47,7 +48,7 @@ class Amazon:
             raise ValueError("the Amazon cookie must be one non-empty line")
         self.domain = domain
         self.base = f"https://www.amazon.{domain}"
-        self.session = session or requests.Session()
+        self.session = session or requests.Session(impersonate=IMPERSONATE)
         self.session.headers.update(HEADERS)
         self.session.headers["Cookie"] = cookie
         self.cache = cache or NoCache()

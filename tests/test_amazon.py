@@ -107,8 +107,17 @@ def test_requests_look_like_a_browser_and_are_jittered():
     amazon = client(session, sleeps=sleeps)
     amazon.product("0575089911")
     assert session.headers["Cookie"] == SECRET
-    assert "Mozilla" in session.headers["User-Agent"]
+    # The browser's own User-Agent comes from curl_cffi's impersonation, so it must not be overridden.
+    assert "User-Agent" not in session.headers
     assert sleeps == [0.7]
+
+
+def test_default_session_impersonates_a_browser():
+    from libarrei.sources.amazon.client import IMPERSONATE, Amazon
+
+    amazon = Amazon(SECRET)
+    assert amazon.session.impersonate == IMPERSONATE
+    assert amazon.session.headers["Cookie"] == SECRET
 
 
 @pytest.mark.parametrize("page", [(CAPTCHA, 200), ("", 503), ("", 500)])
@@ -189,3 +198,25 @@ def test_known_amazon_asins_skip_the_search():
     work = from_amazon(client(session), None, found, False, lambda n: None)
     assert [e.ids[AZ] for e in work.editions] == ["B002GYI9C4"]
     assert session.urls == ["https://www.amazon.co.uk/dp/B002GYI9C4"]
+
+
+def test_current_series_layout_and_kindle_series_note():
+    from libarrei.sources.amazon.mapping import title_and_subtitle
+    from libarrei.sources.amazon.scraper import _series
+
+    assert _series("Book 1 of 8 Dungeon Crawler Carl") == ("Dungeon Crawler Carl", "1")
+    product = {"title": "Dungeon Crawler Carl: Dungeon Crawler Carl Book 1", "series": ("Dungeon Crawler Carl", "1")}
+    assert title_and_subtitle(product) == ("Dungeon Crawler Carl", None)
+    real = {"title": "Dungeon Crawler Carl: A LitRPG Adventure", "series": ("Dungeon Crawler Carl", "1")}
+    assert title_and_subtitle(real) == ("Dungeon Crawler Carl", "A LitRPG Adventure")
+
+
+def test_amazon_emphasis_spans_become_bold_and_italic():
+    from bs4 import BeautifulSoup
+
+    from libarrei.sources.amazon.scraper import _description
+
+    html = ('<div data-a-expander-name="book_description_expander"><div class="a-expander-content">'
+            '<span class="a-text-bold">Bold</span> <span class="a-text-bold a-text-italic">Both</span>'
+            ' <span class="a-text-italic">Italic</span></div></div>')
+    assert _description(BeautifulSoup(html, "html.parser")) == "<b>Bold</b> <i><b>Both</b></i> <i>Italic</i>"

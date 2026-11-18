@@ -34,7 +34,8 @@ BULLETS = {
     "hardcover": "pages",
 }
 # "Book 1 of 4: Mistborn" or "Part of: Mistborn (4 books)".
-SERIES_OF = re.compile(r"^Book\s+(\S+)\s+of\s+\d+\s*:\s*(.+)$", re.IGNORECASE)
+# Older pages read "Book 1 of 8: Name"; current ones put the name on its own line, giving "Book 1 of 8 Name".
+SERIES_OF = re.compile(r"^Book\s+(\S+)\s+of\s+\d+\s*:?\s*(.+)$", re.IGNORECASE)
 SERIES_PART = re.compile(r"^Part of\s*:\s*(.+?)(?:\s*\(\d+ books?\))?$", re.IGNORECASE)
 # The publisher bullet can carry the date: "Gollancz (1 Sept. 2011)".
 PUBLISHER_DATE = re.compile(r"^(.+?)\s*\(([^()]*\d{4})\)\s*$")
@@ -85,6 +86,13 @@ def _description(soup: BeautifulSoup) -> str | None:
         content = BeautifulSoup(noscript.decode_contents(), "html.parser") if noscript else None
     if content is None:
         return None
+    # Amazon styles emphasis with classes on spans, which the description parser would drop as unknown tags.
+    for span in content.select("span.a-text-bold, span.a-text-italic"):
+        classes = span.get("class") or []
+        span.name = "b" if "a-text-bold" in classes else "i"
+        if "a-text-bold" in classes and "a-text-italic" in classes:
+            span.wrap(BeautifulSoup("", "html.parser").new_tag("i"))
+        span.attrs = {}
     html = content.decode_contents().strip()
     return html or None
 
@@ -92,7 +100,9 @@ def _description(soup: BeautifulSoup) -> str | None:
 def _cards(soup: BeautifulSoup) -> dict[str, str]:
     found = {}
     for name, card in CARDS.items():
-        if value := text(soup.select_one(f"#rpi-attribute-{card} .rpi-attribute-value")):
+        # The series card carries "Book 1 of 8" as its label and only the name as its value.
+        part = "" if name == "series" else " .rpi-attribute-value"
+        if value := text(soup.select_one(f"#rpi-attribute-{card}{part}")):
             found[name] = value
     return found
 
