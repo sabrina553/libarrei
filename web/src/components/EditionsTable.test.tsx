@@ -14,7 +14,7 @@ const editions: MergedEdition[] = [
 ]
 
 test('filters editions and opens one for detail', () => {
-  render(<EditionsTable editions={editions} />)
+  render(<EditionsTable editions={editions} book="Test" />)
   expect(screen.getAllByRole('row')).toHaveLength(3)
 
   fireEvent.click(screen.getByText('Conflicts (1)'))

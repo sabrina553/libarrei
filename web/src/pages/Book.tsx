@@ -4,7 +4,7 @@ import { Link, useSearchParams } from 'react-router'
 import { api, type LookupResponse } from '../api/client'
 import { EditionsTable } from '../components/EditionsTable'
 import { FieldGrid } from '../components/FieldGrid'
-import { formatValue } from '../lib/format'
+import { formatValue, type SourceName } from '../lib/format'
 import { queryFromParams } from '../lib/query'
 
 // How often to ask whether a background fetch has finished.
@@ -37,13 +37,17 @@ export function Book() {
 
   const full = job.data?.status === 'done' ? job.data.result : null
   const shown: LookupResponse = full ?? quick.data
+  const book = formatValue(shown.work.fields.title?.value)
 
   return (
     <section>
       <h1>{formatValue(shown.work.fields.title?.value)}</h1>
       <p className="muted">{formatValue(shown.work.fields.contributors?.value)}</p>
       <Notes notes={shown.notes} />
-      <FieldGrid fields={shown.work.fields} order={WORK_FIELDS} />
+      <FieldGrid
+        fields={shown.work.fields} order={WORK_FIELDS}
+        staging={{ book, scope: 'work', records: workRecords(shown.work.ids) }}
+      />
       <p>
         {shown.work.editions.length} edition{shown.work.editions.length === 1 ? '' : 's'}{' '}
         {full ? '(every edition)' : '(matched editions only)'}
@@ -56,9 +60,14 @@ export function Book() {
           <JobStatus status={job.data?.status} error={job.data?.error ?? start.error?.message} />
         </p>
       )}
-      <EditionsTable editions={shown.work.editions} />
+      <EditionsTable editions={shown.work.editions} book={book} />
     </section>
   )
+}
+
+// The work has one record per source, while editions can have several.
+function workRecords(ids: Partial<Record<SourceName, string>>): Partial<Record<SourceName, string[]>> {
+  return Object.fromEntries(Object.entries(ids).map(([source, id]) => [source, [id]]))
 }
 
 function Notes({ notes }: { notes?: Record<string, string> }) {
