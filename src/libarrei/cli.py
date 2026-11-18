@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 from libarrei.lookup import LookupResult, lookup
 from libarrei.match import align
+from libarrei.merge import MergedWork, merge
 from libarrei.model import Candidate, Contributor, SeriesEntry, Work
 
 COMPARED_FIELDS = ["title", "subtitle", "contributors", "series", "genres", "original_release_date", "description"]
@@ -64,6 +65,37 @@ def print_editions(result: LookupResult) -> None:
         print(f"\n{source.value}: {note}")
 
 
+def print_merged(merged: MergedWork, with_editions: bool) -> None:
+    width = shutil.get_terminal_size((100, 20)).columns
+    for name, r in merged.fields.items():
+        # Tags go before the value so truncating a long description never hides them.
+        tags = f"[{r.source.value}]" + (f" ({r.licence})" if r.licence else "") + (" CONFLICT" if r.conflict else "")
+        head = f"{name:<22}{tags} "
+        print(head + textwrap.shorten(show(r.value), max(width - len(head), 20), placeholder=" ..."))
+        for a in r.alternatives:
+            alt = f"{'':<24}[{a.source.value}] "
+            print(alt + textwrap.shorten(show(a.value), max(width - len(alt), 20), placeholder=" ..."))
+
+    editions = merged.editions
+    multi = [e for e in editions if len(e.ids) > 1]
+    print(f"\n{len(editions)} editions, {len(multi)} found in more than one source")
+    counts = {}
+    for e in multi:
+        for name, r in e.fields.items():
+            counts[name] = counts.get(name, 0) + r.conflict
+    for name, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        if n:
+            print(f"  {name:<14} conflicts in {n}")
+    if with_editions:
+        print()
+        for e in editions:
+            value = lambda f: show(e.fields[f].value) if f in e.fields else "-"
+            cells = [value("isbn13"), value("format"), value("language"), value("release_date")]
+            conflicts = ",".join(n for n, r in e.fields.items() if r.conflict)
+            sources = ",".join(sorted(s.value for s in e.ids))
+            print("  ".join(f"{c:<14}" for c in cells) + f"{sources:<34}{conflicts}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="libarrei", description="Compare book metadata across sources.")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -73,6 +105,7 @@ def main() -> None:
     find.add_argument("--isbn", help="ISBN-10 or ISBN-13")
     find.add_argument("--no-cache", action="store_true", help="ignore cached responses and refetch")
     find.add_argument("--editions", action="store_true", help="list every edition, aligned across sources")
+    find.add_argument("--merged", action="store_true", help="pick one value per field and flag conflicts")
     find.add_argument("--json", action="store_true", help="print the full model as JSON")
     args = parser.parse_args()
 
@@ -81,7 +114,15 @@ def main() -> None:
 
     load_dotenv()
     result = lookup(isbn=args.isbn, title=args.title, author=args.author, use_cache=not args.no_cache)
-    if args.json:
+    if args.merged:
+        merged = merge(result.works)
+        if args.json:
+            print(merged.model_dump_json(indent=2, exclude_defaults=True))
+        else:
+            print_merged(merged, args.editions)
+        for source, note in result.notes.items():
+            print(f"\n{source.value}: {note}")
+    elif args.json:
         works = {s.value: w.model_dump(mode="json", exclude_defaults=True) for s, w in result.works.items()}
         print(json.dumps({"works": works, "notes": {s.value: n for s, n in result.notes.items()}}, indent=2))
     elif args.editions:
