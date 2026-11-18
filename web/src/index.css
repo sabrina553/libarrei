@@ -63,3 +63,15 @@ button:disabled { opacity: 0.5; cursor: default; }
 .grid .long { max-height: 9rem; overflow: auto; white-space: pre-line; font-size: 0.9rem; }
 .badge { margin-left: 0.4rem; padding: 0 0.35rem; border-radius: 3px; font-size: 0.7rem; font-weight: 500; background: var(--bad); color: white; }
 .licence { margin-top: 0.3rem; font-size: 0.75rem; color: var(--muted); }
+
+/* Editions */
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 0.5rem; }
+button.secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+button.active { background: var(--accent); }
+.editions { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.editions th, .editions td { border-bottom: 1px solid var(--border); padding: 0.35rem 0.5rem; text-align: left; }
+.editions tr.row { cursor: pointer; }
+.editions tr.row:hover { background: var(--surface); }
+.mono { font-family: var(--mono); }
+.src { display: inline-block; width: 1.3rem; text-align: center; margin-right: 2px; border-radius: 3px; font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border); }
+.src.on { background: var(--good); color: white; border-color: var(--good); }
