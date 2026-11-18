@@ -57,7 +57,7 @@ class LookupResponse(BaseModel):
     notes: dict[str, str] = {}
 
 
-@app.get("/v1/lookup", response_model=LookupResponse, response_model_exclude_defaults=True)
+@app.get("/v1/lookup", response_model=LookupResponse)
 def lookup_merged(
     isbn: str | None = None,
     title: str | None = None,
@@ -78,7 +78,7 @@ class JobRequest(BaseModel):
 
 def _full_lookup(isbn: str | None, title: str | None, author: str | None, token: str | None = None) -> dict:
     response = lookup_merged(isbn=isbn, title=title, author=author, editions="all", x_hardcover_token=token)
-    return response.model_dump(mode="json", exclude_defaults=True)
+    return response.model_dump(mode="json")
 
 
 jobs = JobStore(lambda **query: _full_lookup(**query))
@@ -98,7 +98,7 @@ def _job_view(job: Job) -> JobView:
                    error=job.error if job.status == "failed" else None)
 
 
-@app.post("/v1/jobs", status_code=202, response_model=JobView, response_model_exclude_defaults=True)
+@app.post("/v1/jobs", status_code=202, response_model=JobView)
 def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) -> JobView:
     """Fetches every edition in the background; poll GET /v1/jobs/{id} for the result."""
     if not request.isbn and not request.title:
@@ -107,7 +107,7 @@ def start_job(request: JobRequest, x_hardcover_token: str | None = TokenHeader) 
     return _job_view(jobs.submit(request.model_dump(), secrets))
 
 
-@app.get("/v1/jobs/{job_id}", response_model=JobView, response_model_exclude_defaults=True)
+@app.get("/v1/jobs/{job_id}", response_model=JobView)
 def job_status(job_id: str) -> JobView:
     if not (job := jobs.get(job_id)):
         raise HTTPException(404, "no such job, or it expired")
