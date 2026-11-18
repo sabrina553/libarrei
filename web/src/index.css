@@ -93,6 +93,9 @@ button.active { background: var(--accent); }
 /* Cell states: agreeing cells stay plain so differences and gaps stand out. */
 .grid td { position: relative; }
 .grid td.empty { color: var(--muted); }
+/* A source with no record for this work or edition: one note in the header, plain dimmed cells. */
+.grid th.norecord, .grid td.norecord { color: var(--muted); opacity: 0.55; }
+.grid th.norecord .note { display: block; font-size: 0.7rem; font-weight: 400; font-style: italic; }
 .grid td.missing { color: var(--bad); background: var(--missing-bg); }
 .grid td.differs { background: var(--differs-bg); }
 .grid td.differs mark { background: var(--differs-mark); color: inherit; border-radius: 2px; }

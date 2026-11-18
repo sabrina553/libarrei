@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { inlineDiff, rowStates } from './cellStates'
+import { inlineDiff, missingColumns, rowStates } from './cellStates'
 
 const all = () => true
 
@@ -54,4 +54,18 @@ test('amazon and audible share one column and count once', () => {
   expect(modal).toBe('the hobbit')
   expect(states.amazon).toBe('differs')
   expect(Object.keys(states)).toEqual(['hardcover', 'goodreads', 'openlibrary', 'amazon'])
+})
+
+test('a source with no record is norecord, not missing, and raises no problem', () => {
+  const { states, problem } = rowStates('pages', [
+    { value: 464, source: 'hardcover' },
+    { value: 464, source: 'goodreads' },
+  ], all, (c) => c !== 'amazon' && c !== 'openlibrary')
+  expect(states).toEqual({ hardcover: 'agrees', goodreads: 'agrees', openlibrary: 'norecord', amazon: 'norecord' })
+  expect(problem).toBe(false)
+})
+
+test('missing columns lists only real gaps', () => {
+  const { states } = rowStates('pages', [{ value: 1, source: 'hardcover' }], all, (c) => c !== 'amazon')
+  expect(missingColumns(states)).toEqual(['goodreads', 'openlibrary'])
 })
