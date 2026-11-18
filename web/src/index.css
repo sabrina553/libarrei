@@ -61,7 +61,13 @@ button:disabled { opacity: 0.5; cursor: default; }
 .grid tr.conflict th, .grid tr.conflict td { background: var(--conflict-bg); }
 .grid img { max-height: 8rem; }
 /* Descriptions are long; cap them and let the cell scroll. */
-.grid .long { max-height: 9rem; overflow: auto; white-space: pre-line; font-size: 0.9rem; }
+.grid .long { font-size: 0.9rem; }
+.description-body p, .description-body ul { margin: 0 0 0.4rem; }
+.description-body ul { padding-left: 1.2rem; }
+/* Four lines at the body's 1.5 line height; works across paragraphs, unlike line-clamp. */
+.description-body.collapsed { max-height: 6em; overflow: hidden; }
+.description-body mark.diff { background: var(--conflict-bg); color: inherit; border-radius: 2px; }
+button.link { padding: 0; border: 0; background: none; color: var(--accent); font-size: 0.75rem; cursor: pointer; }
 .badge { margin-left: 0.4rem; padding: 0 0.35rem; border-radius: 3px; font-size: 0.7rem; font-weight: 500; background: var(--bad); color: white; }
 .badge.hint { background: var(--accent); }
 .record { margin-left: 0.4rem; font-family: monospace; font-size: 0.7rem; color: var(--muted); }

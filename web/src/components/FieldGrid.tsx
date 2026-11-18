@@ -2,6 +2,7 @@ import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { formatDuration, formatValue, SOURCE_LABELS, SOURCES, type SourceName } from '../lib/format'
 import { provides, type Level } from './capabilities'
+import { DescriptionValue } from './DescriptionValue'
 import { splitKey, titleSplits, type TitleSplit } from './titleSplit'
 
 export type Resolved = components['schemas']['Resolved']
@@ -120,6 +121,7 @@ function Cell({ name, source, level, resolved, picked, onPick, splitFor, onSplit
       {values.map((v, i) => (
         <div key={i} className={name === 'description' ? 'long' : undefined}>
           {name === 'cover_url' ? <img src={String(v.value)} alt="" loading="lazy" />
+            : name === 'description' ? <DescriptionValue value={v} values={resolved.values} />
             : name === 'duration_seconds' ? formatDuration(Number(v.value)) : formatValue(v.value)}
           {duplicated && <RecordLink level={level} value={v} />}
           <SplitHint value={v} split={splitFor?.(v)} onPick={onSplitPick} isStaged={isStaged} />
