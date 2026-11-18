@@ -40,3 +40,22 @@ def test_other_errors_are_not_retried():
     with pytest.raises(TransportServerError):
         transport.execute("query")
     assert waits == []
+
+
+class CountingLimiter:
+    def __init__(self):
+        self.calls = 0
+
+    def wait(self):
+        self.calls += 1
+
+
+def test_cache_hit_skips_network_and_rate_limit():
+    from libarrei.cache import Cache
+
+    limiter = CountingLimiter()
+    transport = TransportLayer("token", cache=Cache(":memory:"), limiter=limiter)
+    transport.client = client = FakeClient(failures=0)
+    assert transport.execute("query", {"b": 1, "a": 2}) == {"ok": True}
+    assert transport.execute("query", {"a": 2, "b": 1}) == {"ok": True}
+    assert client.calls == 1 and limiter.calls == 1

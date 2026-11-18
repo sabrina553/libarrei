@@ -108,6 +108,48 @@ class Hardcover:
         """
         )
 
+        # Fields mirror BookSearch's editions so mapping.to_edition works unchanged.
+        # A stable order is needed so offset pages neither skip nor repeat editions.
+        self._editions_query = gql(
+        """
+          query BookEditions($id: Int!, $limit: Int!, $offset: Int!) {
+            editions(where: {book_id: {_eq: $id}}, limit: $limit, offset: $offset, order_by: {id: asc}) {
+              id
+              title
+              subtitle
+              cached_contributors
+              pages
+              release_date
+              release_year
+              image {
+                url
+              }
+              publisher {
+                name
+              }
+              isbn_10
+              isbn_13
+              language {
+                code2
+              }
+              reading_format_id
+              score
+            }
+          }
+        """
+        )
+
+    def all_editions(self, book_id: int, page_size: int = 100) -> list[dict]:
+        """Every edition of a book in any language, paged until a short page."""
+        editions, offset = [], 0
+        while True:
+            variables = {"id": book_id, "limit": page_size, "offset": offset}
+            page = self.transport_layer.execute(self._editions_query, variables).get("editions") or []
+            editions.extend(page)
+            if len(page) < page_size:
+                return editions
+            offset += page_size
+
     def search_titles(self, title: str, author: str | None = None, limit: int = 5) -> list[int]:
         weights, fields = TITLE_AUTHOR_WEIGHTS if author else TITLE_ONLY_WEIGHTS
         query = f"{title} {author}" if author else title
