@@ -1,4 +1,4 @@
-import { columnOf, COLUMNS, formatValue, isReference, type ColumnName, type SourceName } from './format'
+import { columnOf, COLUMNS, formatValue, isReference, REFERENCE_SOURCES, type ColumnName, type SourceName } from './format'
 
 /**
  * How one column's cell compares with the other columns in the same row.
@@ -61,6 +61,35 @@ function mostCommon(bySource: Map<ColumnName, Set<string>>): string | null {
   const ranked = [...counts].sort((a, b) => b[1] - a[1])
   if (!ranked.length || (ranked.length > 1 && ranked[0][1] === ranked[1][1])) return null
   return ranked[0][0]
+}
+
+// Contributors agree when their authors do; narrators and translators vary by edition.
+function suggestionKey(field: string, value: unknown): string {
+  if (field !== 'contributors' || !Array.isArray(value)) return compareKey(value)
+  return (value as { name: string; role?: string }[])
+    .filter((p) => (p.role ?? 'author') === 'author')
+    .map((p) => compareKey(p.name)).sort().join('|')
+}
+
+/**
+ * The value most columns hold, as one source's value to pick, or null when there
+ * is no clear majority. Each column votes once, reference stores included, and at
+ * least two must agree. An editable source is credited over a reference store.
+ */
+export function suggestion<T extends Value>(field: string, values: T[]): T | null {
+  if (NOT_COMPARED.has(field)) return null
+  const byColumn = new Map<ColumnName, Set<string>>()
+  for (const v of values) {
+    const key = v.value === null || v.value === undefined || v.value === '' ? '' : suggestionKey(field, v.value)
+    if (!key) continue
+    const column = columnOf(v.source)
+    if (!byColumn.has(column)) byColumn.set(column, new Set())
+    byColumn.get(column)!.add(key)
+  }
+  const top = mostCommon(byColumn)
+  if (top === null || [...byColumn.values()].filter((keys) => keys.has(top)).length < 2) return null
+  const holders = values.filter((v) => v.value !== null && v.value !== undefined && v.value !== '' && suggestionKey(field, v.value) === top)
+  return holders.find((v) => !REFERENCE_SOURCES.has(v.source)) ?? holders[0] ?? null
 }
 
 /** Splits `text` into the part shared with `reference` at each end and the differing middle. */

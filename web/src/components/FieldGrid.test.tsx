@@ -211,3 +211,59 @@ test('the amazon column tags each value with the listing it came from', () => {
   expect(screen.getAllByText('B004EW5KKU').find((e) => e.tagName === 'A'))
     .toHaveAttribute('href', 'https://www.audible.co.uk/pd/B004EW5KKU')
 })
+
+const agreed = (): Resolved => ({
+  value: 310, source: 'hardcover', source_id: '1', conflict: true, alternatives: [],
+  values: [
+    { value: 310, source: 'hardcover', source_id: '1' },
+    { value: 310, source: 'goodreads', source_id: '2' },
+    { value: 320, source: 'openlibrary', source_id: 'OL1M' },
+  ],
+})
+
+test('outlines the suggested cell and accepts every suggestion at once', async () => {
+  const { changeset } = await import('../lib/changeset')
+  changeset.clear()
+  const language: Resolved = {
+    value: 'en', source: 'hardcover', source_id: '1', conflict: false, alternatives: [],
+    values: [{ value: 'en', source: 'hardcover', source_id: '1' }, { value: 'en', source: 'goodreads', source_id: '2' },
+      { value: 'en', source: 'openlibrary', source_id: 'OL1M' }],
+  }
+  render(<FieldGrid fields={{ pages: agreed(), language }} order={['pages', 'language']} level="edition" staging={everyRecord} />)
+
+  const outlined = document.querySelectorAll('.tick.suggested')
+  // Pages and language each get one suggestion, on the first editable source holding it.
+  expect(outlined).toHaveLength(2)
+  expect(outlined[0].closest('td')).toHaveTextContent('310')
+  // Language already agrees everywhere it is editable, so only pages needs accepting.
+  act(() => screen.getByText('Accept suggestions (1)').click())
+  const [change] = changeset.all()
+  expect(change).toMatchObject({ field: 'pages', value: 310, chosenFrom: 'hardcover' })
+  expect(change.corrections).toEqual([{ source: 'openlibrary', record: 'OL1M', current: 320 }])
+  expect(screen.getByText('Accept suggestions (0)')).toBeDisabled()
+})
+
+test('accepting suggestions skips rows already staged', async () => {
+  const { changeset } = await import('../lib/changeset')
+  changeset.clear()
+  render(<FieldGrid fields={{ pages: agreed() }} order={['pages']} level="edition" staging={everyRecord} />)
+  act(() => (document.querySelectorAll('tbody td')[2] as HTMLElement).click())
+  expect(screen.getByText('Accept suggestions (0)')).toBeDisabled()
+  expect(changeset.all()[0].value).toBe(320)
+})
+
+test('an empty cell can be picked to say no value is correct', async () => {
+  const { changeset } = await import('../lib/changeset')
+  changeset.clear()
+  render(<FieldGrid fields={{ pages }} order={['pages']} level="edition" staging={everyRecord} />)
+
+  const gap = screen.getAllByText('—')[0].closest('td')!
+  act(() => gap.click())
+  const [change] = changeset.all()
+  expect(change).toMatchObject({ value: null, chosenFrom: 'goodreads' })
+  // Only editable sources with a value are corrected; Amazon is a reference store.
+  expect(change.corrections.map((c) => c.source)).toEqual(['hardcover', 'openlibrary'])
+  expect(gap).toHaveClass('picked')
+  act(() => gap.click())
+  expect(changeset.all()).toEqual([])
+})

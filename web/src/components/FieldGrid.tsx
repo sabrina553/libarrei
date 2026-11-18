@@ -1,8 +1,8 @@
 import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
-import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMNS, isReference, REFERENCE_SOURCES, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
+import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, isReference, REFERENCE_SOURCES, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
-import { inlineDiff, missingColumns, rowStates, type CellState } from '../lib/cellStates'
+import { inlineDiff, missingColumns, rowStates, suggestion, type CellState } from '../lib/cellStates'
 import { columnProvides, type Level } from './capabilities'
 import { DescriptionValue } from './DescriptionValue'
 import { RecordLink } from './RecordLink'
@@ -57,8 +57,22 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
   const hasRecord = recordCheck(fields, staging?.records)
   const rows = order.map((name) => {
     const resolved = fields[name]
-    return { name, resolved, ...rowStates(name, resolved?.values ?? [], (c) => columnProvides(level, c, name), hasRecord) }
+    const values = resolved?.values ?? []
+    return { name, resolved, suggested: suggestion(name, values), ...rowStates(name, values, (c) => columnProvides(level, c, name), hasRecord) }
   })
+  const change = (name: string, pick: SourceValue) =>
+    buildChange(staging!.book, staging!.scope, name, pick, fields[name]?.values ?? [], staging!.records)
+  // Rows already staged, or where no editable source needs correcting, are left alone.
+  const acceptable = staging ? rows.flatMap(({ name, suggested }) => {
+    if (!suggested || staged.some((c) => c.id === `${staging.scope}::${name}`)) return []
+    const c = change(name, suggested)
+    return c.corrections.length ? [c] : []
+  }) : []
+  // "No value is correct": a gap picked as the answer, credited to the column's record.
+  const emptyPick = (column: ColumnName): SourceValue => {
+    const source = COLUMN_SOURCES[column].find((s) => staging?.records[s]?.length) ?? COLUMN_SOURCES[column][0]
+    return { value: null, source, source_id: staging?.records[source]?.[0] ?? '' }
+  }
   // Each record's format, so values in the shared Amazon column can say which listing they came from.
   const formats = new Map((fields.format?.values ?? []).map((v) => [`${v.source}:${v.source_id}`, v.value]))
   const tag = (v: SourceValue) => storeTag(v.source, formats.get(`${v.source}:${v.source_id}`))
@@ -69,6 +83,13 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
         <input type="checkbox" checked={onlyProblems} onChange={(e) => setOnlyProblems(e.target.checked)} />
         Only problems ({problems} of {rows.length} fields differ or are missing)
       </label>
+      {staging && (
+        <button type="button" className="secondary accept" disabled={!acceptable.length}
+          onClick={() => acceptable.forEach((c) => changeset.stage(c))}
+          title="Stage the suggested value (outlined ✓) for every field that needs correcting">
+          Accept suggestions ({acceptable.length})
+        </button>
+      )}
       <table className="grid">
         <thead>
           <tr>
@@ -83,7 +104,7 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
           </tr>
         </thead>
         <tbody>
-          {rows.filter((r) => !onlyProblems || r.problem).map(({ name, resolved, states, modal }) => {
+          {rows.filter((r) => !onlyProblems || r.problem).map(({ name, resolved, states, modal, suggested }) => {
             const differs = Object.values(states).includes('differs')
             const missing = missingColumns(states)
             const id = staging && `${staging.scope}::${name}`
@@ -105,17 +126,25 @@ export function FieldGrid({ fields, order, level, staging }: Props) {
                     return <td key={source} className="norecord" title={`${COLUMN_LABELS[source]} has no record here`}>—</td>
                   if (state === 'unsupported')
                     return <td key={source} className="unsupported" title={`${COLUMN_LABELS[source]} does not provide this field`}>not provided</td>
-                  if (state === 'missing' || state === 'empty' || !resolved)
-                    return <td key={source} className={[state, isReference(source) && 'reference'].filter(Boolean).join(' ')} title={gapTitle(state, source)}>—</td>
+                  if (state === 'missing' || state === 'empty' || !resolved) {
+                    const picked = !!pick && pick.value === null && columnOf(pick.chosenFrom) === source
+                    return (
+                      <Gap
+                        key={source} state={state} column={source} picked={picked}
+                        onPick={staging && (() => picked ? changeset.unstage(pick.id) : changeset.stage(change(name, emptyPick(source))))}
+                      />
+                    )
+                  }
                   return (
                     <Cell
                       key={source} name={name} source={source} level={level} resolved={resolved} state={state} modal={modal}
                       // A split title staged from this source is not this cell's own value.
+                      suggested={!!suggested && columnOf(suggested.source) === source}
                       picked={!!pick && columnOf(pick.chosenFrom) === source && resolved.values.some((v) =>
                         v.source === pick.chosenFrom && formatValue(v.value) === formatValue(pick.value))}
                       onPick={staging && ((value) => pick && columnOf(pick.chosenFrom) === source
                         ? changeset.unstage(pick.id)
-                        : changeset.stage(buildChange(staging.book, staging.scope, name, value, resolved.values, staging.records)))}
+                        : changeset.stage(change(name, value)))}
                       splitFor={name === 'title' ? (v) => splits.get(splitKey(v)) : undefined}
                       onSplitPick={stageDerived} isStaged={isStaged} tag={tag}
                     />
@@ -138,6 +167,26 @@ function gapTitle(state: CellState, column: ColumnName): string {
   return 'No source has a value'
 }
 
+type GapProps = { state: CellState; column: ColumnName; picked: boolean; onPick?: () => void }
+
+function Gap({ state, column, picked, onPick }: GapProps) {
+  const classes = [state, isReference(column) && 'reference', onPick && 'pickable', picked && 'picked'].filter(Boolean).join(' ')
+  return (
+    <td
+      className={classes}
+      title={onPick ? (picked ? 'Staged as “no value”; click to undo' : `${gapTitle(state, column)}. Click if no value is correct`) : gapTitle(state, column)}
+      onClick={onPick}
+      onKeyDown={onPick && ((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick() } })}
+      tabIndex={onPick ? 0 : undefined}
+      role={onPick ? 'button' : undefined}
+      aria-pressed={onPick ? picked : undefined}
+    >
+      —
+      {picked && <span className="tick" aria-hidden>✓</span>}
+    </td>
+  )
+}
+
 /**
  * Whether a column has a record here: from the staging records when known,
  * otherwise from whether it gave a value for any field.
@@ -158,6 +207,7 @@ type CellProps = {
   resolved: Resolved
   state: CellState
   modal: string | null
+  suggested: boolean
   picked: boolean
   onPick?: (value: SourceValue) => void
   splitFor?: (value: SourceValue) => TitleSplit | undefined
@@ -166,7 +216,7 @@ type CellProps = {
   tag: (value: SourceValue) => string | undefined
 }
 
-function Cell({ name, source, level, resolved, state, modal, picked, onPick, splitFor, onSplitPick, isStaged, tag }: CellProps) {
+function Cell({ name, source, level, resolved, state, modal, suggested, picked, onPick, splitFor, onSplitPick, isStaged, tag }: CellProps) {
   const values = (resolved.values ?? []).filter((v) => columnOf(v.source) === source)
   const classes = [state, isReference(source) && 'reference', onPick && 'pickable', picked && 'picked'].filter(Boolean).join(' ')
   const pick = onPick && (() => onPick(values[0]))
@@ -194,6 +244,7 @@ function Cell({ name, source, level, resolved, state, modal, picked, onPick, spl
       ))}
       {name === 'description' && columnOf(resolved.source) === source && resolved.licence && <div className="licence">{resolved.licence}</div>}
       {picked && <span className="tick" aria-hidden>✓</span>}
+      {suggested && !picked && <span className="tick suggested" title="Suggested: most sources agree">✓</span>}
     </td>
   )
 }

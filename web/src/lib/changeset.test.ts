@@ -40,3 +40,14 @@ test('never stages corrections against reference-only stores, but they can be pi
   expect(fromAmazon.chosenFrom).toBe('amazon')
   expect(fromAmazon.corrections.map((c) => c.source)).toEqual(['hardcover', 'goodreads'])
 })
+
+test('picking no value only corrects records that hold one', () => {
+  const values = [
+    { value: 'Abridged', source: 'hardcover' as const, source_id: '1' },
+    { value: 'Abridged', source: 'amazon' as const, source_id: 'B1' },
+  ]
+  const change = buildChange('B', 'ed', 'edition_statement', { value: null, source: 'goodreads', source_id: '9' },
+    values, { hardcover: ['1'], goodreads: ['9'], openlibrary: ['OL1M'], amazon: ['B1'] })
+  expect(change.value).toBeNull()
+  expect(change.corrections).toEqual([{ source: 'hardcover', record: '1', current: 'Abridged' }])
+})
