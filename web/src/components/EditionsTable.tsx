@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { conflictCount, editionKey, FILTERS, type FilterName, type MergedEdition } from '../lib/editions'
+import { conflictCount, duplicateLabel, editionKey, FILTERS, type FilterName, type MergedEdition } from '../lib/editions'
 import { formatValue, SOURCE_LABELS, SOURCES } from '../lib/format'
 import { FieldGrid } from './FieldGrid'
 
@@ -45,7 +45,7 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                     {SOURCES.map((s) => (
                       <span key={s} className={edition.ids[s] ? 'src on' : 'src'} title={SOURCE_LABELS[s]}>{SOURCE_LABELS[s][0]}</span>
                     ))}
-                    {(edition.duplicates ?? []).length > 0 && <span className="badge">duplicate</span>}
+                    {duplicateLabel(edition) && <span className="badge">{duplicateLabel(edition)}</span>}
                   </td>
                   <td>{edition.match_reason === 'fuzzy' ? `fuzzy ${edition.confidence}` : edition.match_reason ?? '—'}</td>
                   <td>{conflicts || ''}</td>

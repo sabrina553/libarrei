@@ -67,3 +67,11 @@ def test_merge_groups_editions_and_work_fields():
     assert merged.fields["title"].value == "The Hobbit"
     [edition] = merged.editions
     assert edition.ids == {HC: ["2"], GR: ["1"]} and not edition.fields["pages"].conflict
+
+
+def test_merged_edition_carries_duplicate_reasons():
+    a, b = Edition(), Edition()
+    a.add("asin", "B007978NPG", OL, "OL1M")
+    b.add("asin", "B007978NPG", OL, "OL2M")
+    [edition] = merge({OL: Work(editions=[a, b])}).editions
+    assert edition.duplicates == [OL] and edition.duplicate_reasons == {OL: ["asin"]}

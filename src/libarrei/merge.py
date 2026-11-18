@@ -55,6 +55,8 @@ class MergedEdition(BaseModel):
     match_reason: str | None
     confidence: float
     duplicates: list[Source]
+    # Which identifiers each duplicated source's records share, e.g. {"openlibrary": ["isbn13"]}.
+    duplicate_reasons: dict[Source, list[str]] = {}
     fields: dict[str, Resolved]
 
 
@@ -88,7 +90,8 @@ def merge_group(group: EditionGroup) -> MergedEdition:
         if resolved := resolve(name, candidates):
             fields[name] = resolved
     return MergedEdition(ids=ids, match_reason=group.reason, confidence=group.confidence,
-                         duplicates=group.duplicates, fields=fields)
+                         duplicates=group.duplicates, duplicate_reasons=group.duplicate_reasons,
+                         fields=fields)
 
 
 def resolve(name: str, candidates: list[Candidate]) -> Resolved | None:
