@@ -64,6 +64,6 @@ def test_job_endpoints(monkeypatch):
 def test_job_secrets_reach_the_run_but_are_never_shown():
     seen = {}
     store = JobStore(lambda **kw: seen.update(kw) or {}, Inline())
-    job = store.submit({"isbn": "1"}, {"token": "abc"})
-    assert seen["token"] == "abc"
-    assert job.secrets == {} and "abc" not in repr(job) and job.query == {"isbn": "1"}
+    job = store.submit({"isbn": "1"}, {"token": "not-a-hex-secret"})
+    assert seen["token"] == "not-a-hex-secret"
+    assert job.secrets == {} and "not-a-hex-secret" not in repr(job) and job.query == {"isbn": "1"}
