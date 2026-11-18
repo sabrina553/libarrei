@@ -1,0 +1,9 @@
+[
+  {"editions": [
+    {"id": 101, "title": "The Hobbit", "isbn_13": "9780000000001", "language": {"code2": "en"}, "reading_format_id": 1, "publisher": {"name": "Example Press"}},
+    {"id": 102, "title": "Der Hobbit", "isbn_13": "9780000000002", "language": {"code2": "de"}, "reading_format_id": 4}
+  ]},
+  {"editions": [
+    {"id": 103, "title": "Le Hobbit", "isbn_10": "0000000003", "language": {"code2": "fr"}, "reading_format_id": 2}
+  ]}
+]
