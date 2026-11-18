@@ -9,27 +9,9 @@ source IDs rather than the internal kca:// IDs.
 from datetime import UTC, datetime
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
+from libarrei.sources.formats import normalise_format
 
 GR = Source.GOODREADS
-
-FORMATS = {
-    "hardcover": "physical",
-    "paperback": "physical",
-    "mass market paperback": "physical",
-    "board book": "physical",
-    "kindle edition": "ebook",
-    "ebook": "ebook",
-    "audible audio": "audiobook",
-    "audiobook": "audiobook",
-    "audio cd": "audiobook",
-    "mp3 cd": "audiobook",
-}
-
-
-def normalise_format(raw: str | None) -> str | None:
-    if not raw:
-        return None
-    return FORMATS.get(raw.strip().lower(), raw.strip().lower())
 
 
 def date_from_millis(millis: float | None) -> str | None:

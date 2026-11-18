@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 
 from libarrei.model import Source
-from libarrei.sources.goodreads.mapping import edition_from_scrape, normalise_format, work_from_graphql
+from libarrei.sources.formats import normalise_format
+from libarrei.sources.goodreads.mapping import edition_from_scrape, work_from_graphql
 
 RAW = json.loads((Path(__file__).parent / "fixtures" / "goodreads_book.json").read_text())
 
