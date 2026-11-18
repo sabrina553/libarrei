@@ -22,6 +22,8 @@ WORKERS = 2
 class Job:
     id: str
     query: dict
+    # Passed to the run but never shown or compared, e.g. a caller's token.
+    secrets: dict = field(default_factory=dict, repr=False)
     status: str = "queued"  # queued, running, done or failed
     result: dict | None = None
     error: str | None = None
@@ -37,14 +39,14 @@ class JobStore:
         self.jobs: dict[str, Job] = {}
         self.lock = threading.Lock()
 
-    def submit(self, query: dict) -> Job:
+    def submit(self, query: dict, secrets: dict | None = None) -> Job:
         """Starts a job, or returns the unfinished one already running this query."""
         with self.lock:
             self._prune()
             for job in self.jobs.values():
                 if job.query == query and job.status in ("queued", "running"):
                     return job
-            job = Job(id=uuid.uuid4().hex, query=query)
+            job = Job(id=uuid.uuid4().hex, query=query, secrets=secrets or {})
             self.jobs[job.id] = job
         self.executor.submit(self._work, job)
         return job
@@ -57,7 +59,8 @@ class JobStore:
     def _work(self, job: Job) -> None:
         job.status = "running"
         try:
-            job.result = self.run(**job.query)
+            job.result = self.run(**job.query, **job.secrets)
+            job.secrets = {}
             job.status = "done"
         except Exception as error:  # a failed job must report, not vanish
             job.error = str(error)

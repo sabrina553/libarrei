@@ -103,7 +103,7 @@ def from_goodreads(cache, token: str, query: str, all_editions: bool) -> Work | 
 
 def lookup(
     isbn: str | None = None, title: str | None = None, author: str | None = None, use_cache: bool = True,
-    all_editions: bool = False,
+    all_editions: bool = False, hardcover_token: str | None = None,
 ) -> LookupResult:
     """Without all_editions only the matched edition per source is fetched: a few
     requests, rather than minutes for a book with hundreds of editions."""
@@ -123,7 +123,8 @@ def lookup(
             result.notes.setdefault(source, "not found")
 
     jobs = {Source.OPENLIBRARY: lambda: from_openlibrary(cache, isbn, title, author, all_editions)}
-    if token := os.getenv("HARDCOVER_TOKEN"):
+    # A caller's own token (a librarian's, via the API) wins over the server's.
+    if token := hardcover_token or os.getenv("HARDCOVER_TOKEN"):
         jobs[Source.HARDCOVER] = lambda: from_hardcover(cache, token, isbn, title, author, all_editions)
     else:
         result.notes[Source.HARDCOVER] = "HARDCOVER_TOKEN not set"
