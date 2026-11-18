@@ -114,12 +114,27 @@ def pages(raw: int | None) -> int | None:
     return raw if raw and raw > 0 else None
 
 
+# Goodreads genres are the most-used reader shelves, so some are about format or
+# reading habits rather than content.
+NOT_GENRES = {"audiobook", "audiobooks", "audio", "ebook", "ebooks", "kindle", "book club",
+              "novels", "to read", "owned", "favorites", "favourites", "unfinished", "abandoned",
+              "new york times bestseller", "media tie-in", "general"}
+# Open Library subjects include list tags such as "nyt:combined-print-and-e-book-fiction=2023-04-02".
+MACHINE_TAG = re.compile(r"^[a-z_]+:\S+")
+
+
+def genres(raw: list[str] | None) -> list[str] | None:
+    kept = [g for g in raw or [] if g.strip().casefold() not in NOT_GENRES and not MACHINE_TAG.match(g.strip())]
+    return kept or None
+
+
 EDITION_FIELDS = {"pages": pages, "release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn, "asin": asin}
 
 
 def work(record: Work) -> None:
     """Normalises a mapped Work and its editions in place."""
     record.original_release_date = _apply(record.original_release_date, release_date)
+    record.genres = _apply(record.genres, genres)
     for edition in record.editions:
         for name, normaliser in EDITION_FIELDS.items():
             setattr(edition, name, _apply(getattr(edition, name), normaliser))

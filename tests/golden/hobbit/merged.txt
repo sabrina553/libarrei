@@ -4,7 +4,7 @@ subtitle: Heartache, Heritage, and Happiness [hardcover]
 contributors: J.R.R. Tolkien [hardcover] CONFLICT
 description: [goodreads description] [goodreads] CONFLICT
 series: Middle Earth #1 [hardcover]
-genres: Fantasy, Classics, Fiction, Adventure, Young Adult, Audiobook, High Fantasy, Science Fiction Fantasy, Dragons, Novels [goodreads]
+genres: Fantasy, Classics, Fiction, Adventure, Young Adult, High Fantasy, Science Fiction Fantasy, Dragons [goodreads]
 original_release_date: 1937-09-21 [hardcover] CONFLICT
 
 # editions (1684); ! marks a conflict
