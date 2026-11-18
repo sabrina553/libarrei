@@ -1,0 +1,43 @@
+/* Colours as variables so a dark theme only redefines them. */
+:root {
+  --text: #1d1b22;
+  --muted: #6b6375;
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --border: #e3e0d8;
+  --accent: #4b5bd6;
+  --good: #1f7a4d;
+  --bad: #b3261e;
+  --conflict-bg: #fff4d6;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+  color-scheme: light dark;
+  font: 16px/1.5 var(--sans);
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #ebe8f0;
+    --muted: #a39cad;
+    --bg: #17151b;
+    --surface: #201d25;
+    --border: #36323d;
+    --accent: #8f9bff;
+    --good: #5fd39a;
+    --bad: #ff8a80;
+    --conflict-bg: #3a3220;
+  }
+}
+
+body { margin: 0; }
+header { border-bottom: 1px solid var(--border); background: var(--surface); }
+nav { display: flex; gap: 1rem; max-width: 72rem; margin: 0 auto; padding: 0.75rem 1rem; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a.active { color: var(--text); font-weight: 600; }
+main { max-width: 72rem; margin: 0 auto; padding: 1rem; }
+.muted { color: var(--muted); }
+.good { color: var(--good); }
+.bad { color: var(--bad); }
+button, input { font: inherit; }

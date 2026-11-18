@@ -5,6 +5,8 @@ from fastapi.testclient import TestClient
 from libarrei import api
 from libarrei.jobs import KEEP_SECONDS, JobStore
 
+EMPTY_WORK = {"ids": {}, "fields": {}, "editions": []}
+
 
 class Inline(Executor):
     """Runs work at submit time so tests need no waiting."""
@@ -48,13 +50,13 @@ def test_finished_jobs_expire():
 
 
 def test_job_endpoints(monkeypatch):
-    monkeypatch.setattr(api, "jobs", JobStore(lambda **q: {"work": "merged"}, Inline()))
+    monkeypatch.setattr(api, "jobs", JobStore(lambda **q: {"work": EMPTY_WORK}, Inline()))
     client = TestClient(api.app)
 
     started = client.post("/v1/jobs", json={"title": "the hobbit"})
     assert started.status_code == 202
     polled = client.get(f"/v1/jobs/{started.json()['id']}").json()
-    assert polled["status"] == "done" and polled["result"] == {"work": "merged"}
+    assert polled["status"] == "done" and polled["result"]["work"] == EMPTY_WORK
     assert client.get("/v1/jobs/nope").status_code == 404
     assert client.post("/v1/jobs", json={}).status_code == 422
 
