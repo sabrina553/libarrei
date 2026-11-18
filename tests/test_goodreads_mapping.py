@@ -44,4 +44,5 @@ def test_edition_from_scrape():
 
 
 def test_unknown_format_is_kept_lowercased():
-    assert normalise_format("Leather Bound") == "leather bound"
+    assert normalise_format("Toinen Painos") == "toinen painos"
+    assert normalise_format("Unknown Binding") is None
