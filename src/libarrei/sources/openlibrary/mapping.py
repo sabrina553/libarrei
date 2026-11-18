@@ -38,6 +38,26 @@ def contributors(doc: dict, names: dict[str, str]) -> list[Contributor]:
     ]
 
 
+# "Rob Inglis (Narrator)"; catalogue headings such as "Lee, Alan, 1947-" carry no role and are skipped.
+CONTRIBUTION = re.compile(r"^(.+?)\s*\(([^()]+)\)\s*$")
+
+
+def other_contributors(doc: dict) -> list[Contributor]:
+    """Editions' non-author credits: structured `contributors`, else role-tagged `contributions`."""
+    people = [
+        Contributor(name=c["name"].strip(), role=c["role"].strip().lower())
+        for c in doc.get("contributors") or []
+        if (c.get("name") or "").strip() and (c.get("role") or "").strip()
+    ]
+    if people:
+        # The two fields usually repeat each other, so the structured one wins.
+        return people
+    for raw in doc.get("contributions") or []:
+        if (m := CONTRIBUTION.match(raw.strip())) and m.group(1).lower() != "author":
+            people.append(Contributor(name=m.group(1), role=m.group(2).strip().lower()))
+    return people
+
+
 def pages(doc: dict) -> int | None:
     if doc.get("number_of_pages"):
         return doc["number_of_pages"]
@@ -56,7 +76,7 @@ def to_edition(doc: dict, names: dict[str, str]) -> Edition:
     sid = short_key(doc["key"])
     edition.add("title", doc.get("title"), OL, sid)
     edition.add("subtitle", doc.get("subtitle"), OL, sid)
-    edition.add("contributors", contributors(doc, names), OL, sid)
+    edition.add("contributors", contributors(doc, names) + other_contributors(doc), OL, sid)
     for isbn in doc.get("isbn_13") or []:
         edition.add("isbn13", isbn, OL, sid)
     for isbn in doc.get("isbn_10") or []:

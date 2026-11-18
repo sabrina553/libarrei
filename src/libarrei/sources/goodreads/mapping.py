@@ -27,8 +27,9 @@ def contributor(node: dict, role: str) -> Contributor:
 
 def contributors(book: dict) -> list[Contributor]:
     people = []
-    if primary := (book.get("primaryContributorEdge") or {}).get("node"):
-        people.append(contributor(primary, "author"))
+    edge = book.get("primaryContributorEdge") or {}
+    if primary := edge.get("node"):
+        people.append(contributor(primary, (edge.get("role") or "author").lower()))
     for edge in book.get("secondaryContributorEdges") or []:
         people.append(contributor(edge["node"], (edge.get("role") or "contributor").lower()))
     return people
