@@ -104,6 +104,7 @@ class Hardcover:
                   code2
                 }
                 reading_format_id
+                edition_information
                 score
               }
             }
@@ -147,6 +148,7 @@ class Hardcover:
                 code2
               }
               reading_format_id
+              edition_information
               score
             }
           }

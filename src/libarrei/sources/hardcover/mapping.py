@@ -45,6 +45,7 @@ def to_edition(raw: dict) -> Edition:
     sid = str(raw["id"])
     edition.add("title", raw.get("title"), HC, sid)
     edition.add("subtitle", raw.get("subtitle"), HC, sid)
+    edition.add("edition_statement", raw.get("edition_information"), HC, sid)
     edition.add("contributors", contributors(raw.get("cached_contributors")), HC, sid)
     edition.add("isbn13", raw.get("isbn_13"), HC, sid)
     edition.add("isbn10", raw.get("isbn_10"), HC, sid)

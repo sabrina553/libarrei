@@ -51,6 +51,7 @@ class Record(BaseModel):
 class Edition(Record):
     title: list[Candidate[str]] = []
     subtitle: list[Candidate[str]] = []
+    edition_statement: list[Candidate[str]] = []
     contributors: list[Candidate[list[Contributor]]] = []
     isbn13: list[Candidate[str]] = []
     isbn10: list[Candidate[str]] = []
