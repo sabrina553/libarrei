@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import type { components } from '../api/schema'
-import { baseline, blocksOf, changedRanges, flatText, splitByRanges, type Block, type Range, type Run } from '../lib/description'
+import { baseline, blocksOf, compare, flatText, splitByRanges, type Block, type Range, type Run } from '../lib/description'
 
 type SourceValue = components['schemas']['Alternative']
 
@@ -15,17 +15,18 @@ type Props = {
 
 /**
  * A description rendered from its safe structure as React elements, never as
- * HTML, with the words that differ from most sources highlighted.
+ * HTML, with the words a close variant adds to the baseline highlighted.
  */
 export function DescriptionValue({ value, values }: Props) {
   const [expanded, setExpanded] = useState(false)
   const blocks = blocksOf(value.formatted, String(value.value))
   const flat = flatText(blocks)
   const base = baseline(values.map((v) => flatText(blocksOf(v.formatted, String(v.value)))))
-  const ranges = changedRanges(flat, base)
+  const { ranges, distinct } = compare(flat, base)
   const long = flat.length > COLLAPSE_AT || blocks.length > 3
   return (
     <div className="description">
+      {distinct && <span className="badge hint" title="Shares few words with the most common blurb, so no words are marked">different blurb</span>}
       <div className={long && !expanded ? 'description-body collapsed' : 'description-body'}>
         {renderBlocks(blocks, ranges)}
       </div>

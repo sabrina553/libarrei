@@ -1,4 +1,4 @@
-import { diffWords } from 'diff'
+import { diffArrays } from 'diff'
 import type { components } from '../api/schema'
 
 export type Block = components['schemas']['Block']
@@ -22,32 +22,69 @@ export function flatText(blocks: Block[]): string {
   return blocks.map((b) => b.runs.map((r) => r.text).join('')).join('\n')
 }
 
+// Below this share of words in common, two blurbs are different texts and a word diff is noise.
+export const CLOSE_VARIANT = 0.6
+
+type Token = { key: string; start: number; end: number }
+
+// Case and punctuation are ignored, so "Hobbit," and "hobbit" count as the same word.
+function tokens(text: string): Token[] {
+  return [...text.matchAll(/\S+/g)]
+    .map((m) => ({ key: m[0].toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ''), start: m.index, end: m.index + m[0].length }))
+    .filter((t) => t.key)
+}
+
+/** Dice coefficient on the two texts' word sets: 1 for the same words, 0 for none shared. */
+export function similarity(a: string, b: string): number {
+  const x = new Set(tokens(a).map((t) => t.key))
+  const y = new Set(tokens(b).map((t) => t.key))
+  if (!x.size && !y.size) return 1
+  let shared = 0
+  for (const w of x) if (y.has(w)) shared++
+  return (2 * shared) / (x.size + y.size)
+}
+
 /**
- * The text each source is compared against: the one most sources agree on,
- * or the first source's when no two agree.
+ * The text each source is compared against: the one most sources agree on, or,
+ * when no two agree, the one closest on average to all the others.
  */
 export function baseline(texts: string[]): string | null {
+  const all = texts.map(normalise)
   const counts = new Map<string, number>()
-  for (const text of texts.map(normalise)) counts.set(text, (counts.get(text) ?? 0) + 1)
+  for (const text of all) counts.set(text, (counts.get(text) ?? 0) + 1)
   let best: string | null = null
   let most = 1
   for (const [text, count] of counts) if (count > most) [best, most] = [text, count]
-  return best ?? (texts.length ? normalise(texts[0]) : null)
+  if (best !== null || !all.length) return best
+  const distinct = [...counts.keys()]
+  const closeness = (t: string) => distinct.reduce((n, o) => (o === t ? n : n + similarity(t, o)), 0)
+  return distinct.reduce((a, b) => (closeness(b) > closeness(a) ? b : a))
 }
 
-/** Where `text` has words the baseline lacks; empty when they read the same. */
+export type Comparison = { ranges: Range[]; distinct: boolean }
+
+/**
+ * How `text` compares with the baseline: a close variant has the words the
+ * baseline lacks marked; a different blurb is flagged with nothing marked.
+ */
+export function compare(text: string, base: string | null): Comparison {
+  if (base === null || normalise(text) === base) return { ranges: [], distinct: false }
+  if (similarity(text, base) < CLOSE_VARIANT) return { ranges: [], distinct: true }
+  return { ranges: changedRanges(text, base), distinct: false }
+}
+
+/** Where `text` has words the baseline lacks; shared words are never marked. */
 export function changedRanges(text: string, base: string | null): Range[] {
   if (base === null || normalise(text) === base) return []
+  const ours = tokens(text)
   const ranges: Range[] = []
   let at = 0
-  for (const part of diffWords(base, text)) {
+  // Diffing word keys, not raw text, keeps offsets tied to the text's own words.
+  for (const part of diffArrays(tokens(base).map((t) => t.key), ours.map((t) => t.key))) {
     if (part.removed) continue
-    const start = text.indexOf(part.value.trim() || part.value, at)
-    // The diff's whitespace may not match the text's exactly; give up rather than mark the wrong words.
-    if (start < 0) return []
-    const end = start + (part.value.trim() || part.value).length
-    if (part.added && part.value.trim()) ranges.push([start, end])
-    at = end
+    const words = ours.slice(at, at + part.value.length)
+    at += part.value.length
+    if (part.added && words.length) ranges.push([words[0].start, words[words.length - 1].end])
   }
   return ranges
 }
