@@ -109,7 +109,12 @@ def asin(raw: str | None) -> str | None:
     return None if isbn(value) else value
 
 
-EDITION_FIELDS = {"release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn, "asin": asin}
+def pages(raw: int | None) -> int | None:
+    """Goodreads shows 0 when the page count is unknown."""
+    return raw if raw and raw > 0 else None
+
+
+EDITION_FIELDS = {"pages": pages, "release_date": release_date, "language": language, "isbn13": isbn, "isbn10": isbn, "asin": asin}
 
 
 def work(record: Work) -> None:
