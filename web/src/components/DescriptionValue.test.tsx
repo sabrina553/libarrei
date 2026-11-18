@@ -50,3 +50,16 @@ test('long descriptions collapse behind Show more', () => {
 test('ranges split a run at their edges', () => {
   expect(splitByRanges('abcdef', 10, [[12, 14]])).toEqual([['ab', false], ['cd', true], ['ef', false]])
 })
+
+test('a blurb unlike the baseline gets a tag and no highlighting; the baseline cell never highlights', () => {
+  const base = value('Bilbo the hobbit sets out with dwarves to win back their gold.', null, 'hardcover')
+  const other = value('An epic prequel to the greatest fantasy saga of all time.', null, 'openlibrary')
+  const all = [value('Bilbo the hobbit sets out with dwarves to win back their gold.'), base, other]
+  const { container } = render(<DescriptionValue value={other} values={all} />)
+  expect(container.querySelector('mark')).toBeNull()
+  expect(screen.getByText('different blurb')).toBeInTheDocument()
+
+  const { container: baseCell } = render(<DescriptionValue value={base} values={all} />)
+  expect(baseCell.querySelector('mark')).toBeNull()
+  expect(baseCell).not.toHaveTextContent('different blurb')
+})
