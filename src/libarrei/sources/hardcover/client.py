@@ -105,6 +105,8 @@ class Hardcover:
                 }
                 reading_format_id
                 edition_information
+                edition_format
+                audio_seconds
                 score
               }
             }
@@ -149,6 +151,8 @@ class Hardcover:
               }
               reading_format_id
               edition_information
+              edition_format
+              audio_seconds
               score
             }
           }

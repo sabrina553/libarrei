@@ -9,7 +9,7 @@ source IDs rather than the internal kca:// IDs.
 from datetime import UTC, datetime
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
-from libarrei.sources.formats import normalise_format
+from libarrei.sources.formats import detail, normalise_format
 from libarrei.sources.goodreads.titles import split_title
 
 GR = Source.GOODREADS
@@ -58,6 +58,7 @@ def edition_from_graphql(book: dict) -> Edition:
     edition.add("release_date", date_from_millis(details.get("publicationTime")), GR, sid)
     edition.add("pages", details.get("numPages"), GR, sid)
     edition.add("format", normalise_format(details.get("format")), GR, sid)
+    edition.add("format_detail", detail(details.get("format")), GR, sid)
     edition.add("language", (details.get("language") or {}).get("name"), GR, sid)
     edition.add("cover_url", book.get("imageUrl"), GR, sid)
     return edition
@@ -93,6 +94,7 @@ def edition_from_scrape(scraped: dict) -> Edition:
     edition.add("release_date", scraped.get("publish_date"), GR, sid)
     edition.add("pages", scraped.get("pages"), GR, sid)
     edition.add("format", normalise_format(scraped.get("book_type")), GR, sid)
+    edition.add("format_detail", detail(scraped.get("book_type")), GR, sid)
     edition.add("language", scraped.get("language"), GR, sid)
     return edition
 

@@ -8,7 +8,7 @@ Field reference: https://openlibrary.org/dev/docs/api/books
 import re
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
-from libarrei.sources.formats import normalise_format
+from libarrei.sources.formats import detail, normalise_format
 
 OL = Source.OPENLIBRARY
 COVER_URL = "https://covers.openlibrary.org/b/id/{}-L.jpg"
@@ -105,6 +105,7 @@ def to_edition(doc: dict, names: dict[str, str]) -> Edition:
     edition.add("release_date", doc.get("publish_date"), OL, sid)
     edition.add("pages", pages(doc), OL, sid)
     edition.add("format", normalise_format(doc.get("physical_format")), OL, sid)
+    edition.add("format_detail", detail(doc.get("physical_format")), OL, sid)
     for language in doc.get("languages") or []:
         edition.add("language", short_key(language["key"]), OL, sid)
     edition.add("cover_url", cover(doc), OL, sid)
