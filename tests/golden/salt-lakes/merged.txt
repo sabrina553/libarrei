@@ -9,8 +9,8 @@ original_release_date: 2026-03-17 [hardcover]
 # editions (7); ! marks a conflict
 goodreads:233411509 hardcover:32475686 | isbn13 | 9781324089025 | physical | en | 2026-03-17 | 272 | W. W. Norton! | Salt Lakes: An Unnatural History
 goodreads:239045006 | - | 9781324089032 | ebook | en | 2026-03-17 | 269 | W. W. Norton & Company | Salt Lakes
-goodreads:249052424 | - | - | audiobook | en | 2026-03-17 | 8 | Tantor Media | Salt Lakes
-goodreads:249783176 | - | 9798228930520 | audiobook | en | 2026-03-17 | 1 | Blackstone Publishing, Inc. | Salt Lakes
-goodreads:249783256 | - | 9798228930537 | audiobook | en | 2026-03-17 | 1 | Blackstone Publishing, Inc. | Salt Lakes
+goodreads:249052424 | - | - | audiobook | en | 2026-03-17 | - | Tantor Media | Salt Lakes
+goodreads:249783176 | - | 9798228930520 | audiobook | en | 2026-03-17 | - | Blackstone Publishing, Inc. | Salt Lakes
+goodreads:249783256 | - | 9798228930537 | audiobook | en | 2026-03-17 | - | Blackstone Publishing, Inc. | Salt Lakes
 goodreads:252438048 | - | 9781324157113 | physical | en | 2027-03-30 | 272 | W. W. Norton & Company | Salt Lakes
 openlibrary:OL7671714M | - | 9780516297033 | physical | en | 2006-09 | 32 | Children's Press (CT) | Great Salt Lake

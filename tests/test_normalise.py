@@ -61,3 +61,16 @@ def test_work_normalises_editions_and_derives_isbn13():
 
 def test_zero_pages_count_as_unknown():
     assert normalise.pages(0) is None and normalise.pages(310) == 310
+
+
+def test_audiobook_pages_are_dropped():
+    from libarrei.model import Edition, Source, Work
+
+    work, audio = Work(), Edition()
+    audio.add("format", "audiobook", Source.GOODREADS, "1")
+    audio.add("pages", 15, Source.GOODREADS, "1")
+    work.editions.append(audio)
+
+    normalise.work(work)
+
+    assert audio.pages == []
