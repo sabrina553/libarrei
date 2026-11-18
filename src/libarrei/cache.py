@@ -25,19 +25,22 @@ class Cache:
         self.clock = clock
         # sqlite3 connections can't cross threads, and sources are fetched in parallel.
         self._local = threading.local()
-        # An in-memory database exists per connection, so it must stay shared.
-        self._shared = self._connect() if path == ":memory:" else None
-
-    def _connect(self) -> sqlite3.Connection:
-        db = sqlite3.connect(self.path, timeout=30, check_same_thread=self.path != ":memory:")
-        if self.path != ":memory:":
+        # Schema and journal mode are set once here: changing them from several
+        # threads at once fails with "database is locked" despite the timeout.
+        setup = self._connect()
+        if path != ":memory:":
             # WAL lets one source write while another reads.
-            db.execute("PRAGMA journal_mode=WAL")
-        db.execute(
+            setup.execute("PRAGMA journal_mode=WAL")
+        setup.execute(
             "CREATE TABLE IF NOT EXISTS responses ("
             "source TEXT, request TEXT, body TEXT, fetched_at REAL, PRIMARY KEY (source, request))"
         )
-        return db
+        setup.commit()
+        # An in-memory database exists per connection, so it must stay shared.
+        self._shared = setup if path == ":memory:" else None
+
+    def _connect(self) -> sqlite3.Connection:
+        return sqlite3.connect(self.path, timeout=30, check_same_thread=self.path != ":memory:")
 
     @property
     def db(self) -> sqlite3.Connection:
