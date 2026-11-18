@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
-import { Home } from './pages/Home'
+import { Book } from './pages/Book'
+import { Search } from './pages/Search'
 import { Settings } from './pages/Settings'
 
 const queryClient = new QueryClient({
@@ -14,13 +15,14 @@ export default function App() {
       <BrowserRouter>
         <header>
           <nav>
-            <NavLink to="/" end>Home</NavLink>
+            <NavLink to="/" end>Search</NavLink>
             <NavLink to="/settings">Settings</NavLink>
           </nav>
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Search />} />
+            <Route path="/book" element={<Book />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </main>
