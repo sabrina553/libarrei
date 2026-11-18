@@ -63,6 +63,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 /* Descriptions are long; cap them and let the cell scroll. */
 .grid .long { max-height: 9rem; overflow: auto; white-space: pre-line; font-size: 0.9rem; }
 .badge { margin-left: 0.4rem; padding: 0 0.35rem; border-radius: 3px; font-size: 0.7rem; font-weight: 500; background: var(--bad); color: white; }
+.badge.hint { background: var(--accent); }
 .licence { margin-top: 0.3rem; font-size: 0.75rem; color: var(--muted); }
 
 /* Editions */
