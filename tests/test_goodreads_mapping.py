@@ -54,3 +54,22 @@ def test_publish_row_without_a_date_keeps_only_the_publisher():
     assert parse_publish_row("Published by Adelphi") == (None, "Adelphi")
     assert parse_publish_row("Published April 28th 2026 by Dutton") == ("April 28th 2026", "Dutton")
     assert parse_publish_row("Published 2001") == ("2001", None)
+
+
+def test_graphql_title_is_split_into_title_and_subtitle():
+    raw = {**RAW, "title": "Dune: Deluxe Edition (Dune, #1)",
+           "work": {**RAW["work"], "details": {**RAW["work"]["details"], "originalTitle": "Dune: A Novel"}}}
+    work = work_from_graphql(raw)
+    edition = work.editions[0]
+
+    assert values(edition.title) == ["Dune"]
+    assert values(edition.subtitle) == ["Deluxe Edition"]
+    assert values(work.title) == ["Dune"]
+    assert values(work.subtitle) == ["A Novel"]
+
+
+def test_graphql_title_without_subtitle_leaves_subtitle_empty():
+    edition = work_from_graphql(RAW).editions[0]
+
+    assert values(edition.title) == ["Hello Beautiful"]
+    assert edition.subtitle == []
