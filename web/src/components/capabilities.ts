@@ -11,13 +11,14 @@ const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
     goodreads: new Set(['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher',
       'release_date', 'pages', 'format', 'language', 'cover_url']),
     openlibrary: new Set(['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'publisher',
-      'release_date', 'pages', 'format', 'language', 'cover_url']),
+      'release_date', 'pages', 'format', 'language', 'cover_url', 'series']),
   },
   work: {
     hardcover: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',
       'original_release_date']),
     goodreads: new Set(['title', 'contributors', 'description', 'series', 'genres', 'original_release_date']),
-    openlibrary: new Set(['title', 'subtitle', 'contributors', 'description', 'genres', 'original_release_date']),
+    openlibrary: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',
+      'original_release_date']),
   },
 }
 

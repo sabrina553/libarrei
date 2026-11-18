@@ -68,6 +68,12 @@ class Hardcover:
                 }
                 position
               }
+              book_series {
+                position
+                series {
+                  name
+                }
+              }
               rating
               ratings_count
               reviews_count

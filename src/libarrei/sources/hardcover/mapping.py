@@ -28,11 +28,16 @@ def genres(cached_tags: dict | None) -> list[str]:
     return [t["tag"] for t in (cached_tags or {}).get("Genre", [])]
 
 
-def series(featured: dict | None) -> list[SeriesEntry]:
-    if not featured or not featured.get("series"):
-        return []
-    position = featured.get("position")
-    return [SeriesEntry(name=featured["series"]["name"], position=None if position is None else f"{position:g}")]
+def series(featured: dict | None, every: list[dict] | None = None) -> list[SeriesEntry]:
+    """Every series the book is in, the featured one first."""
+    entries: list[SeriesEntry] = []
+    for link in [featured or {}, *(every or [])]:
+        name = (link.get("series") or {}).get("name")
+        position = link.get("position")
+        entry = SeriesEntry(name=name, position=None if position is None else f"{position:g}") if name else None
+        if entry and entry not in entries:
+            entries.append(entry)
+    return entries
 
 
 def to_edition(raw: dict) -> Edition:
@@ -59,7 +64,7 @@ def to_work(raw: dict) -> Work:
     work.add("subtitle", raw.get("subtitle"), HC, sid)
     work.add("contributors", contributors(raw.get("cached_contributors")), HC, sid)
     work.add("description", raw.get("description"), HC, sid)
-    work.add("series", series(raw.get("featured_book_series")), HC, sid)
+    work.add("series", series(raw.get("featured_book_series"), raw.get("book_series")), HC, sid)
     work.add("genres", genres(raw.get("cached_tags")), HC, sid)
     work.add("original_release_date", raw.get("release_date"), HC, sid)
     work.editions = [to_edition(e) for e in raw.get("editions") or []]
