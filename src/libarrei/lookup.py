@@ -27,29 +27,33 @@ class LookupResult:
     notes: dict[Source, str] = field(default_factory=dict)
 
 
-def from_openlibrary(isbn: str | None, title: str | None, author: str | None) -> tuple[Work | None, list[str]]:
-    """Also returns ISBNs found, so title searches can be passed on to Hardcover."""
+def from_openlibrary(isbn: str | None, title: str | None, author: str | None) -> Work | None:
     ol = OpenLibrary()
-    editions, isbns = [], [isbn] if isbn else []
+    editions = []
     if isbn:
         edition = ol.edition_by_isbn(isbn)
         if not edition or not edition.get("works"):
-            return None, isbns
+            return None
         editions, work_key = [edition], edition["works"][0]["key"]
     else:
         docs = ol.search(title or "", author, limit=1)
         if not docs:
-            return None, isbns
-        work_key, isbns = docs[0]["key"], docs[0].get("isbn", [])
+            return None
+        work_key = docs[0]["key"]
     work = ol.document(work_key)
     if not work:
-        return None, isbns
+        return None
     names = ol.author_names(list(dict.fromkeys(author_keys(work) + [k for e in editions for k in author_keys(e)])))
-    return openlibrary_work(work, editions, names), isbns
+    return openlibrary_work(work, editions, names)
 
 
-def from_hardcover(token: str, isbns: list[str]) -> Work | None:
-    books = Hardcover(HardcoverTransport(token)).search({"isbn": isbns, "hcid": []})["books"]
+def from_hardcover(token: str, isbn: str | None, title: str | None, author: str | None) -> Work | None:
+    client = Hardcover(HardcoverTransport(token))
+    if isbn:
+        books = client.search({"isbn": [isbn], "hcid": []})["books"]
+    else:
+        ids = client.search_titles(title or "", author, limit=1)
+        books = client.search({"isbn": [], "hcid": ids})["books"] if ids else []
     return hardcover_work(books[0]) if books else None
 
 
@@ -78,20 +82,10 @@ def lookup(isbn: str | None = None, title: str | None = None, author: str | None
         else:
             result.notes.setdefault(source, "not found")
 
-    isbns: list[str] = []
-
-    def openlibrary() -> Work | None:
-        work, found = from_openlibrary(isbn, title, author)
-        isbns.extend(found)
-        return work
-
-    attempt(Source.OPENLIBRARY, openlibrary)
+    attempt(Source.OPENLIBRARY, lambda: from_openlibrary(isbn, title, author))
 
     if token := os.getenv("HARDCOVER_TOKEN"):
-        if isbns:
-            attempt(Source.HARDCOVER, lambda: from_hardcover(token, isbns))
-        else:
-            result.notes[Source.HARDCOVER] = "no ISBN to search with"
+        attempt(Source.HARDCOVER, lambda: from_hardcover(token, isbn, title, author))
     else:
         result.notes[Source.HARDCOVER] = "HARDCOVER_TOKEN not set"
 
