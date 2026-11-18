@@ -90,7 +90,8 @@ def test_edition_mapping():
     assert people == [("J. R. R. Tolkien", "author"), ("Rob Inglis", "narrator")]
     assert edition.asin[0].value == "B004EW5KKU"
     assert edition.format[0].value == "audiobook"
-    assert edition.format_detail[0].value == "Unabridged audiobook"
+    assert edition.format_detail[0].value == "Audiobook"
+    assert edition.edition_statement[0].value == "Unabridged"
     assert edition.duration_seconds[0].value == 662 * 60
     assert edition.release_date[0].value == "2008-12-28"
     assert edition.language[0].value == "en"
@@ -109,7 +110,9 @@ def test_isbn_shaped_audible_asin_is_kept():
 
 
 def test_abridged_detail():
-    assert to_edition(SEARCH["products"][2], "co.uk").format_detail[0].value == "Abridged audiobook"
+    edition = to_edition(SEARCH["products"][2], "co.uk")
+    assert edition.edition_statement[0].value == "Abridged"
+    assert edition.format_detail[0].value == "Audiobook"
 
 
 def test_work_description_parsed_as_html():

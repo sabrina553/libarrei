@@ -6,9 +6,11 @@ Descriptions stay as Audible's HTML; the merger parses them like Goodreads'.
 """
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
+from libarrei.normalise import strip_language_label
 
 AU = Source.AUDIBLE
-FORMAT_DETAILS = {"unabridged": "Unabridged audiobook", "abridged": "Abridged audiobook"}
+# Audible reports abridgement as the format; it is an edition statement, as Hardcover records it.
+EDITION_STATEMENTS = {"unabridged": "Unabridged", "abridged": "Abridged"}
 
 
 def authors(product: dict) -> list[Contributor]:
@@ -21,7 +23,7 @@ def narrators(product: dict) -> list[Contributor]:
 
 
 def series(product: dict) -> list[SeriesEntry]:
-    return [SeriesEntry(name=s["title"], position=s.get("sequence") or None)
+    return [SeriesEntry(name=strip_language_label(s["title"]), position=s.get("sequence") or None)
             for s in product.get("series") or [] if s.get("title")]
 
 
@@ -38,14 +40,15 @@ def duration(product: dict) -> int | None:
 def to_edition(product: dict, region: str) -> Edition:
     edition = Edition()
     sid = product["asin"]
-    edition.add("title", product.get("title"), AU, sid)
+    edition.add("title", strip_language_label(product.get("title")), AU, sid)
     edition.add("subtitle", product.get("subtitle"), AU, sid)
     edition.add("contributors", authors(product) + narrators(product), AU, sid)
     edition.add("asin", sid, AU, sid)
     edition.add("publisher", product.get("publisher_name"), AU, sid)
     edition.add("release_date", product.get("release_date") or product.get("issue_date"), AU, sid)
     edition.add("format", "audiobook", AU, sid)
-    edition.add("format_detail", FORMAT_DETAILS.get((product.get("format_type") or "").lower()), AU, sid)
+    edition.add("format_detail", "Audiobook", AU, sid)
+    edition.add("edition_statement", EDITION_STATEMENTS.get((product.get("format_type") or "").lower()), AU, sid)
     edition.add("duration_seconds", duration(product), AU, sid)
     edition.add("language", product.get("language"), AU, sid)
     edition.add("cover_url", (product.get("product_images") or {}).get("1000"), AU, sid)
@@ -60,7 +63,7 @@ def to_work(products: list[dict], region: str) -> Work:
     work = Work()
     first = products[0]
     sid = first["asin"]
-    work.add("title", first.get("title"), AU, sid)
+    work.add("title", strip_language_label(first.get("title")), AU, sid)
     work.add("subtitle", first.get("subtitle"), AU, sid)
     work.add("contributors", authors(first), AU, sid)
     work.add("series", series(first), AU, sid)
