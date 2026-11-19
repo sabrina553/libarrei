@@ -1,11 +1,14 @@
 import { changeset, toMarkdown, useChangeset } from '../lib/changeset'
 import { formatValue, SOURCE_LABELS } from '../lib/format'
+import { merges, mergesToMarkdown, useMerges } from '../lib/merges'
 
 export function Changes() {
   const changes = useChangeset()
+  const { merges: staged, notDuplicates } = useMerges()
   const corrections = changes.reduce((n, c) => n + c.corrections.length, 0)
+  const markdown = () => toMarkdown(changes) + (staged.length ? '\n' + mergesToMarkdown(staged) : '')
 
-  if (!changes.length)
+  if (!changes.length && !staged.length && !notDuplicates.length)
     return (
       <section>
         <h1>Changes</h1>
@@ -17,12 +20,38 @@ export function Changes() {
     <section>
       <h1>Changes</h1>
       <p>
-        {changes.length} pick{changes.length === 1 ? '' : 's'}, {corrections} correction{corrections === 1 ? '' : 's'} to make.{' '}
-        <button onClick={() => download('libarrei-changeset.md', toMarkdown(changes), 'text/markdown')}>Export Markdown</button>{' '}
-        <button className="secondary" onClick={() => download('libarrei-changeset.json', JSON.stringify(changes, null, 2), 'application/json')}>Export JSON</button>{' '}
-        <button className="secondary" onClick={() => confirm('Discard every staged change?') && changeset.clear()}>Discard all</button>
+        {changes.length} pick{changes.length === 1 ? '' : 's'}, {corrections} correction{corrections === 1 ? '' : 's'} and {staged.length} merge{staged.length === 1 ? '' : 's'} to make.{' '}
+        <button onClick={() => download('libarrei-changeset.md', markdown(), 'text/markdown')}>Export Markdown</button>{' '}
+        <button className="secondary" onClick={() => download('libarrei-changeset.json', JSON.stringify({ changes, merges: staged }, null, 2), 'application/json')}>Export JSON</button>{' '}
+        <button className="secondary" onClick={() => { if (confirm('Discard every staged change and merge?')) { changeset.clear(); merges.clear() } }}>Discard all</button>
       </p>
-      <table className="editions">
+      {staged.length > 0 && (
+        <>
+          <h2>Merges</h2>
+          <table className="editions">
+            <thead><tr><th>Book</th><th>Duplicate</th><th>Merge into</th><th>Values kept</th><th></th></tr></thead>
+            <tbody>
+              {staged.map((m) => (
+                <tr key={m.id}>
+                  <td>{m.book}</td>
+                  <td>{SOURCE_LABELS[m.source]} <span className="mono">{m.record}</span></td>
+                  <td>{SOURCE_LABELS[m.into.source]} <span className="mono">{m.into.record}</span></td>
+                  <td>{m.carried.join(', ') || <span className="muted">none</span>}</td>
+                  <td><button className="secondary" onClick={() => merges.unstage(m.id)}>Undo</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+      {notDuplicates.length > 0 && (
+        <p className="muted">
+          {notDuplicates.length} record{notDuplicates.length === 1 ? '' : 's'} marked as not a duplicate.{' '}
+          <button className="link" onClick={() => notDuplicates.forEach(merges.forgetRejection)}>Suggest them again</button>
+        </p>
+      )}
+      {changes.length > 0 && <h2>Field corrections</h2>}
+      {changes.length > 0 && <table className="editions">
         <thead><tr><th>Book</th><th>Field</th><th>Correct value</th><th>Fix in</th><th></th></tr></thead>
         <tbody>
           {changes.map((c) => (
@@ -39,7 +68,7 @@ export function Changes() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>}
     </section>
   )
 }

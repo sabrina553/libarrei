@@ -211,15 +211,33 @@ export function foldCopies(editions: MergedEdition[]): Folded[] {
 
 const DETAIL_FIELDS = ['pages', 'duration_seconds', 'contributors', 'publisher', 'release_date', 'cover_url', 'subtitle', 'edition_statement']
 
-/** What a copy holds that its original lacks or states differently: worth copying over before it is merged away. */
-export function copyExtras(copy: MergedEdition, original: MergedEdition): string[] {
-  return DETAIL_FIELDS.flatMap((name) => {
-    const mine = copy.fields[name]?.value
-    if (mine === null || mine === undefined || mine === '') return []
-    const theirs = original.fields[name]?.value
-    if (theirs === null || theirs === undefined || theirs === '') return [`adds ${name.replaceAll('_', ' ')}`]
-    if (compareKey(mine) === compareKey(theirs)) return []
-    const shown = name === 'cover_url' ? '' : `: ${formatValue(mine)}`
-    return [`differs on ${name.replaceAll('_', ' ')}${shown}`]
+export type Extra = { field: string; value: unknown; kind: 'adds' | 'differs' }
+
+/** What a copy holds that its original lacks or states differently: worth keeping before it is merged away. */
+export function copyExtras(copy: MergedEdition, original: MergedEdition): Extra[] {
+  return DETAIL_FIELDS.flatMap((field): Extra[] => {
+    const value = copy.fields[field]?.value
+    if (value === null || value === undefined || value === '') return []
+    const theirs = original.fields[field]?.value
+    if (theirs === null || theirs === undefined || theirs === '') return [{ field, value, kind: 'adds' }]
+    return compareKey(value) === compareKey(theirs) ? [] : [{ field, value, kind: 'differs' }]
   })
+}
+
+export function describeExtra({ field, value, kind }: Extra): string {
+  const name = field.replaceAll('_', ' ')
+  return kind === 'adds' ? `adds ${name}` : `differs on ${name}${field === 'cover_url' ? '' : `: ${formatValue(value)}`}`
+}
+
+/** Why a copy was matched to its original, from the fields the stub check compares. */
+export function matchEvidence(copy: MergedEdition, original: MergedEdition): string[] {
+  const same = (field: string, key = (v: unknown) => compareKey(v)) => {
+    const a = copy.fields[field]?.value
+    const b = original.fields[field]?.value
+    return a !== null && a !== undefined && b !== null && b !== undefined && key(a) === key(b)
+  }
+  return [
+    ...['title', 'format', 'language', 'publisher'].filter((f) => same(f)),
+    ...(same('release_date', (v) => String(v).slice(0, 4)) ? ['year'] : []),
+  ]
 }

@@ -1,10 +1,12 @@
 import { Fragment, useState, type ReactNode } from 'react'
-import { copyExtras, EDITION_FIELDS, editionIssues, editionKey, FILTERS, foldCopies, issueSummary, isSparse, lowestQuality, nextSort, sortEditions, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
+import { copyExtras, describeExtra, EDITION_FIELDS, editionIssues, editionKey, FILTERS, foldCopies, issueSummary, isSparse, lowestQuality, nextSort, sortEditions, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
 import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
 import { byLanguage } from '../lib/languages'
 import { SlugsContext } from '../lib/links'
 import { getLanguagePrefs } from '../settings/languages'
+import { CopyReview, firstRecord } from './CopyReview'
 import { FieldGrid } from './FieldGrid'
+import { recordId, useMerges } from '../lib/merges'
 
 // Rendering thousands of rows at once is slow; show a page and let the librarian ask for more.
 const PAGE = 100
@@ -32,6 +34,12 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
   const view = byLanguage(editions, allLanguages ? { ...prefs, preferred: [] } : prefs)
   const inView = view.shown
   const [unfolded, setUnfolded] = useState<Set<string>>(new Set())
+  const decisions = useMerges()
+  const verdict = (copy: MergedEdition) => {
+    const own = firstRecord(copy)
+    const id = own ? recordId(own.source, own.record) : ''
+    return decisions.merges.some((m) => m.id === id) ? 'merged' : decisions.notDuplicates.includes(id) ? 'kept' : 'open'
+  }
   const shown = foldCopies(sortEditions(inView.filter(FILTERS[filter].test), sort, prefs.preferred))
   const toggleCopies = (key: string) => setUnfolded((was) => {
     const next = new Set(was)
@@ -77,21 +85,35 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
           {shown.slice(0, limit).map(({ edition, copies }) => {
             const key = editionKey(edition)
             const unfold = unfolded.has(key)
+            const open = copies.filter((c) => verdict(c) === 'open')
+            const kept = copies.filter((c) => verdict(c) === 'kept')
+            const merged = copies.length - open.length - kept.length
             return (
               <Fragment key={key}>
-                {row(edition, copies.length > 0 && (
-                  <button type="button" className="link" aria-expanded={unfold}
-                    onClick={(e) => { e.stopPropagation(); toggleCopies(key) }}
-                    title="Records with no identifier whose title, format, language and publisher or year match this edition">
-                    {unfold ? '−' : '+'}{copies.length} likely cop{copies.length === 1 ? 'y' : 'ies'}
-                  </button>
+                {row(edition, (open.length > 0 || merged > 0) && (
+                  <>
+                    {open.length > 0 && (
+                      <button type="button" className="link" aria-expanded={unfold}
+                        onClick={(e) => { e.stopPropagation(); toggleCopies(key) }}
+                        title="Records with no identifier whose title, format, language and publisher or year match this edition">
+                        {unfold ? '−' : '+'}{open.length} possible duplicate{open.length === 1 ? '' : 's'}
+                      </button>
+                    )}
+                    {merged > 0 && <span className="muted"> {merged} merged</span>}
+                  </>
                 ))}
-                {unfold && copies.map((copy) => {
-                  const extras = copyExtras(copy, edition)
-                  return row(copy, <span className="badge hint" title={extras.join('\n') || undefined}>
-                    likely copy{extras.length ? ` · ${extras.length} extra` : ''}
-                  </span>)
-                })}
+                {unfold && open.length > 0 && (
+                  <>
+                    {open.map((copy) => {
+                      const extras = copyExtras(copy, edition)
+                      return row(copy, <span className="badge hint" title={extras.map(describeExtra).join('\n') || undefined}>
+                        possible duplicate{extras.length ? ` · ${extras.length} extra` : ''}
+                      </span>)
+                    })}
+                    <tr className="copy-panel"><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><CopyReview book={book} best={edition} copies={open} /></SlugsContext></td></tr>
+                  </>
+                )}
+                {kept.map((copy) => row(copy))}
               </Fragment>
             )
           })}
