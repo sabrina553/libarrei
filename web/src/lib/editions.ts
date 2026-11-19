@@ -1,11 +1,19 @@
 import type { components } from '../api/schema'
+import { columnProvides } from '../components/capabilities'
+import { recordCheck, rowStates } from './cellStates'
 import { COLUMN_SOURCES, COLUMNS } from './format'
 
 export type MergedEdition = components['schemas']['MergedEdition']
 
+// The fields an edition's grid shows, in order; issues are counted over the same rows.
+export const EDITION_FIELDS = ['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin',
+  'identifiers', 'publisher',
+  'release_date', 'pages', 'format', 'format_detail', 'duration_seconds', 'language', 'series', 'cover_url']
+
 export const FILTERS = {
   all: { label: 'All', test: () => true },
-  conflicts: { label: 'Conflicts', test: (e: MergedEdition) => conflictCount(e) > 0 },
+  issues: { label: 'Any issue', test: (e: MergedEdition) => issueCount(e) > 0 },
+  conflicts: { label: 'Conflicts', test: (e: MergedEdition) => editionIssues(e).conflicts.length > 0 },
   missing: { label: 'Missing from a source', test: (e: MergedEdition) => COLUMNS.some((c) => !COLUMN_SOURCES[c].some((s) => e.ids[s])) },
   duplicates: { label: 'Duplicates', test: (e: MergedEdition) => (e.duplicates ?? []).length > 0 },
   duplicateAsin: { label: 'Duplicate ASIN', test: (e: MergedEdition) => sharedIdentifiers(e).has('asin') || sharedIdentifiers(e).has('store_asin') },
@@ -46,7 +54,7 @@ export const SORT_COLUMNS = {
   release_date: text('release_date'),
   publisher: text('publisher'),
   match: (e: MergedEdition): SortValue => e.match_reason ?? null,
-  conflicts: (e: MergedEdition): SortValue => conflictCount(e),
+  issues: (e: MergedEdition): SortValue => issueCount(e),
   quality: (e: MergedEdition): SortValue => lowestQuality(e),
 } as const
 
@@ -93,8 +101,53 @@ export function stubLabel(edition: MergedEdition, editions: MergedEdition[]): st
 
 export type FilterName = keyof typeof FILTERS
 
-export function conflictCount(edition: MergedEdition): number {
-  return Object.values(edition.fields).filter((f) => f.conflict).length
+export type Issues = {
+  // Fields whose grid row has a differing or a missing cell, as the grid's "Only problems" shows them.
+  conflicts: string[]
+  missing: string[]
+  // Record-level flags, one issue each.
+  flags: string[]
+}
+
+// Sorting asks for the same edition's issues many times; editions are never mutated, so they are cached.
+const issuesCache = new WeakMap<MergedEdition, Issues>()
+
+export function editionIssues(edition: MergedEdition): Issues {
+  const cached = issuesCache.get(edition)
+  if (cached) return cached
+  const hasRecord = recordCheck(edition.fields, edition.ids)
+  const conflicts: string[] = []
+  const missing: string[] = []
+  for (const name of EDITION_FIELDS) {
+    const { states } = rowStates(name, edition.fields[name]?.values ?? [], (c) => columnProvides('edition', c, name), hasRecord)
+    const all = Object.values(states)
+    if (all.includes('differs')) conflicts.push(name)
+    if (all.includes('missing')) missing.push(name)
+  }
+  const flags = [
+    duplicateLabel(edition),
+    edition.stub_of && 'possible stub of a fuller edition',
+    isSparse(edition) && 'sparse record',
+    edition.match_reason === 'fuzzy' && `fuzzy match (${edition.confidence})`,
+    edition.match_reason === 'asin' && 'matched only by a catalogue ASIN',
+  ].filter((f): f is string => !!f)
+  const issues = { conflicts, missing, flags }
+  issuesCache.set(edition, issues)
+  return issues
+}
+
+export function issueCount(edition: MergedEdition): number {
+  const { conflicts, missing, flags } = editionIssues(edition)
+  return conflicts.length + missing.length + flags.length
+}
+
+/** The hover text behind the Issues count. */
+export function issueSummary({ conflicts, missing, flags }: Issues): string {
+  return [
+    conflicts.length && `Conflicts: ${conflicts.join(', ')}`,
+    missing.length && `Missing: ${missing.join(', ')}`,
+    ...flags,
+  ].filter(Boolean).join('\n')
 }
 
 function sharedIdentifiers(edition: MergedEdition): Set<string> {

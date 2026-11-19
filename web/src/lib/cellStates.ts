@@ -131,3 +131,15 @@ export function inlineDiff(text: string, reference: string): [string, string, st
 export function missingColumns(states: Record<ColumnName, CellState>): ColumnName[] {
   return COLUMNS.filter((c) => states[c] === 'missing')
 }
+
+type Fields = Record<string, { values?: Value[] } | undefined>
+
+/** Whether a column holds any record for this edition, from its record ids or any value it gave. */
+export function recordCheck(fields: Fields, records?: Partial<Record<SourceName, string[]>>) {
+  const seen = new Set<ColumnName>()
+  if (records) {
+    for (const [source, ids] of Object.entries(records)) if (ids?.length) seen.add(columnOf(source as SourceName))
+  }
+  for (const f of Object.values(fields)) for (const v of f?.values ?? []) seen.add(columnOf(v.source))
+  return (column: ColumnName) => seen.has(column)
+}

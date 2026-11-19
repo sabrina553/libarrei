@@ -2,7 +2,7 @@ import type { components } from '../api/schema'
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
 import { columnOf, COLUMN_ABBREVIATIONS, COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, isReference, REFERENCE_SOURCES, formatDuration, formatValue, storeTag, type ColumnName, type SourceName } from '../lib/format'
 import { useState } from 'react'
-import { columnQuality, inlineDiff, missingColumns, rowStates, suggestion, type CellState, type Quality } from '../lib/cellStates'
+import { columnQuality, inlineDiff, missingColumns, recordCheck, rowStates, suggestion, type CellState, type Quality } from '../lib/cellStates'
 import { SPARSE } from '../lib/editions'
 import { asinNotes, editionFormat, storeAsin, type AsinNote } from '../lib/asin'
 import { columnProvides, type Level } from './capabilities'
@@ -203,15 +203,6 @@ function Gap({ state, column, picked, onPick }: GapProps) {
  * Whether a column has a record here: from the staging records when known,
  * otherwise from whether it gave a value for any field.
  */
-function recordCheck(fields: Record<string, Resolved>, records?: Partial<Record<SourceName, string[]>>) {
-  const seen = new Set<ColumnName>()
-  if (records) {
-    for (const [source, ids] of Object.entries(records)) if (ids?.length) seen.add(columnOf(source as SourceName))
-  }
-  for (const f of Object.values(fields)) for (const v of f.values ?? []) seen.add(columnOf(v.source))
-  return (column: ColumnName) => seen.has(column)
-}
-
 type CellProps = {
   name: string
   source: ColumnName

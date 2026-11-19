@@ -119,3 +119,4 @@ button.accept { margin-top: 0.5rem; }
 .only-problems { display: flex; gap: 0.4rem; align-items: center; margin-top: 1rem; font-size: 0.875rem; color: var(--muted); }
 button.split { display: block; margin-top: 0.2rem; padding: 0; border: 0; background: none; color: var(--accent); font-size: 0.75rem; text-align: left; }
 button.split[aria-pressed='true'] { color: var(--good); }
+.editions td.issues { cursor: help; text-decoration: underline dotted; }
