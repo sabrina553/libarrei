@@ -9,6 +9,7 @@ source IDs rather than the internal kca:// IDs.
 from datetime import UTC, datetime
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
+from libarrei.normalise import strip_language_label
 from libarrei.sources.formats import detail, normalise_format
 from libarrei.sources.goodreads.titles import split_title
 
@@ -55,7 +56,7 @@ def edition_from_graphql(book: dict) -> Edition:
     details = book.get("details") or {}
     edition = Edition()
     sid = str(book["legacyId"])
-    title, subtitle = split_title(book.get("title"))
+    title, subtitle = split_title(strip_language_label(book.get("title")))
     edition.add("title", title, GR, sid)
     edition.add("subtitle", subtitle, GR, sid)
     edition.add("contributors", contributors(book), GR, sid)
@@ -77,7 +78,7 @@ def work_from_graphql(book: dict) -> Work:
     work_details = raw_work.get("details") or {}
     work = Work()
     sid = str(raw_work.get("legacyId") or book["legacyId"])
-    title, subtitle = split_title(work_details.get("originalTitle") or book.get("title"))
+    title, subtitle = split_title(strip_language_label(work_details.get("originalTitle") or book.get("title")))
     work.add("title", title, GR, sid)
     work.add("subtitle", subtitle, GR, sid)
     work.add("contributors", contributors(book), GR, sid)
@@ -92,7 +93,7 @@ def work_from_graphql(book: dict) -> Work:
 def edition_from_scrape(scraped: dict) -> Edition:
     edition = Edition()
     sid = scraped.get("goodreads_id") or ""
-    edition.add("title", scraped.get("title"), GR, sid)
+    edition.add("title", strip_language_label(scraped.get("title")), GR, sid)
     edition.add("subtitle", scraped.get("subtitle"), GR, sid)
     edition.add("contributors", [scraped_contributor(a) for a in scraped.get("authors") or []], GR, sid)
     edition.add("isbn13", scraped.get("isbn13"), GR, sid)

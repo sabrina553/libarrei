@@ -314,6 +314,16 @@ def strip_language_label(text: str | None) -> str | None:
     return cleaned or text
 
 
+# "Book 1", "Libro 1", "Tome 1", optionally after the series name: a series note, not a subtitle.
+_SERIES_NOTE_WORDS = r"(?:book|volume|vol\.?|part|libro|volumen|tomo|tome|band|livre|#)"
+
+
+def is_series_note(subtitle: str, series_names: list[str]) -> bool:
+    names = "|".join(re.escape(n) for n in series_names if n)
+    prefix = rf"(?:(?:{names})\s*,?\s*)?" if names else ""
+    return re.fullmatch(rf"{prefix}{_SERIES_NOTE_WORDS}\s*\S+", subtitle.strip(), re.IGNORECASE) is not None
+
+
 # Only these words may qualify "edition", so a real subtitle such as "The Last Edition" stays a subtitle.
 # Kept in step with web/src/components/titleSplit.ts.
 _EDITION_QUALIFIERS = {

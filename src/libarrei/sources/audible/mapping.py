@@ -6,7 +6,7 @@ Descriptions stay as Audible's HTML; the merger parses them like Goodreads'.
 """
 
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
-from libarrei.normalise import strip_language_label
+from libarrei.normalise import is_series_note, strip_language_label
 
 AU = Source.AUDIBLE
 # Audible reports abridgement as the format; it is an edition statement, as Hardcover records it.
@@ -27,6 +27,15 @@ def series(product: dict) -> list[SeriesEntry]:
             for s in product.get("series") or [] if s.get("title")]
 
 
+def subtitle(product: dict) -> str | None:
+    # Audible puts the series note in the subtitle ("Dungeon Crawler Carl, Libro 1").
+    value = product.get("subtitle")
+    names = [s.get("title") or "" for s in product.get("series") or []]
+    if value and is_series_note(value, names + [strip_language_label(n) for n in names]):
+        return None
+    return value
+
+
 def description(product: dict) -> str | None:
     # The merchandising summary is a shortened plain-text teaser, so only a fallback.
     return product.get("publisher_summary") or product.get("merchandising_summary")
@@ -41,7 +50,7 @@ def to_edition(product: dict, region: str) -> Edition:
     edition = Edition()
     sid = product["asin"]
     edition.add("title", strip_language_label(product.get("title")), AU, sid)
-    edition.add("subtitle", product.get("subtitle"), AU, sid)
+    edition.add("subtitle", subtitle(product), AU, sid)
     edition.add("contributors", authors(product) + narrators(product), AU, sid)
     edition.add("asin", sid, AU, sid)
     edition.add("publisher", product.get("publisher_name"), AU, sid)
@@ -64,7 +73,7 @@ def to_work(products: list[dict], region: str) -> Work:
     first = products[0]
     sid = first["asin"]
     work.add("title", strip_language_label(first.get("title")), AU, sid)
-    work.add("subtitle", first.get("subtitle"), AU, sid)
+    work.add("subtitle", subtitle(first), AU, sid)
     work.add("contributors", authors(first), AU, sid)
     work.add("series", series(first), AU, sid)
     work.add("description", description(first), AU, sid)

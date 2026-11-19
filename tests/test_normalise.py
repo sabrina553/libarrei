@@ -80,3 +80,8 @@ def test_genres_drop_shelves_and_machine_tags():
     raw = ["Fiction", "Audiobook", "Book Club", "nyt:combined-print-and-e-book-fiction=2023-04-02", "Romance"]
     assert normalise.genres(raw) == ["Fiction", "Romance"]
     assert normalise.genres(["Audiobook"]) is None
+
+
+def test_spanish_narration_label_is_stripped():
+    from libarrei.normalise import strip_language_label
+    assert strip_language_label("Carl el mazmorrero [Narración en español castellano]") == "Carl el mazmorrero"

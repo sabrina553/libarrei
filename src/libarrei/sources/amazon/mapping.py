@@ -5,10 +5,8 @@ the best-matching one also supplies the work-level fields.
 Descriptions stay as Amazon's HTML; the merger parses them like Goodreads'.
 """
 
-import re
-
 from libarrei.model import Contributor, Edition, SeriesEntry, Source, Work
-from libarrei.normalise import strip_language_label
+from libarrei.normalise import is_series_note, strip_language_label
 from libarrei.sources.formats import detail, normalise_format
 from libarrei.sources.goodreads.titles import split_title
 
@@ -29,10 +27,8 @@ def series(product: dict) -> list[SeriesEntry]:
 def title_and_subtitle(product: dict) -> tuple[str | None, str | None]:
     """Kindle titles often end in a series note ("Title: Series Book 1"), which is not a subtitle."""
     title, subtitle = split_title(strip_language_label(product.get("title")))
-    if subtitle and product.get("series"):
-        name = re.escape(product["series"][0])
-        if re.fullmatch(rf"(?:{name}\s*)?(?:book|volume|vol\.?|part|#)\s*\S+", subtitle, re.IGNORECASE):
-            subtitle = None
+    if subtitle and product.get("series") and is_series_note(subtitle, [product["series"][0]]):
+        subtitle = None
     return title, subtitle
 
 
