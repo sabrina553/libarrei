@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react'
-import { EDITION_FIELDS, editionIssues, editionKey, FILTERS, issueSummary, isSparse, lowestQuality, nextSort, sortEditions, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
+import { Fragment, useState, type ReactNode } from 'react'
+import { copyExtras, EDITION_FIELDS, editionIssues, editionKey, FILTERS, foldCopies, issueSummary, isSparse, lowestQuality, nextSort, sortEditions, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
 import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
 import { byLanguage } from '../lib/languages'
 import { SlugsContext } from '../lib/links'
@@ -31,7 +31,17 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
   const prefs = getLanguagePrefs()
   const view = byLanguage(editions, allLanguages ? { ...prefs, preferred: [] } : prefs)
   const inView = view.shown
-  const shown = sortEditions(inView.filter(FILTERS[filter].test), sort, prefs.preferred)
+  const [unfolded, setUnfolded] = useState<Set<string>>(new Set())
+  const shown = foldCopies(sortEditions(inView.filter(FILTERS[filter].test), sort, prefs.preferred))
+  const toggleCopies = (key: string) => setUnfolded((was) => {
+    const next = new Set(was)
+    if (!next.delete(key)) next.add(key)
+    return next
+  })
+  const row = (edition: MergedEdition, note?: ReactNode) => (
+    <EditionRow key={editionKey(edition)} edition={edition} book={book} note={note}
+      open={open === editionKey(edition)} onToggle={() => setOpen(open === editionKey(edition) ? null : editionKey(edition))} />
+  )
 
   return (
     <section>
@@ -64,34 +74,24 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
           </tr>
         </thead>
         <tbody>
-          {shown.slice(0, limit).map((edition) => {
+          {shown.slice(0, limit).map(({ edition, copies }) => {
             const key = editionKey(edition)
-            const value = (name: string) => formatValue(edition.fields[name]?.value)
-            const issues = editionIssues(edition)
-            const issueTotal = issues.conflicts.length + issues.missing.length + issues.flags.length
-            const lowest = lowestQuality(edition)
+            const unfold = unfolded.has(key)
             return (
               <Fragment key={key}>
-                <tr className="row" onClick={() => setOpen(open === key ? null : key)} aria-expanded={open === key}>
-                  <td className="mono">{value('isbn13')}</td>
-                  <td>{value('format')}</td>
-                  <td>{value('language')}</td>
-                  <td>{value('release_date')}</td>
-                  <td>{value('publisher')}</td>
-                  <td>
-                    {COLUMNS.map((c) => (
-                      <span key={c} className={COLUMN_SOURCES[c].some((s) => edition.ids[s]) ? 'src on' : 'src'} title={COLUMN_LABELS[c]}>{COLUMN_LABELS[c][0]}</span>
-                    ))}
-                  </td>
-                  <td>{edition.match_reason === 'fuzzy' ? `fuzzy ${edition.confidence}` : edition.match_reason ?? '—'}</td>
-                  <td title={issueSummary(issues) || undefined} className={issueTotal ? 'issues' : undefined}>{issueTotal || ''}</td>
-                  <td className={isSparse(edition) ? 'quality low' : 'quality'} title="Completeness of the weakest source record">
-                    {lowest === null ? '—' : `${lowest} %`}
-                  </td>
-                </tr>
-                {open === key && (
-                  <tr><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" asinChecks={edition.asin_checks} asinStores={edition.asin_stores} quality={edition.quality} staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
-                )}
+                {row(edition, copies.length > 0 && (
+                  <button type="button" className="link" aria-expanded={unfold}
+                    onClick={(e) => { e.stopPropagation(); toggleCopies(key) }}
+                    title="Records with no identifier whose title, format, language and publisher or year match this edition">
+                    {unfold ? '−' : '+'}{copies.length} likely cop{copies.length === 1 ? 'y' : 'ies'}
+                  </button>
+                ))}
+                {unfold && copies.map((copy) => {
+                  const extras = copyExtras(copy, edition)
+                  return row(copy, <span className="badge hint" title={extras.join('\n') || undefined}>
+                    likely copy{extras.length ? ` · ${extras.length} extra` : ''}
+                  </span>)
+                })}
               </Fragment>
             )
           })}
@@ -99,5 +99,40 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
       </table>
       {shown.length > limit && <button className="secondary" onClick={() => setLimit(limit + PAGE)}>Show more ({shown.length - limit} left)</button>}
     </section>
+  )
+}
+
+type RowProps = { edition: MergedEdition; book: string; open: boolean; onToggle: () => void; note?: ReactNode }
+
+function EditionRow({ edition, book, open, onToggle, note }: RowProps) {
+  const key = editionKey(edition)
+  const value = (name: string) => formatValue(edition.fields[name]?.value)
+  const issues = editionIssues(edition)
+  const issueTotal = issues.conflicts.length + issues.missing.length + issues.flags.length
+  const lowest = lowestQuality(edition)
+  return (
+    <>
+      <tr className={edition.stub_of ? 'row copy' : 'row'} onClick={onToggle} aria-expanded={open}>
+        <td className="mono">{value('isbn13')}</td>
+        <td>{value('format')}</td>
+        <td>{value('language')}</td>
+        <td>{value('release_date')}</td>
+        <td>{value('publisher')}</td>
+        <td>
+          {COLUMNS.map((c) => (
+            <span key={c} className={COLUMN_SOURCES[c].some((s) => edition.ids[s]) ? 'src on' : 'src'} title={COLUMN_LABELS[c]}>{COLUMN_LABELS[c][0]}</span>
+          ))}
+          {note && <> {note}</>}
+        </td>
+        <td>{edition.match_reason === 'fuzzy' ? `fuzzy ${edition.confidence}` : edition.match_reason ?? '—'}</td>
+        <td title={issueSummary(issues) || undefined} className={issueTotal ? 'issues' : undefined}>{issueTotal || ''}</td>
+        <td className={isSparse(edition) ? 'quality low' : 'quality'} title="Completeness of the weakest source record">
+          {lowest === null ? '—' : `${lowest} %`}
+        </td>
+      </tr>
+      {open && (
+        <tr><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><FieldGrid fields={edition.fields} order={EDITION_FIELDS} level="edition" asinChecks={edition.asin_checks} asinStores={edition.asin_stores} quality={edition.quality} staging={{ book, scope: key, records: edition.ids }} /></SlugsContext></td></tr>
+      )}
+    </>
   )
 }
