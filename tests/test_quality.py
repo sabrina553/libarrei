@@ -69,6 +69,17 @@ def test_sparse_record_with_identifier_is_not_a_stub():
     assert gr.quality[GR] < SPARSE and gr.stub_of is None
 
 
+def test_well_filled_copies_without_identifiers_point_at_their_original():
+    # Like Hardcover 33335690 and 33335689: everything but an identifier, beside the real Dandy House ebook.
+    dandy = {**FULL, "publisher": "Dandy House", "release_date": "2020-10-02", "format": "ebook",
+             "isbn13": "9781405989411", "isbn10": "1405989416", "asin": "B08BKGYQXW"}
+    copy = {k: v for k, v in dandy.items() if k not in ("isbn13", "isbn10", "asin")} | {"pages": 447}
+    copies = [edition(HC, sid, **copy) for sid in ("33335690", "33335689", "33250543")]
+    merged = merge({HC: Work(editions=[edition(HC, "30407789", **dandy), *copies])})
+    original = next(e for e in merged.editions if "30407789" in e.ids[HC])
+    assert [e.stub_of for e in merged.editions if e is not original] == [original.ids] * 3
+
+
 def _ts_sets(level: str) -> dict[str, set[str]]:
     block = re.search(rf"\b{level}: \{{(.*?)\n  \}}", TS.read_text(), re.S).group(1)
     return {m.group(1): set(re.findall(r"'([a-z_0-9]+)'", m.group(2)))
@@ -78,3 +89,9 @@ def _ts_sets(level: str) -> dict[str, set[str]]:
 def test_gui_capabilities_match_backend():
     assert _ts_sets("edition") == {s.value: set(f) for s, f in EDITION.items()}
     assert _ts_sets("work") == {s.value: set(f) for s, f in WORK.items()}
+
+
+def test_a_full_record_without_identifiers_stays_sparse():
+    rich = {"title", "contributors", "publisher", "release_date", "pages", "format", "language", "cover_url"}
+    assert score(HC, rich, audiobook=False) == SPARSE - 1
+    assert score(HC, rich | {"asin"}, audiobook=False) > SPARSE

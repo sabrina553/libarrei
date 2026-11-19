@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { duplicateLabel, editionIssues, issueCount, issueSummary, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
+import { copyExtras, duplicateLabel, editionIssues, foldCopies, issueCount, issueSummary, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
 
 const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   ids: { hardcover: ['2'], goodreads: ['1'] },
@@ -100,4 +100,15 @@ test('a record listing contributors but no author is an issue', () => {
   ] } } })
   expect(editionIssues(e).flags).toContain('Open Library OL1M names no author')
   expect(editionIssues(e).flags.filter((f) => f.includes('no author'))).toHaveLength(1)
+})
+
+test('likely copies fold under their original, and their extra details are named', () => {
+  const f = (value: unknown) => ({ value, source: 'hardcover' as const, source_id: '1', conflict: false, alternatives: [], values: [] })
+  const original = edition({ ids: { hardcover: ['30407789'] }, fields: { pages: f(446), publisher: f('Dandy House') } })
+  const copy = edition({ ids: { hardcover: ['33335690'] }, stub_of: { hardcover: ['30407789'] },
+    fields: { pages: f(447), publisher: f('Dandy House'), cover_url: f('x.jpg') } })
+  const orphan = edition({ ids: { hardcover: ['9'] }, stub_of: { hardcover: ['not-listed'] } })
+  const folded = foldCopies([copy, original, orphan])
+  expect(folded.map((g) => [g.edition.ids.hardcover, g.copies.length])).toEqual([[['30407789'], 1], [['9'], 0]])
+  expect(copyExtras(copy, original)).toEqual(['differs on pages: 447', 'adds cover url'])
 })

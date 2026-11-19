@@ -1,8 +1,8 @@
 import type { components } from '../api/schema'
 import { columnProvides } from '../components/capabilities'
-import { recordCheck, rowStates } from './cellStates'
+import { compareKey, recordCheck, rowStates } from './cellStates'
 import { languageRank } from './languages'
-import { COLUMN_LABELS, COLUMN_SOURCES, columnOf, COLUMNS } from './format'
+import { COLUMN_LABELS, COLUMN_SOURCES, columnOf, COLUMNS, formatValue } from './format'
 
 export type MergedEdition = components['schemas']['MergedEdition']
 
@@ -186,4 +186,40 @@ export function editionKey(edition: MergedEdition): string {
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([source, ids]) => `${source}:${(ids ?? []).join('+')}`)
     .join('|')
+}
+
+export type Folded = { edition: MergedEdition; copies: MergedEdition[] }
+
+/**
+ * Tucks each likely copy (an identifier-less stub) under the edition it copies, when that edition
+ * is listed too, so a handful of near-empty records does not bury the real one. Order is kept.
+ */
+export function foldCopies(editions: MergedEdition[]): Folded[] {
+  const keys = new Set(editions.map(editionKey))
+  const originalOf = (e: MergedEdition) => {
+    if (!e.stub_of) return null
+    const key = editionKey({ ...e, ids: e.stub_of })
+    return keys.has(key) ? key : null
+  }
+  const copies = new Map<string, MergedEdition[]>()
+  for (const e of editions) {
+    const key = originalOf(e)
+    if (key) copies.set(key, [...(copies.get(key) ?? []), e])
+  }
+  return editions.filter((e) => !originalOf(e)).map((edition) => ({ edition, copies: copies.get(editionKey(edition)) ?? [] }))
+}
+
+const DETAIL_FIELDS = ['pages', 'duration_seconds', 'contributors', 'publisher', 'release_date', 'cover_url', 'subtitle', 'edition_statement']
+
+/** What a copy holds that its original lacks or states differently: worth copying over before it is merged away. */
+export function copyExtras(copy: MergedEdition, original: MergedEdition): string[] {
+  return DETAIL_FIELDS.flatMap((name) => {
+    const mine = copy.fields[name]?.value
+    if (mine === null || mine === undefined || mine === '') return []
+    const theirs = original.fields[name]?.value
+    if (theirs === null || theirs === undefined || theirs === '') return [`adds ${name.replaceAll('_', ' ')}`]
+    if (compareKey(mine) === compareKey(theirs)) return []
+    const shown = name === 'cover_url' ? '' : `: ${formatValue(mine)}`
+    return [`differs on ${name.replaceAll('_', ' ')}${shown}`]
+  })
 }
