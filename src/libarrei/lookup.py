@@ -8,9 +8,11 @@ cookie, runs in that round too.
 """
 
 import os
+import re
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from difflib import SequenceMatcher
 
 from libarrei import normalise
 from libarrei.asin_check import Unavailable
@@ -261,6 +263,33 @@ def from_goodreads(cache, token: str, query: str, all_editions: bool) -> Work | 
     return work
 
 
+# How close a found title must be to the one searched for; below it the search found another book.
+TITLE_MATCH = 0.6
+
+
+def _main_title(text: str) -> str:
+    return text_key(re.split(r"[:(\[]", text, maxsplit=1)[0])
+
+
+def first_title(work: Work) -> str | None:
+    return next((c.value for c in work.title), None) or next((c.value for e in work.editions for c in e.title), None)
+
+
+def titled_like(work: Work, wanted: str) -> bool:
+    """Whether the work or any of its editions carries a title close to the one searched for.
+
+    Editions count too, as a work's own title may be the original-language one."""
+    target = _main_title(wanted)
+    if not target:
+        return True
+    titles = [c.value for c in work.title] + [c.value for e in work.editions for c in e.title]
+    for found in filter(None, titles):
+        main = _main_title(found)
+        if main and (main in target or target in main or SequenceMatcher(None, main, target).ratio() >= TITLE_MATCH):
+            return True
+    return not titles
+
+
 def run_parallel(jobs: dict, attempt) -> None:
     # Sources are independent and network-bound, so a round takes as long as
     # the slowest source rather than all of them added up.
@@ -277,6 +306,7 @@ def lookup(
     requests, rather than minutes for a book with hundreds of editions."""
     result = LookupResult()
     cache = Cache() if use_cache else NoCache()
+    title = normalise.search_title(title)
 
     def attempt(source: Source, fetch) -> None:
         try:
@@ -284,7 +314,9 @@ def lookup(
         except Exception as error:  # one failing source must not hide the others
             result.notes[source] = f"error: {error}"
             return
-        if work:
+        if work and not isbn and title and not titled_like(work, title):
+            result.notes[source] = f"no close title match (found {first_title(work)!r})"
+        elif work:
             normalise.work(work)
             result.works[source] = work
         else:
