@@ -19,7 +19,11 @@ GR = Source.GOODREADS
 def date_from_millis(millis: float | None) -> str | None:
     if millis is None:
         return None
-    return datetime.fromtimestamp(millis / 1000, UTC).date().isoformat()
+    try:
+        return datetime.fromtimestamp(millis / 1000, UTC).date().isoformat()
+    except (ValueError, OverflowError, OSError):
+        # Ancient works ("The Odyssey", about 800 BC) fall outside the dates Python can hold.
+        return None
 
 
 def contributor(node: dict, role: str) -> Contributor:
