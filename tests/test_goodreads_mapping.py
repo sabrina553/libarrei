@@ -92,3 +92,10 @@ def test_scraped_authors_keep_roles():
     edition = edition_from_scrape({"title": "Dungeon Crawler Carl", "authors": authors, "goodreads_id": "1"})
     people = edition.contributors[0].value
     assert [(p.name, p.role) for p in people] == [("Matt Dinniman", "author"), ("Jeff Hays", "narrator")]
+
+
+def test_dates_before_year_one_are_dropped_not_fatal():
+    from libarrei.sources.goodreads.mapping import date_from_millis
+
+    assert date_from_millis(-87_400_000_000_000) is None
+    assert date_from_millis(0) == "1970-01-01"
