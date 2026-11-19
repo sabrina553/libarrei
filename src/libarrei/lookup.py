@@ -14,6 +14,8 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 
+from anyascii import anyascii
+
 from libarrei import normalise
 from libarrei.asin_check import Unavailable
 from libarrei.cache import Cache, NoCache
@@ -249,11 +251,14 @@ def from_hardcover(
     if isbn:
         books = client.search({"isbn": [isbn], "hcid": []})["books"]
     else:
-        ids = client.search_titles(title or "", author, limit=1)
+        documents = client.search_documents(title or "", author, limit=1)
+        ids = [int(d["id"]) for d in documents]
         books = client.search({"isbn": [], "hcid": ids})["books"] if ids else []
     if not books:
         return None
     work = hardcover_work(books[0])
+    if not isbn and documents:
+        work._aliases = [t for t in documents[0].get("alternative_titles") or [] if isinstance(t, str)]
     if not all_editions:
         return work
     # The searched edition stays first so it remains the best match.
@@ -288,7 +293,8 @@ TITLE_MATCH = 0.6
 
 
 def _main_title(text: str) -> str:
-    return text_key(re.split(r"[:(\[]", text, maxsplit=1)[0])
+    # Transliterated, so an original-script title ("Ἰλιάς") compares with its English one ("Iliad").
+    return text_key(re.split(r"[:(\[]", anyascii(text), maxsplit=1)[0])
 
 
 def first_title(work: Work) -> str | None:
@@ -296,13 +302,13 @@ def first_title(work: Work) -> str | None:
 
 
 def titled_like(work: Work, wanted: str) -> bool:
-    """Whether the work or any of its editions carries a title close to the one searched for.
+    """Whether the work, any of its editions or any of its other known titles is close to the one searched for.
 
     Editions count too, as a work's own title may be the original-language one."""
     target = _main_title(wanted)
     if not target:
         return True
-    titles = [c.value for c in work.title] + [c.value for e in work.editions for c in e.title]
+    titles = [c.value for c in work.title] + [c.value for e in work.editions for c in e.title] + work._aliases
     for found in filter(None, titles):
         main = _main_title(found)
         if main and (main in target or target in main or SequenceMatcher(None, main, target).ratio() >= TITLE_MATCH):
@@ -334,10 +340,11 @@ def lookup(
         except Exception as error:  # one failing source must not hide the others
             result.notes[source] = f"error: {error}"
             return
+        if work:
+            normalise.work(work)
         if work and not isbn and title and not titled_like(work, title):
             result.notes[source] = f"no close title match (found {first_title(work)!r})"
         elif work:
-            normalise.work(work)
             result.works[source] = work
         else:
             result.notes.setdefault(source, "not found")

@@ -9,7 +9,7 @@ Shape follows OPDS 2.0 publication metadata: https://drafts.opds.io/opds-2.0
 from datetime import UTC, datetime
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
 
 
 class Source(StrEnum):
@@ -93,3 +93,6 @@ class Work(Record):
     genres: list[Candidate[list[str]]] = []
     original_release_date: list[Candidate[str]] = []
     editions: list[Edition] = []
+    # Other titles the work is known by (translations, originals), used only to recognise
+    # search results; private so they never reach the merged output.
+    _aliases: list[str] = PrivateAttr(default_factory=list)

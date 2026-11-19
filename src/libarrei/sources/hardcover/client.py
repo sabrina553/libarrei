@@ -25,9 +25,15 @@ def title_similarity(wanted: str, title: str) -> float:
 
 def rank_hits(hits: list[dict], title: str, author: str | None = None) -> list[int]:
     """Orders search hits by title match, plus a bonus for the author, then popularity."""
+    return [int(d["id"]) for d in rank_documents(hits, title, author)]
+
+
+def rank_documents(hits: list[dict], title: str, author: str | None = None) -> list[dict]:
     def score(document: dict) -> tuple[float, int]:
         found = document.get("title") or ""
-        points = title_similarity(title, found)
+        # A translation is often searched by its own title, which Hardcover keeps as an alternative.
+        alternatives = [t for t in document.get("alternative_titles") or [] if isinstance(t, str)]
+        points = max(title_similarity(title, t) for t in [found, *alternatives])
         # Without this, split volumes such as "The Final Empire (2 of 3)" tie with
         # the real book on their main title and win on popularity.
         if found.strip().lower() == title.strip().lower():
@@ -37,7 +43,7 @@ def rank_hits(hits: list[dict], title: str, author: str | None = None) -> list[i
         return round(points, 2), document.get("users_count") or 0
 
     documents = [h["document"] for h in hits if h.get("document", {}).get("id")]
-    return [int(d["id"]) for d in sorted(documents, key=score, reverse=True)]
+    return sorted(documents, key=score, reverse=True)
 
 
 def hits_from_search(response: dict) -> list[dict]:
@@ -173,11 +179,15 @@ class Hardcover:
             offset += page_size
 
     def search_titles(self, title: str, author: str | None = None, limit: int = 5) -> list[int]:
+        return [int(d["id"]) for d in self.search_documents(title, author, limit)]
+
+    def search_documents(self, title: str, author: str | None = None, limit: int = 5) -> list[dict]:
+        """Ranked search hits, which also carry each book's alternative titles."""
         weights, fields = TITLE_AUTHOR_WEIGHTS if author else TITLE_ONLY_WEIGHTS
         query = f"{title} {author}" if author else title
         variables = {"q": query.strip(), "limit": CANDIDATES_PER_SEARCH, "weights": weights, "fields": fields}
         hits = hits_from_search(self.transport_layer.execute(self._title_search_query, variables))
-        return rank_hits(hits, title, author)[:limit]
+        return rank_documents(hits, title, author)[:limit]
 
     def search(self, variable_values):
         return self.transport_layer.execute(self.BookSearch, variable_values)
