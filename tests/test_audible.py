@@ -170,3 +170,12 @@ def test_search_hits_must_be_the_same_work_not_a_sequel():
     assert audible_is_work(translated, found)
     assert not audible_is_work(sequel, found)
     assert not audible_is_work(novella, found)
+
+
+def test_spanish_series_note_is_not_a_subtitle():
+    from libarrei.sources.audible.mapping import subtitle
+
+    product = {"subtitle": "Dungeon Crawler Carl, Libro 1",
+               "series": [{"title": "Dungeon Crawler Carl (edición en español)", "sequence": "1"}]}
+    assert subtitle(product) is None
+    assert subtitle({"subtitle": "Una aventura LitRPG", "series": []}) == "Una aventura LitRPG"

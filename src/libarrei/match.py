@@ -11,8 +11,10 @@ in a correction tool a wrong merge spreads one edition's data onto another,
 while a missed match merely shows up as "missing from source X".
 """
 
+import unicodedata
 from collections import defaultdict
 from dataclasses import dataclass, field
+from datetime import date
 from difflib import SequenceMatcher
 
 from libarrei.model import Edition, Source, Work
@@ -90,7 +92,7 @@ class EditionGroup:
 def align(works: dict[Source, Work]) -> list[EditionGroup]:
     editions = [(source, e) for source, work in works.items() for e in work.editions]
     groups = _by_identifier(editions)
-    return _fuzzy_pairs(groups)
+    return _fuzzy_pairs(_narrated_groups(groups))
 
 
 def _by_identifier(editions: list[tuple[Source, Edition]]) -> list[EditionGroup]:
@@ -138,6 +140,27 @@ def _similar(a: str, b: str) -> float:
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
 
 
+def _fold(name: str) -> str:
+    plain = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    return " ".join(plain.lower().replace(".", " ").split())
+
+
+def narrators(edition: Edition) -> frozenset[str]:
+    people = _value(edition.contributors) or []
+    return frozenset(_fold(p.name) for p in people if p.role == "narrator" and p.name)
+
+
+# Release dates a few days apart are the same audiobook launch listed by different catalogues.
+NARRATED_DAYS = 3
+
+
+def _days_apart(a: str, b: str) -> int | None:
+    try:
+        return abs((date.fromisoformat(a[:10]) - date.fromisoformat(b[:10])).days)
+    except ValueError:
+        return None
+
+
 def pair_score(a: Edition, b: Edition) -> int | None:
     """None if any signal disagrees; otherwise how many optional signals agree."""
     for name in ("format", "language"):
@@ -146,11 +169,23 @@ def pair_score(a: Edition, b: Edition) -> int | None:
     year_a, year_b = _value(a.release_date), _value(b.release_date)
     if not year_a or not year_b or year_a[:4] != year_b[:4]:
         return None
-    title_a, title_b = _value(a.title), _value(b.title)
-    if title_a and title_b and _similar(title_a, title_b) < 0.6:
-        return None
 
     score = 0
+    # An audiobook's narrators and launch date identify it even when catalogues title it differently
+    # (a translated title against the original); different narrators are a different recording.
+    voices_a, voices_b = narrators(a), narrators(b)
+    if _value(a.format) == "audiobook" and voices_a and voices_b:
+        if voices_a != voices_b:
+            return None
+        days = _days_apart(year_a, year_b)
+        if len(year_a) >= 10 and len(year_b) >= 10 and (days is None or days > NARRATED_DAYS):
+            return None
+        score += 2
+    else:
+        title_a, title_b = _value(a.title), _value(b.title)
+        if title_a and title_b and _similar(title_a, title_b) < 0.6:
+            return None
+
     pages_a, pages_b = _value(a.pages), _value(b.pages)
     if pages_a and pages_b:
         if abs(pages_a - pages_b) > max(2, 0.02 * max(pages_a, pages_b)):
@@ -163,6 +198,31 @@ def pair_score(a: Edition, b: Edition) -> int | None:
             return None
         score += similarity >= 0.8
     return score if score else None
+
+
+def _narrated_groups(groups: list[EditionGroup]) -> list[EditionGroup]:
+    """Joins lone audiobooks, one per source, that share language, narrators and launch date."""
+    lone = [g for g in groups if len(g.members) == 1 and _value(g.members[0][1].format) == "audiobook"]
+    buckets = defaultdict(list)
+    for g in lone:
+        e = g.members[0][1]
+        if (voices := narrators(e)) and _value(e.language) and _value(e.release_date):
+            buckets[(_value(e.language), voices)].append(g)
+
+    joined = set()
+    merged = []
+    for bucket in buckets.values():
+        sources = [g.members[0][0] for g in bucket]
+        dates = [_value(g.members[0][1].release_date) for g in bucket]
+        # Two records from one source would be ambiguous, so the bucket is left to pairwise matching.
+        if len(bucket) < 3 or len(set(sources)) != len(sources):
+            continue
+        if any((_days_apart(a, b) or 0) > NARRATED_DAYS or (_days_apart(a, b) is None and a[:4] != b[:4])
+               for a in dates for b in dates):
+            continue
+        joined |= {id(g) for g in bucket}
+        merged.append(EditionGroup([m for g in bucket for m in g.members], "fuzzy", 1.0))
+    return [g for g in groups if id(g) not in joined] + merged
 
 
 def _fuzzy_pairs(groups: list[EditionGroup]) -> list[EditionGroup]:
@@ -197,7 +257,7 @@ def _fuzzy_pairs(groups: list[EditionGroup]) -> list[EditionGroup]:
         if j in used or not back or back[1] != i:
             continue
         used |= {i, j}
-        merged.append(EditionGroup(lone[i].members + lone[j].members, "fuzzy", round(0.5 + 0.25 * score, 2)))
+        merged.append(EditionGroup(lone[i].members + lone[j].members, "fuzzy", min(1.0, round(0.5 + 0.25 * score, 2))))
 
     kept = [g for g in groups if len(g.members) > 1] + [g for k, g in enumerate(lone) if k not in used]
     return kept + merged
