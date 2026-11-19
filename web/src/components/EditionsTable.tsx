@@ -98,7 +98,7 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                     {pending.length > 0 && (
                       <button type="button" className="link" aria-expanded={unfold}
                         onClick={(e) => { e.stopPropagation(); toggleCopies(key) }}
-                        title="Records with no identifier whose title, format, language and publisher or year match this edition">
+                        title="Records with no identifier whose title, format, language and publisher or year match this edition, or other stores' listings of the same audiobook recording (same narrators, publisher, length and launch date)">
                         {unfold ? '−' : '+'}{pending.length} possible duplicate{pending.length === 1 ? '' : 's'}
                       </button>
                     )}
@@ -110,7 +110,7 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                     {pending.map((copy) => {
                       const extras = copyExtras(copy, edition)
                       return row(copy, <span className="badge hint" title={extras.map(describeExtra).join('\n') || undefined}>
-                        possible duplicate{extras.length ? ` · ${extras.length} extra` : ''}
+                        {copy.listing_of ? 'other store listing' : 'possible duplicate'}{extras.length ? ` · ${extras.length} extra` : ''}
                       </span>)
                     })}
                     <tr className="copy-panel"><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><CopyReview book={book} best={edition} copies={pending} /></SlugsContext></td></tr>
@@ -137,7 +137,7 @@ function EditionRow({ edition, book, open, onToggle, note, hasCopies }: RowProps
   const lowest = lowestQuality(edition)
   return (
     <>
-      <tr className={['row', edition.stub_of && 'copy', hasCopies && 'has-copies'].filter(Boolean).join(' ')} onClick={onToggle} aria-expanded={open}>
+      <tr className={['row', (edition.stub_of || edition.listing_of) && 'copy', hasCopies && 'has-copies'].filter(Boolean).join(' ')} onClick={onToggle} aria-expanded={open}>
         <td className="mono">{value('isbn13')}</td>
         <td>{value('format')}</td>
         <td>{value('language')}</td>

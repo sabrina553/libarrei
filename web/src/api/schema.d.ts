@@ -213,6 +213,10 @@ export interface components {
             stub_of?: {
                 [key: string]: string[];
             } | null;
+            /** Listing Of */
+            listing_of?: {
+                [key: string]: string[];
+            } | null;
             /**
              * Format Clash Isbns
              * @default []

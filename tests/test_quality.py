@@ -95,3 +95,23 @@ def test_a_full_record_without_identifiers_stays_sparse():
     rich = {"title", "contributors", "publisher", "release_date", "pages", "format", "language", "cover_url"}
     assert score(HC, rich, audiobook=False) == SPARSE - 1
     assert score(HC, rich | {"asin"}, audiobook=False) > SPARSE
+
+
+CARL_AUDIO = dict(title="Dungeon Crawler Carl", format="audiobook", language="en", publisher="Audible Studios",
+                  contributors=[Contributor(name="Matt Dinniman"), Contributor(name="Jeff Hays", role="narrator")])
+
+
+def test_other_store_listings_of_one_recording_point_at_the_best():
+    # Like Hardcover 32126720, 31923605, 32757508 and 32895787: one Audible Studios recording, one ASIN per store.
+    best = {**CARL_AUDIO, "asin": "B08V8B2CGV", "isbn13": "9783748087328", "release_date": "2021-01-28",
+            "duration_seconds": 48660, "cover_url": "https://example.org/c.jpg"}
+    listings = [{**CARL_AUDIO, "asin": asin, "release_date": day, "duration_seconds": seconds}
+                for asin, day, seconds in (("B08V8877BY", "2021-01-28", 48660), ("B08V7VS8H2", "2021-01-26", 48700),
+                                           ("B08V893CH7", "2021-01-01", 48720))]
+    other = {**CARL_AUDIO, "asin": "B0OTHER001", "release_date": "2021-01-28", "duration_seconds": 30000}
+    records = [edition(HC, "1", **best), *(edition(HC, str(i), **l) for i, l in enumerate(listings, 2)), edition(HC, "9", **other)]
+    merged = merge({HC: Work(editions=records)})
+    head = next(e for e in merged.editions if "1" in e.ids[HC])
+    assert sorted(e.ids[HC][0] for e in merged.editions if e.listing_of == head.ids) == ["2", "3", "4"]
+    assert head.listing_of is None
+    assert next(e for e in merged.editions if "9" in e.ids[HC]).listing_of is None
