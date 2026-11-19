@@ -43,7 +43,9 @@ def summary(author: str, title: str, all_editions: bool) -> list[str]:
         check_all(work.editions, result.probe)
     found = work.fields.get("title")
     found_title = str(found.value) if found else ""
-    similarity = SequenceMatcher(None, title.lower(), found_title.lower()).ratio() if found_title else 0.0
+    # Compared without the subtitle, so "Atomic Habits" matches "Atomic Habits: An Easy & Proven Way…".
+    main_title = found_title.split(":", 1)[0]
+    similarity = SequenceMatcher(None, title.lower(), main_title.lower()).ratio() if found_title else 0.0
     editions = work.editions
     return [
         author, title, found_title, f"{similarity:.2f}{'' if similarity >= TITLE_MATCH else ' ?'}",
