@@ -1,13 +1,17 @@
 # work
 title: The Lord of the Rings [hardcover] CONFLICT
-subtitle: The Fellowship of the Ring, The Two Towers, The Return of the King [hardcover]
+subtitle: The Fellowship of the Ring, The Two Towers, The Return of the King [hardcover] CONFLICT
 contributors: J.R.R. Tolkien [hardcover]
 description: [goodreads description] [goodreads] CONFLICT
-series: The Lord of the Rings #1 [hardcover] CONFLICT
+series: The Lord of the Rings #1, Middle Earth #2 [hardcover] CONFLICT
 genres: Fantasy, Classics, Fiction, Adventure, High Fantasy, Epic Fantasy, Science Fiction Fantasy, Young Adult [goodreads]
 original_release_date: 1955-10-20 [hardcover] CONFLICT
 
-# editions (1409); ! marks a conflict
+# editions (1411); ! marks a conflict
+audible:0008487278 | - | - | audiobook | en | 2021-09-16 | - | HarperCollins | The Fellowship of the Ring
+audible:B004F45X40 | - | - | audiobook | en | 2007-09-05 | - | BBC Digital Audio | The Lord of the Rings: The Fellowship of the Ring
+audible:B004FTVZFG goodreads:50404360 | store_asin | - | audiobook | en | 2004-12-26! | - | HarperCollins Publishers Limited | The Fellowship of the Ring
+audible:B0GNP7WMGG | - | - | audiobook | en | 2026-02-16 | - | BBC Digital Audio | The Lord of the Rings, The Soundtrack
 goodreads:100486336 | - | 9785353001096 | physical | ru | 2001-01-01 | - | Росмэн-Пресс | Хранители
 goodreads:10135421 | - | - | physical | it | 2005-07 | 524 | RCS Quotidiani S.p.a. | La Compagnia dell'anello
 goodreads:10262631 | - | 9789089681515 | physical | nl | 2009-07 | 491 | De Boekerij | Reisgenoten
@@ -263,7 +267,7 @@ goodreads:1395829 | - | 9789796866939 | physical | id | 2002 | 512 | Gramedia Pu
 goodreads:139809039 | - | - | physical | - | 1672-01-01 | - | Cryptozoic Entertainment | Cryptozoic Entertainment
 goodreads:141621322 | - | - | physical | fr | - | - | Pocket | Seigneur DES Anneaux, Le; 1. LA Communaute De L'Anneau by Tolkein, J.R.R. published by Pocket
 goodreads:1432618 | - | 9780345272584 | physical | en | 1977-10-12 | 527 | Ballantine Books | The Fellowship of the Ring
-goodreads:143421358 | - | - | physical | en | 2012-11-30 | - | Planeta | El Senor de Los Anillos 1 (Movie Ed)( La Comunidad del Anillo)[SPA-SENOR DE LOS ANILLOS 1 (MO][Spanish Edition][Paperback]
+goodreads:143421358 | - | - | physical | en | 2012-11-30 | - | Planeta | El Senor de Los Anillos 1 (Movie Ed)( La Comunidad del Anillo)[SPA-SENOR DE LOS ANILLOS 1 (MO][Paperback]
 goodreads:144052709 | - | - | physical | sr | 1981-01-01 | - | NOLIT BEOGRAD | GOSPODAR PRSTENOVA 1-3
 goodreads:1451516 | - | - | physical | en | 1974 | 391 | Unwin Paperbacks | The Fellowship of the Ring
 goodreads:14713147 | - | 9788956371818 | physical | ko | 2010-06-15 | 672 | 씨앗을뿌리는사람 | 반지의 제왕 1
@@ -380,7 +384,7 @@ goodreads:18403060 | - | 9789985552445 | physical | et | 2007 | 463 | Tiritamm |
 goodreads:18454519 | - | 9789742474485 | physical | th | 2012-10 | 605 | แพรวเยาวชน | ลอร์ด ออฟ เดอะ ริงส์ ตอน มหันตภัยแห่งแหวน
 goodreads:18459384 | - | - | physical | en | 1988 | 423 | Houghton Mifflin Company | The Fellowship of the Ring
 goodreads:18488193 | - | - | physical | en | 1993 | 479 | Ballantine Books | The Fellowship of the Ring
-goodreads:18510 | - | - | physical | en | 2000 | 458 | Del Rey Books | The Fellowship of the Ring
+goodreads:18510,40197832 openlibrary:OL21171006M | isbn13 DUP | 9780345339706! | physical | en | 2000! | 458! | Del Rey Books! | The Fellowship of the Ring!
 goodreads:18523887 | - | 9789510272930 | physical | fi | 2002 | 539 | WSOY | Sormuksen ritarit
 goodreads:18593842 | - | 9789027475763 | physical | nl | 2001 | 491 | Het Spectrum | De Reisgenoten
 goodreads:18593886 | - | 9789027422941 | physical | nl | 1997 | 502 | Het Spectrum | De Reisgenoten
@@ -685,7 +689,6 @@ goodreads:40183314 | - | - | physical | he | 1979 | 418 | שמורה ביתן | 
 goodreads:40193571 | - | - | ebook | en | 2018-03-02 | - | Harper | The Fellowship of the Ring
 goodreads:40197253 | - | 9788202336400 | audiobook | no | 2010 | - | Cappelen Damm Lydbok | Ringens Brorskap
 goodreads:40197381 | - | 9780261103573 | physical | en | 2011 | 407 | Harper Collins | The Fellowship of the Ring
-goodreads:40197832 openlibrary:OL21171006M | isbn13 | 9780345339706! | physical | en | 2018-03-19! | 458! | Del Rey! | The Fellowship of the Ring!
 goodreads:40198224 | - | - | ebook | pt | 2013 | - | - | A sociedade do anel
 goodreads:40226955 | - | - | physical | sr | 1981 | 591 | Nolit | Družina prstena
 goodreads:40378091 | - | 9789655529197 | paperback bunko | he | 2014-01-01 | - | - | The Lord of the Rings
@@ -763,7 +766,6 @@ goodreads:50243665 openlibrary:OL43243843M | isbn13 | 9782075134040 | physical |
 goodreads:50261696 | - | 9789533421544 | physical | hr | 2019 | 516 | Lumen | Prstenova družina
 goodreads:50348156 | - | - | physical | hr | 2018 | 512 | LUMEN | Prstenova družina
 goodreads:50364478 | - | 9785170567829 | physical | ru | 2008-12-15 | 576 | АСТ | Хранители Кольца
-goodreads:50404360 | - | - | audiobook | en | 2004-12-26 | - | HarperCollins Publishers Limited | The Fellowship of the Ring
 goodreads:50938758 | - | 9789584250681 | physical | es | 2020-03 | 578 | Booket | La Comunidad del Anillo
 goodreads:51108255 | - | - | physical | pt | 2019-11-25 | 576 | Harper Collins | A sociedade do anel
 goodreads:51177733 | - | 9780008376062 | physical | en | 2020-06-09 | 415 | HarperCollins | The Fellowship of the Ring

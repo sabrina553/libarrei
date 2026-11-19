@@ -5,7 +5,8 @@ description: [goodreads description] [goodreads] CONFLICT
 genres: Fiction, Contemporary, Japan, Japanese Literature, Literary Fiction, Asia, Adult, Asian Literature [goodreads]
 original_release_date: 2016-07-27 [goodreads]
 
-# editions (149); ! marks a conflict
+# editions (147); ! marks a conflict
+audible:1783785632 goodreads:53358907 | fuzzy | - | audiobook | en | 2020-03-09 | - | Granta Books | Convenience Store Woman
 goodreads:107139968,53450682 hardcover:31341914 | isbn13 DUP | 9785604458006 | physical! | ru | 2016-07-27! | 143! | Popcorn Books | Человек-комбини
 goodreads:149603562,203098198 hardcover:30441796 | isbn13 DUP | 9781846276859 | ebook | en | 2016-07-27! | 230! | Portobello Books! | Convenience Store Woman
 goodreads:157883656 | - | 9788202680657 | physical | nb | 2020-09-01 | 160 | Font forlag | Døgnåpent
@@ -64,7 +65,7 @@ goodreads:42087801 | - | 9780010759907 | physical | zh | 2017-07-31 | 224 | 悅�
 goodreads:42357662 hardcover:24796723 openlibrary:OL28337601M | isbn13 | 9780802129628 | physical | en | 2019-09-17 | 176! | Grove Press | Convenience Store Woman
 goodreads:42427078 hardcover:32136841 | isbn13 | 9786163375414 | physical | th | 2016-07-27! | 161! | animag | มนุษย์ร้านสะดวกซื้อ
 goodreads:43195322 hardcover:30513058 openlibrary:OL62210735M | isbn13 | 9788574482958 | physical | pt | 2016-07-27! | 152 | Estação Liberdade | Querida Konbini
-goodreads:43385579 | - | - | audiobook | en | 2018-06-12 | - | Blackstone Audio, Inc. | Convenience Store Woman
+goodreads:43385579 hardcover:31501584 | asin | - | audiobook | en | 2018-06-12 | - | Blackstone Audio, Inc. | Convience Store Woman!
 goodreads:43386807 | - | 9788417016852 | ebook | ca | 2019-01-16 | 122 | Editorial Empúries | La noia de la botiga 24 hores
 goodreads:43598479 | - | - | physical | en | 2019-05-02 | 163 | Granta Books | Convenience Store Woman
 goodreads:43599043,43764278 hardcover:30566588 openlibrary:OL28230310M | isbn13 DUP | 9788417761196! | physical! | es | 2016-07-27! | 162! | Duomo Ediciones | La dependienta
@@ -92,7 +93,7 @@ goodreads:49802501 | - | 9781783785575 | physical | en | 2018 | 159 | GROVE/ATLA
 goodreads:49865679 hardcover:32347782 | isbn13 | 9786004613538 | physical | fa | 2016-07-27! | 127! | کوله‌پشتی | سوپرمارکت شبانه‌روزی
 goodreads:50077439 hardcover:30698872 | isbn13 | 9788680830254 | physical | sr | 2016-07-27! | 117 | Booka | Prodavačica
 goodreads:50513298 | - | 9788281695238 | physical | no | 2020-01-06 | 156 | - | Døgnåpent
-goodreads:51031906 | - | - | ebook | en | 2019-08 | 176 | Grove Press | Convenience Store Woman
+goodreads:51031906 hardcover:31712403 | asin | - | ebook | en | 2019-08-01 | 176 | Grove Press | Convenience Store Woman
 goodreads:51110871 | - | 9788793661370 | ebook | da | 2019-05-24 | - | Grif | Døgnkioskmennesket
 goodreads:51496697 hardcover:30939339 | isbn13 | 9783746636061 | physical | de | 2016-07-27! | 145 | Aufbau Taschenbuch Verlag! | Die Ladenhüterin
 goodreads:51836492 hardcover:31106651 | isbn13 | 9789512418985 | audiobook | fi | 2016-07-27! | - | Gummerus | Lähikaupan nainen
@@ -102,7 +103,6 @@ goodreads:52292854 hardcover:31101845 openlibrary:OL62751434M | isbn13 | 9786045
 goodreads:52351851 | - | 9789512418206 | ebook | fi | 2020-02-19 | 71 | Gummerus | Lähikaupan nainen
 goodreads:52682951 | - | - | physical | en | 2019-05-02 | 163 | Granta Books | Convenience Store Woman
 goodreads:53243162 hardcover:33062181 | isbn13 | 9789669820990 | physical | uk | 2016-01-01! | 144 | Vivat | Дівчина з крамнички
-goodreads:53358907 | - | - | audiobook | en | 2020-03-09 | - | Granta Books | Convenience Store Woman
 goodreads:53407179 | - | - | ebook | en | 2018-07 | 176 | Granta Books | Convenience Store Woman
 goodreads:53470472 | - | - | ebook | sv | - | - | - | Hur mår fröken Furukura?
 goodreads:54260476 hardcover:31694925 | isbn13 | 9786020644394 | physical | id | 2016-07-27! | 160 | Gramedia Pustaka Utama | Convenience Store Woman - Gadis Minimarket
@@ -142,11 +142,9 @@ hardcover:30633344 openlibrary:OL39690880M | isbn13 | 9781538584552 | audiobook 
 hardcover:31001902 | - | 9786020644400 | physical | id | 2020-08-03 | 160 | Gramedia Pustaka Utama | Gadis Minimarket
 hardcover:31258363 | - | - | physical | en | 2016-07-27 | - | Grove Press | Convenience Store Woman
 hardcover:31269519 | - | - | physical | - | - | - | - | Человек-комбини
-hardcover:31501584 | - | - | audiobook | - | - | - | - | Convience Store Woman
 hardcover:31508238 | - | - | ebook | - | - | 72 | - | La Dependienta
 hardcover:31563357 | - | - | physical | es | 2016-07-27 | 162 | Duomo Ediciones | La dependienta
 hardcover:31693231 | - | - | audiobook | en | 2022-12-11 | - | BBC Radio 4 | Working Titles, Convenience Store Woman - BBC Radio 4
-hardcover:31712403 | - | - | ebook | - | 2019-08-01 | 176 | Grove Press | Convenience Store Woman
 hardcover:32266285 | - | - | physical | - | - | - | - | Convenience Store Woman
 hardcover:32292360 | - | - | physical | - | - | - | - | Buurtsupermens
 hardcover:32292664 | - | - | physical | - | - | - | - | コンビニ人間
