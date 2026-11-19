@@ -74,10 +74,16 @@ def make_probe(audible: Audible, amazon: Amazon | None) -> Callable[[Source, str
         if amazon is None:
             raise Unavailable()
         try:
-            product = parse_product(amazon.product(asin) or "")
+            page, domain, missing = amazon.product(asin), amazon.domain, []
+            if page is None:
+                domain, page, missing = amazon.product_elsewhere(asin)
+                missing = [amazon.domain, *missing]
         except AmazonBlocked as blocked:
             raise Unavailable() from blocked
-        return product and {"title": product.get("title"), "authors": [n for n, _ in product.get("authors") or []]}
+        product = parse_product(page or "")
+        if not product:
+            return {"missing_from": missing}
+        return {"title": product.get("title"), "authors": [n for n, _ in product.get("authors") or []], "found_on": domain}
 
     return probe
 

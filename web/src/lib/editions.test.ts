@@ -8,7 +8,7 @@ const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   asin_checks: {},
   quality: {},
   duplicates: [],
-  duplicate_reasons: {}, format_clash_isbns: [],
+  duplicate_reasons: {}, format_clash_isbns: [], asin_stores: {},
   slugs: {},
   fields: {},
   ...over,

@@ -4,7 +4,7 @@ import { FILTERS, isSparse, lowestQuality, stubLabel, type MergedEdition } from 
 
 const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   ids: { hardcover: ['1'] }, match_reason: null, confidence: 1, asin_checks: {}, quality: {},
-  duplicates: [], duplicate_reasons: {}, format_clash_isbns: [], slugs: {}, fields: {}, ...over,
+  duplicates: [], duplicate_reasons: {}, format_clash_isbns: [], asin_stores: {}, slugs: {}, fields: {}, ...over,
 })
 
 test('a much fuller record breaks a tie', () => {

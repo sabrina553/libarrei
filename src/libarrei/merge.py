@@ -65,6 +65,8 @@ class MergedEdition(BaseModel):
     fields: dict[str, Resolved]
     # Catalogue ASINs checked against the store: same_product, other_product or not_found.
     asin_checks: dict[str, str] = {}
+    # Amazon store domains behind each check: where the ASIN was found, or every store that lacked it.
+    asin_stores: dict[str, list[str]] = {}
     # Each source's record completeness, 0 to 100 (see quality.py).
     quality: dict[Source, int] = {}
     # The ids of a fuller edition this sparse, identifier-less one probably duplicates.

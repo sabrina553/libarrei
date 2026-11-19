@@ -37,12 +37,14 @@ type Props = {
   staging?: { book: string; scope: string; records: Partial<Record<SourceName, string[]>> }
   // Catalogue ASINs checked against the store, from the API's per-edition asin_checks.
   asinChecks?: Record<string, string>
+  // The Amazon stores behind each check: where the ASIN was found, or all that lacked it.
+  asinStores?: Record<string, string[]>
   // Each source record's completeness (0–100), shown in the column header and used to break ties.
   quality?: Quality
 }
 
 /** Fields down the side, sources across the top, like a side-by-side diff. */
-export function FieldGrid({ fields, order, level, staging, asinChecks = {}, quality = {} }: Props) {
+export function FieldGrid({ fields, order, level, staging, asinChecks = {}, asinStores = {}, quality = {} }: Props) {
   const staged = useChangeset()
   const [onlyProblems, setOnlyProblems] = useState(false)
   const splits = titleSplits(fields)
@@ -68,7 +70,7 @@ export function FieldGrid({ fields, order, level, staging, asinChecks = {}, qual
   const format = editionFormat(fields.format?.values ?? [])
   const suggest = (name: string, values: SourceValue[]) =>
     (name === 'asin' ? storeAsin(values, format, recordFormat) : null) ?? suggestion(name, values, quality)
-  const notesFor = (v: SourceValue) => asinNotes(String(v.value), fields.asin?.values ?? [], asinChecks, format)
+  const notesFor = (v: SourceValue) => asinNotes(String(v.value), fields.asin?.values ?? [], asinChecks, format, asinStores)
   const rows = order.map((name) => {
     const resolved = fields[name]
     const values = resolved?.values ?? []

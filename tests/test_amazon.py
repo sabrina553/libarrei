@@ -220,3 +220,29 @@ def test_amazon_emphasis_spans_become_bold_and_italic():
             '<span class="a-text-bold">Bold</span> <span class="a-text-bold a-text-italic">Both</span>'
             ' <span class="a-text-italic">Italic</span></div></div>')
     assert _description(BeautifulSoup(html, "html.parser")) == "<b>Bold</b> <i><b>Both</b></i> <i>Italic</i>"
+
+
+class StoreSession(FakeSession):
+    """Answers by full URL, so different Amazon stores can disagree about one ASIN."""
+
+    def get(self, url, timeout=None):
+        self.urls.append(url)
+        return FakeResponse(*self.pages.get(url, ("", 404)))
+
+
+def test_missing_product_is_looked_for_on_other_stores_without_the_cookie():
+    home, other = StoreSession({}), StoreSession({"https://www.amazon.ca/dp/B0X": (KINDLE, 200)})
+    amazon = Amazon(SECRET, "co.uk", home, limiter=RateLimiter(0, sleep=lambda s: None),
+                    jitter=lambda: 0, sleep=lambda s: None, elsewhere=other)
+    assert amazon.product("B0X") is None
+    domain, page, missing = amazon.product_elsewhere("B0X")
+    assert (domain, missing) == ("ca", ["com"]) and page == KINDLE
+    assert "Cookie" not in other.headers
+
+
+def test_a_bot_check_elsewhere_stops_the_search_but_does_not_block_the_home_store():
+    other = StoreSession({"https://www.amazon.com/dp/B0X": (CAPTCHA, 200)})
+    amazon = Amazon(SECRET, "co.uk", StoreSession({}), limiter=RateLimiter(0, sleep=lambda s: None),
+                    jitter=lambda: 0, sleep=lambda s: None, elsewhere=other)
+    assert amazon.product_elsewhere("B0X") == (None, None, [])
+    assert not amazon.blocked and len(other.urls) == 1

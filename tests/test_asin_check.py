@@ -105,3 +105,17 @@ def test_probe_memoises_and_needs_cookie_for_amazon():
     assert probe(AU, "B2") is None
     with pytest.raises(Unavailable):
         probe(AZ, "B1")
+
+
+def test_stores_that_lacked_the_asin_are_recorded():
+    edition = merged_edition("B0DT38PQYW", AZ, "B08BKGYQXW")
+    answers = {"B08BKGYQXW": {**CARL, "found_on": "co.uk"}, "B0DT38PQYW": {"missing_from": ["co.uk", "com", "ca"]}}
+    assert check_edition(edition, lambda store, asin: answers[asin]) == {"B0DT38PQYW": AsinStatus.NOT_FOUND}
+    assert edition.asin_stores == {"B0DT38PQYW": ["co.uk", "com", "ca"]}
+
+
+def test_asin_found_on_another_store_is_the_same_product():
+    edition = merged_edition("B0USONLY01", AZ, "B08BKGYQXW")
+    answers = {"B08BKGYQXW": {**CARL, "found_on": "co.uk"}, "B0USONLY01": {**CARL, "found_on": "com"}}
+    assert check_edition(edition, lambda store, asin: answers[asin]) == {"B0USONLY01": AsinStatus.SAME_PRODUCT}
+    assert edition.asin_stores == {"B0USONLY01": ["com"]}

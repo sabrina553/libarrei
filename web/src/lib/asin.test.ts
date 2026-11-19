@@ -34,3 +34,10 @@ test('a B0 asin on a print edition is suspicious', () => {
     .toBe('ASIN looks like a Kindle/Audible ID on a print edition')
   expect(asinNotes('0261103342', [], {}, 'physical')).toEqual([])
 })
+
+test('notes name the Amazon stores that were checked', () => {
+  const checks = { B0DT38PQYW: 'not_found', B0USONLY01: 'same_product' }
+  const stores = { B0DT38PQYW: ['co.uk', 'com', 'ca'], B0USONLY01: ['com'] }
+  expect(asinNotes('B0DT38PQYW', [], checks, 'ebook', stores)[0].text).toBe('no live listing on amazon.co.uk, .com, .ca')
+  expect(asinNotes('B0USONLY01', [], checks, 'ebook', stores)[0].text).toBe('also valid on amazon.com')
+})
