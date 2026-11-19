@@ -91,3 +91,13 @@ test('an ISBN shared by unrelated-looking records is an issue', () => {
   const e = edition({ format_clash_isbns: ['9781405989411'] })
   expect(editionIssues(e).flags).toEqual(['ISBN 9781405989411 shared by records with different format, publisher and year'])
 })
+
+test('a record listing contributors but no author is an issue', () => {
+  const people = (...roles: string[]) => roles.map((role, i) => ({ name: `P${i}`, role }))
+  const e = edition({ fields: { contributors: { value: people('author'), source: 'hardcover', source_id: '2', conflict: true, alternatives: [], values: [
+    { value: people('author', 'narrator'), source: 'hardcover', source_id: '2' },
+    { value: people('editor', 'illustrator'), source: 'openlibrary', source_id: 'OL1M' },
+  ] } } })
+  expect(editionIssues(e).flags).toContain('Open Library OL1M names no author')
+  expect(editionIssues(e).flags.filter((f) => f.includes('no author'))).toHaveLength(1)
+})

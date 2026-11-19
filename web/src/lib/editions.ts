@@ -1,7 +1,7 @@
 import type { components } from '../api/schema'
 import { columnProvides } from '../components/capabilities'
 import { recordCheck, rowStates } from './cellStates'
-import { COLUMN_SOURCES, COLUMNS } from './format'
+import { COLUMN_LABELS, COLUMN_SOURCES, columnOf, COLUMNS } from './format'
 
 export type MergedEdition = components['schemas']['MergedEdition']
 
@@ -128,6 +128,7 @@ export function editionIssues(edition: MergedEdition): Issues {
     duplicateLabel(edition),
     edition.stub_of && 'possible stub of a fuller edition',
     ...(edition.format_clash_isbns ?? []).map((isbn) => `ISBN ${isbn} shared by records with different format, publisher and year`),
+    ...authorless(edition).map((record) => `${record} names no author`),
     isSparse(edition) && 'sparse record',
     edition.match_reason === 'fuzzy' && `fuzzy match (${edition.confidence})`,
     edition.match_reason === 'asin' && 'matched only by a catalogue ASIN',
@@ -135,6 +136,16 @@ export function editionIssues(edition: MergedEdition): Issues {
   const issues = { conflicts, missing, flags }
   issuesCache.set(edition, issues)
   return issues
+}
+
+type Person = { name: string; role?: string | null }
+
+/** Records whose contributor list has people but no author, such as only an editor and illustrator. */
+export function authorless(edition: MergedEdition): string[] {
+  return (edition.fields.contributors?.values ?? [])
+    .filter((v) => Array.isArray(v.value) && v.value.length > 0
+      && !(v.value as Person[]).some((p) => (p.role ?? 'author') === 'author'))
+    .map((v) => `${COLUMN_LABELS[columnOf(v.source)]} ${v.source_id}`)
 }
 
 export function issueCount(edition: MergedEdition): number {
