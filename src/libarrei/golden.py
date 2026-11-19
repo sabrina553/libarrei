@@ -7,6 +7,7 @@ matching or merging shows up as a reviewable diff.
 
     uv run python -m libarrei.golden record hobbit --title "the hobbit" --author tolkien
     uv run python -m libarrei.golden update
+    uv run python -m libarrei.golden rerecord   # fetch every set again with its saved query
 """
 
 import argparse
@@ -94,11 +95,18 @@ def main() -> None:
     rec.add_argument("--author")
     rec.add_argument("--isbn")
     commands.add_parser("update", help="rewrite every snapshot from the frozen fixtures")
+    commands.add_parser("rerecord", help="fetch every golden book again, with the query it was recorded with")
     args = parser.parse_args()
 
     if args.command == "record":
         load_dotenv(Path.cwd() / ".env")
         record(args.name, title=args.title, author=args.author, isbn=args.isbn)
+    elif args.command == "rerecord":
+        load_dotenv(Path.cwd() / ".env")
+        for folder in sorted(p for p in GOLDEN_DIR.iterdir() if p.is_dir()):
+            query = json.loads(gzip.decompress((folder / "works.json.gz").read_bytes()))["query"]
+            record(folder.name, **query)
+            print(f"re-recorded {folder.name}")
     else:
         for folder in sorted(p for p in GOLDEN_DIR.iterdir() if p.is_dir()):
             write_snapshot(folder)
