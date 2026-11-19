@@ -43,6 +43,8 @@ from libarrei.sources.openlibrary.mapping import to_work as openlibrary_work
 MAX_KNOWN_ASINS = 10
 # Each Amazon page risks a block, so few are fetched however many editions exist.
 MAX_AMAZON_PAGES = 3
+# Extra product pages allowed when known ASINs or search hits turn out not to be the book.
+AMAZON_SPARE_PAGES = 2
 # Catalogue sources, best first, for the title and author that later stores search by.
 CATALOGUE_ORDER = [Source.HARDCOVER, Source.GOODREADS, Source.OPENLIBRARY]
 
@@ -177,18 +179,26 @@ def from_amazon(client: Amazon, isbn: str | None, found: Clues, all_editions: bo
     """Stops at the first sign of a block, keeping whatever was already read."""
     products: list[tuple[str, dict]] = []
     wanted = MAX_AMAZON_PAGES if all_editions else 1
-    try:
-        # Known ASINs come first and may save the search altogether.
-        known = found.asins[Source.AMAZON][:wanted]
-        asins = list(known)
-        query = isbn or " ".join(filter(None, [found.title, found.author]))
-        if query and len(asins) < wanted:
-            asins += [a for a in parse_search(client.search(query) or "") if a not in asins]
-        for asin in asins[:wanted]:
+    # Catalogue ASINs can be dead or another format, so a few more pages may be read to fill the quota.
+    budget = [wanted + AMAZON_SPARE_PAGES]
+    known = found.asins[Source.AMAZON][:wanted]
+
+    def read(asins: list[str], trusted: bool) -> None:
+        for asin in asins:
+            if len(products) >= wanted or budget[0] <= 0:
+                return
+            budget[0] -= 1
             if (html := client.product(asin)) and (product := parse_product(html)):
                 # An ISBN or a known ASIN names this edition; a title search can land on a sequel.
-                if isbn or asin in known or amazon_is_work(product, found):
+                if trusted or amazon_is_work(product, found):
                     products.append((asin, product))
+
+    try:
+        read(known, trusted=True)
+        query = isbn or " ".join(filter(None, [found.title, found.author]))
+        if query and len(products) < wanted and budget[0] > 0:
+            seen = set(known)
+            read([a for a in parse_search(client.search(query) or "") if a not in seen], trusted=bool(isbn))
     except AmazonBlocked as blocked:
         note(str(blocked))
     return amazon_work(products, client.domain) if products else None
