@@ -298,6 +298,18 @@ def _main_title(text: str) -> str:
     return text_key(re.split(r"[:(\[]", anyascii(text), maxsplit=1)[0])
 
 
+def _without_articles(text: str) -> str:
+    return text_key(re.sub(r"\b(the|an?)\b", " ", anyascii(text), flags=re.I))
+
+
+def _bracketed(wanted: str) -> list[str]:
+    """Bracketed parts of a searched title, which some name the actual works: "The Complete Collection
+    [The Iliad & The Odyssey]". Articles are dropped as originals rarely have them ("Ilias / Odysseia").
+    One-word brackets are skipped: they are nearly always edition labels ("[Illustrated]", "[Unabridged]")."""
+    parts = [re.sub(r"\b(the|an?)\b", " ", part, flags=re.I).split() for part in re.findall(r"\[([^\]]+)\]", wanted)]
+    return [_without_articles(" ".join(words)) for words in parts if len(words) >= 2]
+
+
 def first_title(work: Work) -> str | None:
     return next((c.value for c in work.title), None) or next((c.value for e in work.editions for c in e.title), None)
 
@@ -313,6 +325,10 @@ def titled_like(work: Work, wanted: str) -> bool:
     for found in filter(None, titles):
         main = _main_title(found)
         if main and (main in target or target in main or SequenceMatcher(None, main, target).ratio() >= TITLE_MATCH):
+            return True
+        # Similarity only: a short bracket ("[Illustrated]") would otherwise be contained in other titles.
+        plain = _without_articles(re.split(r"[:(\[]", found, maxsplit=1)[0])
+        if any(SequenceMatcher(None, plain, part).ratio() >= TITLE_MATCH for part in _bracketed(wanted)):
             return True
     return not titles
 
