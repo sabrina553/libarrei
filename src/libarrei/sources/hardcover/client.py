@@ -12,6 +12,8 @@ TITLE_ONLY_WEIGHTS = ("10,5,3", "title,alternative_titles,description")
 # Hardcover sorts by popularity, which buries exact matches for niche books, so a
 # wider page of candidates is fetched and re-ranked by title and author match.
 CANDIDATES_PER_SEARCH = 10
+# How much an alternative title counts against the main one.
+ALTERNATIVE_WEIGHT = 0.9
 
 
 def title_similarity(wanted: str, title: str) -> float:
@@ -33,7 +35,8 @@ def rank_documents(hits: list[dict], title: str, author: str | None = None) -> l
         found = document.get("title") or ""
         # A translation is often searched by its own title, which Hardcover keeps as an alternative.
         alternatives = [t for t in document.get("alternative_titles") or [] if isinstance(t, str)]
-        points = max(title_similarity(title, t) for t in [found, *alternatives])
+        # Discounted, so a sequel listing the series name as an alternative ("Dune") cannot tie the real book.
+        points = max([title_similarity(title, found)] + [ALTERNATIVE_WEIGHT * title_similarity(title, t) for t in alternatives])
         # Without this, split volumes such as "The Final Empire (2 of 3)" tie with
         # the real book on their main title and win on popularity.
         if found.strip().lower() == title.strip().lower():

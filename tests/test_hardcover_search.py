@@ -52,3 +52,9 @@ def test_alternative_titles_rank_a_translation():
     hits = [{"document": {"id": "1", "title": "Crime and Punishment Study Guide", "users_count": 50}},
             {"document": {"id": "2", "title": "Преступление и наказание", "alternative_titles": ["Crime and Punishment", None]}}]
     assert rank_hits(hits, "crime and punishment")[0] == 2
+
+
+def test_an_alternative_title_does_not_beat_a_matching_main_title():
+    hits = [{"document": {"id": "1", "title": "Sandworms of Dune", "alternative_titles": ["Dune"], "users_count": 900}},
+            {"document": {"id": "2", "title": "Dune: The Butlerian Jihad", "users_count": 10}}]
+    assert rank_hits(hits, "dune")[0] == 2
