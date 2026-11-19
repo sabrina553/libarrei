@@ -1,6 +1,7 @@
 import type { components } from '../api/schema'
 import { columnProvides } from '../components/capabilities'
 import { recordCheck, rowStates } from './cellStates'
+import { languageRank } from './languages'
 import { COLUMN_LABELS, COLUMN_SOURCES, columnOf, COLUMNS } from './format'
 
 export type MergedEdition = components['schemas']['MergedEdition']
@@ -72,11 +73,12 @@ function compare(a: SortValue, b: SortValue, descending = false): number {
  * The table's order: by the chosen column, or by default language, then the best
  * record's quality (fullest first), then release date.
  */
-export function sortEditions(editions: MergedEdition[], sort: Sort): MergedEdition[] {
+export function sortEditions(editions: MergedEdition[], sort: Sort, preferred: string[] = []): MergedEdition[] {
   const by = sort
     ? (a: MergedEdition, b: MergedEdition) => compare(SORT_COLUMNS[sort.column](a), SORT_COLUMNS[sort.column](b), sort.descending)
     : (a: MergedEdition, b: MergedEdition) =>
-        compare(SORT_COLUMNS.language(a), SORT_COLUMNS.language(b))
+        compare(languageRank(a, preferred), languageRank(b, preferred))
+        || compare(SORT_COLUMNS.language(a), SORT_COLUMNS.language(b))
         || compare(bestQuality(a), bestQuality(b), true)
         || compare(SORT_COLUMNS.release_date(a), SORT_COLUMNS.release_date(b))
   // toSorted is stable, so equal rows keep the API's order.

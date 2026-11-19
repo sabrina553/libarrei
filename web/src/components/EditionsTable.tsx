@@ -1,7 +1,9 @@
 import { Fragment, useState } from 'react'
 import { EDITION_FIELDS, editionIssues, editionKey, FILTERS, issueSummary, isSparse, lowestQuality, nextSort, sortEditions, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
 import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
+import { byLanguage } from '../lib/languages'
 import { SlugsContext } from '../lib/links'
+import { getLanguagePrefs } from '../settings/languages'
 import { FieldGrid } from './FieldGrid'
 
 // Rendering thousands of rows at once is slow; show a page and let the librarian ask for more.
@@ -12,22 +14,42 @@ const HEADERS: [SortColumn | null, string][] = [
   ['publisher', 'Publisher'], [null, 'Sources'], ['match', 'Match'], ['issues', 'Issues'], ['quality', 'Quality'],
 ]
 
+const LANGUAGE_RULES = {
+  off: 'Every language',
+  preferred: 'Your preferred languages',
+  'fallback-all': 'None in your preferred languages, so every language',
+  'fallback-english': 'None in your preferred languages, so English',
+  'fallback-none': 'None in your preferred languages',
+} as const
+
 export function EditionsTable({ editions, book }: { editions: MergedEdition[]; book: string }) {
   const [filter, setFilter] = useState<FilterName>('all')
   const [open, setOpen] = useState<string | null>(null)
   const [limit, setLimit] = useState(PAGE)
   const [sort, setSort] = useState<Sort>(null)
-  const shown = sortEditions(editions.filter(FILTERS[filter].test), sort)
+  const [allLanguages, setAllLanguages] = useState(false)
+  const prefs = getLanguagePrefs()
+  const view = byLanguage(editions, allLanguages ? { ...prefs, preferred: [] } : prefs)
+  const inView = view.shown
+  const shown = sortEditions(inView.filter(FILTERS[filter].test), sort, prefs.preferred)
 
   return (
     <section>
       <div className="filters" role="group" aria-label="Filter editions">
         {(Object.keys(FILTERS) as FilterName[]).map((name) => (
           <button key={name} className={name === filter ? 'active' : 'secondary'} onClick={() => { setFilter(name); setLimit(PAGE) }}>
-            {FILTERS[name].label} ({editions.filter(FILTERS[name].test).length})
+            {FILTERS[name].label} ({inView.filter(FILTERS[name].test).length})
           </button>
         ))}
       </div>
+      {(view.hidden > 0 || allLanguages) && (
+        <p className="muted">
+          {allLanguages ? 'Showing every language. ' : `${LANGUAGE_RULES[view.rule]}; ${view.hidden} other-language edition${view.hidden === 1 ? '' : 's'} hidden. `}
+          <button type="button" className="link" onClick={() => setAllLanguages(!allLanguages)}>
+            {allLanguages ? 'Use my language settings' : 'Show all languages'}
+          </button>
+        </p>
+      )}
       <table className="editions">
         <thead>
           <tr>
