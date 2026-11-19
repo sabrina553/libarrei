@@ -71,6 +71,9 @@ class MergedEdition(BaseModel):
     quality: dict[Source, int] = {}
     # The ids of a fuller edition this sparse, identifier-less one probably duplicates.
     stub_of: dict[Source, list[str]] | None = None
+    # The ids of the best-filled listing of the same audiobook recording in another store, such as Audible
+    # Australia's own ASIN for a US recording.
+    listing_of: dict[Source, list[str]] | None = None
     # ISBNs joining records that disagree on format, publisher and year: one probably cites the other's ISBN.
     format_clash_isbns: list[str] = []
     # Page slugs for sources that address records by slug, such as Hardcover's book slug.

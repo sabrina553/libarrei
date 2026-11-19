@@ -191,14 +191,16 @@ export function editionKey(edition: MergedEdition): string {
 export type Folded = { edition: MergedEdition; copies: MergedEdition[] }
 
 /**
- * Tucks each likely copy (an identifier-less stub) under the edition it copies, when that edition
+ * Tucks each likely copy (an identifier-less stub, or another store's listing of the same audiobook
+ * recording) under the edition it copies, when that edition
  * is listed too, so a handful of near-empty records does not bury the real one. Order is kept.
  */
 export function foldCopies(editions: MergedEdition[]): Folded[] {
   const keys = new Set(editions.map(editionKey))
   const originalOf = (e: MergedEdition) => {
-    if (!e.stub_of) return null
-    const key = editionKey({ ...e, ids: e.stub_of })
+    const target = e.stub_of ?? e.listing_of
+    if (!target) return null
+    const key = editionKey({ ...e, ids: target })
     return keys.has(key) ? key : null
   }
   const copies = new Map<string, MergedEdition[]>()
@@ -231,6 +233,8 @@ export function describeExtra({ field, value, kind }: Extra): string {
 
 /** Why a copy was matched to its original, from the fields the stub check compares. */
 export function matchEvidence(copy: MergedEdition, original: MergedEdition): string[] {
+  // Store listings are matched on the recording, not the stub check's fields.
+  if (copy.listing_of) return ['contributors', 'publisher', 'duration_seconds', 'release_date']
   const same = (field: string, key = (v: unknown) => compareKey(v)) => {
     const a = copy.fields[field]?.value
     const b = original.fields[field]?.value

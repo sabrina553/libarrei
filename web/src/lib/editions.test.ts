@@ -113,3 +113,10 @@ test('likely copies fold under their original, and their extra details are named
   expect(copyExtras(copy, original).map(describeExtra)).toEqual(['differs on pages: 447', 'adds cover url'])
   expect(matchEvidence(copy, original)).toEqual(['publisher'])
 })
+
+test("other stores' listings of one recording fold under the best listing", () => {
+  const best = edition({ ids: { hardcover: ['32126720'] } })
+  const listing = edition({ ids: { hardcover: ['31923605'] }, listing_of: { hardcover: ['32126720'] } })
+  expect(foldCopies([listing, best]).map((g) => [g.edition.ids.hardcover, g.copies.length])).toEqual([[['32126720'], 1]])
+  expect(matchEvidence(listing, best)).toEqual(['contributors', 'publisher', 'duration_seconds', 'release_date'])
+})
