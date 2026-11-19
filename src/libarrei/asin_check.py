@@ -29,6 +29,7 @@ class Unavailable(Exception):
 
 
 # (store, asin) -> {"title": ..., "authors": [...]}, None when the store has no such product.
+# Amazon adds "found_on" (the store domain that had it), or answers {"missing_from": [domains]} when none did.
 Probe = Callable[[Source, str], dict | None]
 
 
@@ -39,6 +40,10 @@ def same_product(a: dict, b: dict) -> bool:
         return False
     words = [{w for name in p.get("authors") or [] for w in name.casefold().replace(".", " ").split()} for p in (a, b)]
     return not words[0] or not words[1] or bool(words[0] & words[1])
+
+
+def _found(product: dict | None) -> dict | None:
+    return None if product is None or "missing_from" in product else product
 
 
 def check_edition(edition: MergedEdition, probe: Probe, budget: list[int] | None = None) -> dict[str, AsinStatus]:
@@ -53,13 +58,16 @@ def check_edition(edition: MergedEdition, probe: Probe, budget: list[int] | None
         return {}
     checks = {}
     try:
-        reference = probe(store, store_asins[store][0]) or _edition_summary(edition)
+        reference = _found(probe(store, store_asins[store][0])) or _edition_summary(edition)
         for asin in sorted(others):
             if budget is not None:
                 if budget[0] <= 0:
                     break
                 budget[0] -= 1
-            found = probe(store, asin)
+            answer = probe(store, asin)
+            if answer and (stores := answer.get("missing_from") or [answer.get("found_on")]) and all(stores):
+                edition.asin_stores[asin] = stores
+            found = _found(answer)
             if found is None:
                 checks[asin] = AsinStatus.NOT_FOUND
             else:

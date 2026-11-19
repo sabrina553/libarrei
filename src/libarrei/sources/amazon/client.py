@@ -20,6 +20,8 @@ from libarrei.sources.amazon.scraper import is_captcha
 
 DOMAINS = ("com", "co.uk", "de", "fr", "it", "es", "ca", "com.au", "co.jp", "in", "nl", "se", "com.mx", "com.br")
 DEFAULT_DOMAIN = "co.uk"
+# Where a product missing from the home store is looked for next: the largest English-language stores, then Germany.
+FALLBACK_DOMAINS = ("com", "ca", "com.au", "de")
 BLOCKED_NOTE = "Amazon blocked the request; update your cookie"
 # The browser whose handshake and default headers curl_cffi copies; its own User-Agent must
 # not be overridden, or the headers and the handshake would disagree.
@@ -39,7 +41,7 @@ def product_url(domain: str, asin: str) -> str:
 class Amazon:
     def __init__(self, cookie: str, domain: str = DEFAULT_DOMAIN, session: requests.Session | None = None,
                  cache=None, limiter: RateLimiter | None = None, jitter=lambda: random.uniform(0.5, 1.5),
-                 sleep=time.sleep):
+                 sleep=time.sleep, elsewhere: requests.Session | None = None):
         if domain not in DOMAINS:
             raise ValueError(f"unknown Amazon domain {domain!r}; use one of {', '.join(DOMAINS)}")
         cookie = cookie.strip()
@@ -57,6 +59,9 @@ class Amazon:
         self.sleep = sleep
         # Once Amazon pushes back, every further request this run would only dig deeper.
         self.blocked = False
+        # The cookie belongs to the home store, so other stores are asked without it, on their own session.
+        self.elsewhere = elsewhere or requests.Session(impersonate=IMPERSONATE)
+        self.elsewhere.headers.update(HEADERS)
 
     def __repr__(self) -> str:
         return f"Amazon(domain={self.domain!r}, cookie=<redacted>)"
@@ -79,6 +84,35 @@ class Amazon:
 
         # Keyed by URL alone: pages are the same whoever's cookie fetched them.
         return self.cache.fetch("amazon", url, load)
+
+    def product_elsewhere(self, asin: str) -> tuple[str | None, str | None, list[str]]:
+        """Looks for a product the home store lacks: (domain, page) where found, and the stores that lacked it.
+
+        A cookie-less request is often met with a bot check; that ends the search without
+        blocking the home store, and leaves the product's existence unknown beyond the stores listed.
+        """
+        missing = []
+        for domain in (d for d in FALLBACK_DOMAINS if d != self.domain):
+            url = product_url(domain, quote_plus(asin))
+
+            def load(url=url):
+                self.limiter.wait()
+                self.sleep(self.jitter())
+                res = self.elsewhere.get(url, timeout=20)
+                if res.status_code == 404:
+                    return None
+                if res.status_code >= 400 or is_captcha(res.text):
+                    raise AmazonBlocked()
+                return res.text
+
+            try:
+                page = self.cache.fetch("amazon", url, load)
+            except AmazonBlocked:
+                break
+            if page is not None:
+                return domain, page, missing
+            missing.append(domain)
+        return None, None, missing
 
     def search(self, query: str) -> str | None:
         return self._page(f"{self.base}/s?k={quote_plus(query)}")

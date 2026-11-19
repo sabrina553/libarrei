@@ -21,19 +21,30 @@ export function storeAsin<T extends Value>(values: T[], format: string | null, r
   return null
 }
 
+// "amazon.co.uk, .com, .ca": the first in full, the rest by their ending.
+function domainList(domains: string[]): string {
+  return [`amazon.${domains[0]}`, ...domains.slice(1).map((d) => `.${d}`)].join(', ')
+}
+
 function storeName(values: Value[]): string {
   return values.some((v) => v.source === 'audible') ? 'Audible' : 'Amazon'
 }
 
 /** What is known about one ASIN in the row: its store check, and whether it suits the format. */
-export function asinNotes(asin: string, values: Value[], checks: Record<string, string>, format: string | null): AsinNote[] {
+export function asinNotes(asin: string, values: Value[], checks: Record<string, string>, format: string | null,
+  stores: Record<string, string[]> = {}): AsinNote[] {
   const notes: AsinNote[] = []
   const store = storeName(values)
+  const domains = stores[asin] ?? []
   const status = checks[asin] as AsinStatus | undefined
   if (status === 'same_product')
-    notes.push({ text: 'also valid', title: `Another ${store} listing of the same product, such as a regional one`, warning: false })
+    notes.push(domains.length
+      ? { text: `also valid on amazon.${domains[0]}`, title: `The same product, listed on amazon.${domains[0]}`, warning: false }
+      : { text: 'also valid', title: `Another ${store} listing of the same product, such as a regional one`, warning: false })
   else if (status === 'not_found')
-    notes.push({ text: `not found on ${store}`, title: `${store} has no product with this ASIN`, warning: true })
+    notes.push(domains.length
+      ? { text: `no live listing on ${domainList(domains)}`, title: `None of these Amazon stores lists this ASIN; it may be withdrawn or never existed`, warning: true }
+      : { text: `not found on ${store}`, title: `${store} has no product with this ASIN`, warning: true })
   else if (status === 'other_product')
     notes.push({ text: `other product on ${store}`, title: `On ${store} this ASIN is a different book`, warning: true })
   // Print books' ASINs are normally their ISBN-10; B0… ids are Kindle and Audible products.

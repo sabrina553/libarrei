@@ -196,6 +196,13 @@ export interface components {
                 [key: string]: string;
             };
             /**
+             * Asin Stores
+             * @default {}
+             */
+            asin_stores: {
+                [key: string]: string[];
+            };
+            /**
              * Quality
              * @default {}
              */
