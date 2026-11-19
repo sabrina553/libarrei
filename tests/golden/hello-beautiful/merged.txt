@@ -1,16 +1,17 @@
 # work
 title: Hello Beautiful [hardcover]
+subtitle: The poignant and uplifting New York Times bestselling family saga [audible]
 contributors: Ann Napolitano [hardcover]
 description: [goodreads description] [goodreads] CONFLICT
 genres: Fiction, Historical Fiction, Romance, Literary Fiction, Contemporary, Family, Adult, Adult Fiction [goodreads]
 original_release_date: 2023-03-14 [goodreads]
 
 # editions (74); ! marks a conflict
+audible:B0BPYYKP98 goodreads:199619828 | fuzzy | - | audiobook | en | 2023-03-13 | - | Penguin | Hello Beautiful
 goodreads:131910714 hardcover:31522636 | isbn13 | 9780593664056 | audiobook | en | 2023-03-14 | - | Books on Tape | Hello Beautiful
 goodreads:163529945 | - | 9780593862391 | audiobook | en | 2023-08-01 | - | Random House Audio | Hello Beautiful
 goodreads:175407087 hardcover:30948881 openlibrary:OL51325620M | isbn13 | 9780241998496 | physical | en | 2023-03-14! | 416! | Penguin Books! | Hello Beautiful
 goodreads:197864999 | - | 9789897871603 | physical | pt | 2023-10-09 | 464 | TopSeller | Olá, Linda
-goodreads:199619828 | - | - | audiobook | en | 2023-03-13 | - | Penguin | Hello Beautiful
 goodreads:199682171 | - | 9783755810018 | ebook | de | 2024-02-26 | 513 | DuMont Buchverlag | Hallo, du Schöne
 goodreads:202991248 | - | 9788381353670 | physical | pl | 2024-01-24 | 472 | Otwarte | Witaj, piękna
 goodreads:203501764 | - | - | ebook | nl | 2024-03-12 | 480 | Luitingh Sijthoff | Je bent prachtig
