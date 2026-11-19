@@ -119,3 +119,55 @@ def test_duplicates_sharing_a_store_confirmed_asin_say_so():
         amazon=[edition(AZ, "B002GYI9C4", asin="B002GYI9C4")],
     ))
     assert group.duplicate_reasons == {GR: ["store_asin"]}
+
+
+CASTILIAN = {"format": "audiobook", "language": "es"}
+CASTILIAN_VOICES = [("Íñigo Álvarez de Lara", "narrator"), ("Ana Fernández", "narrator")]
+NEUTRAL_VOICES = [("Paris Roa", "narrator"), ("Cristina Tenorio", "narrator")]
+
+
+def people(*named):
+    from libarrei.model import Contributor
+    return [Contributor(name="Matt Dinniman", role="author")] + [Contributor(name=n, role=r) for n, r in named]
+
+
+def test_spanish_audiobooks_group_by_narrators_despite_different_titles():
+    groups = align(works(
+        goodreads=[
+            edition(GR, "238401580", title="Carl el mazmorrero", release_date="2025-07-10", asin="B0FG35DPWV",
+                    contributors=people(*CASTILIAN_VOICES), **CASTILIAN),
+            edition(GR, "239829094", title="Carl el mazmorrero", release_date="2025-08-19", asin="B0FLFCNBRP",
+                    contributors=people(*NEUTRAL_VOICES), **CASTILIAN),
+        ],
+        hardcover=[edition(HC, "33108868", title="Dungeon Crawler Carl", release_date="2025-07-10",
+                           contributors=people(("Inigo Alvarez de Lara", "narrator"), ("Ana Fernandez", "narrator")),
+                           **CASTILIAN)],
+        audible=[
+            edition(Source.AUDIBLE, "B0FG35CZN3", title="Dungeon Crawler Carl", release_date="2025-07-11",
+                    asin="B0FG35CZN3", contributors=people(*CASTILIAN_VOICES), **CASTILIAN),
+            edition(Source.AUDIBLE, "B0FLFCTJ2V", title="Dungeon Crawler Carl", release_date="2025-08-19",
+                    asin="B0FLFCTJ2V", contributors=people(*NEUTRAL_VOICES), **CASTILIAN),
+        ],
+    ))
+    assert sorted(sorted(m[1].ids.get(m[0]) or "" for m in g.members) for g in groups) == [
+        ["238401580", "33108868", "B0FG35CZN3"], ["239829094", "B0FLFCTJ2V"]]
+
+
+def test_same_narrators_on_another_book_stay_apart():
+    groups = align(works(
+        goodreads=[edition(GR, "1", title="Book One", release_date="2025-07-10",
+                           contributors=people(*CASTILIAN_VOICES), **CASTILIAN)],
+        hardcover=[edition(HC, "2", title="Book Two", release_date="2025-11-02",
+                           contributors=people(*CASTILIAN_VOICES), **CASTILIAN)],
+    ))
+    assert len(groups) == 2
+
+
+def test_different_narrators_are_different_recordings():
+    groups = align(works(
+        goodreads=[edition(GR, "1", title="Dungeon Crawler Carl", release_date="2025-07-10",
+                           contributors=people(*CASTILIAN_VOICES), **CASTILIAN)],
+        hardcover=[edition(HC, "2", title="Dungeon Crawler Carl", release_date="2025-07-10",
+                           contributors=people(*NEUTRAL_VOICES), **CASTILIAN)],
+    ))
+    assert len(groups) == 2
