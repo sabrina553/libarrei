@@ -246,3 +246,12 @@ def test_a_bot_check_elsewhere_stops_the_search_but_does_not_block_the_home_stor
                     jitter=lambda: 0, sleep=lambda s: None, elsewhere=other)
     assert amazon.product_elsewhere("B0X") == (None, None, [])
     assert not amazon.blocked and len(other.urls) == 1
+
+
+def test_dead_known_asin_falls_back_to_the_search():
+    pages = {**PAGES, "B0DEADDEAD": ("", 404)}
+    session = FakeSession(pages)
+    found = Clues("mistborn", "sanderson", {Source.AUDIBLE: [], AZ: ["B0DEADDEAD"]})
+    work = from_amazon(client(session), None, found, False, lambda n: None)
+    assert [e.ids[AZ] for e in work.editions] == ["0575089911"]
+    assert len(session.urls) == 3  # the dead page, the search, one product page
