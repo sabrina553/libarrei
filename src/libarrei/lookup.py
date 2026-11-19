@@ -24,6 +24,7 @@ from libarrei.sources.amazon.client import DEFAULT_DOMAIN as AMAZON_DEFAULT_DOMA
 from libarrei.sources.amazon.client import Amazon, AmazonBlocked
 from libarrei.sources.amazon.mapping import to_work as amazon_work
 from libarrei.sources.amazon.scraper import parse_product, parse_search
+from libarrei.sources.formats import normalise_format
 from libarrei.sources.audible.client import DEFAULT_REGION as AUDIBLE_DEFAULT_REGION
 from libarrei.sources.audible.client import Audible
 from libarrei.sources.audible.mapping import to_work as audible_work
@@ -44,7 +45,7 @@ MAX_KNOWN_ASINS = 10
 # Each Amazon page risks a block, so few are fetched however many editions exist.
 MAX_AMAZON_PAGES = 3
 # Extra product pages allowed when known ASINs or search hits turn out not to be the book.
-AMAZON_SPARE_PAGES = 2
+AMAZON_SPARE_PAGES = 4
 # Catalogue sources, best first, for the title and author that later stores search by.
 CATALOGUE_ORDER = [Source.HARDCOVER, Source.GOODREADS, Source.OPENLIBRARY]
 
@@ -158,8 +159,13 @@ def audible_is_work(product: dict, found: Clues) -> bool:
     return same_work(product.get("title"), positions, found)
 
 
-def amazon_is_work(product: dict, found: Clues) -> bool:
+def amazon_is_work(product: dict, found: Clues, strict: bool = False) -> bool:
+    """Strict also wants the title itself, so a single matched edition is not a translation
+    that merely shares the series number."""
     series = product.get("series")
+    if strict:
+        mine, wanted = _main_title(product.get("title") or ""), _main_title(found.title or "")
+        return bool(mine and wanted) and (mine.startswith(wanted) or wanted.startswith(mine))
     return same_work(product.get("title"), {series[1]} if series and series[1] else set(), found)
 
 
@@ -189,12 +195,16 @@ def from_amazon(client: Amazon, isbn: str | None, found: Clues, all_editions: bo
                 return
             budget[0] -= 1
             if (html := client.product(asin)) and (product := parse_product(html)):
+                # Audible covers audiobooks, so Amazon's search is kept to print and Kindle listings.
+                if not trusted and normalise_format(product.get("format")) == "audiobook":
+                    continue
                 # An ISBN or a known ASIN names this edition; a title search can land on a sequel.
-                if trusted or amazon_is_work(product, found):
+                if trusted or amazon_is_work(product, found, strict=not all_editions):
                     products.append((asin, product))
 
     try:
-        read(known, trusted=True)
+        # Known ASINs can be any edition, such as a translation; only a full listing takes them all on trust.
+        read(known, trusted=all_editions)
         query = isbn or " ".join(filter(None, [found.title, found.author]))
         if query and len(products) < wanted and budget[0] > 0:
             seen = set(known)
