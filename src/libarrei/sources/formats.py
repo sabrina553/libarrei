@@ -44,6 +44,8 @@ FORMATS = {
     "digital audio": "audiobook",
     "audio drama": "audiobook",
     "preloaded digital audio player": "audiobook",
+    "large print": "physical",
+    "print": "physical",
 }
 
 # Labels that say nothing about the edition's format.

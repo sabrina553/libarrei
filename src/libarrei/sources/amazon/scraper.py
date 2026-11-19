@@ -21,6 +21,8 @@ CARDS = {
     "ebook_pages": "book_details-ebook_pages",
     "series": "book_details-series",
     "language": "language",
+    "large_print": "book_details-edition_large_print",
+    "dimensions": "book_details-dimensions",
 }
 # The bullet list's labels, lowercased, by the same names.
 BULLETS = {
@@ -54,15 +56,24 @@ def is_captcha(html: str) -> bool:
     return any(marker in html for marker in CAPTCHA_MARKERS)
 
 
+DP_LINK = re.compile(r"/dp/([A-Z0-9]{10})")
+
+
 def parse_search(html: str) -> list[str]:
-    """ASINs of the organic results, in page order; sponsored results are skipped."""
+    """ASINs of the organic results, in page order; sponsored results are skipped.
+
+    A result card leads with one format (often the audiobook, for Audible members) and
+    links its other formats, so those follow it in the order shown."""
     soup = BeautifulSoup(html, "html.parser")
     asins = []
     for result in soup.select('div[data-component-type="s-search-result"][data-asin]'):
-        asin = result["data-asin"].strip()
         sponsored = "AdHolder" in (result.get("class") or []) or result.select_one(".puis-sponsored-label-text")
-        if asin and not sponsored and asin not in asins:
-            asins.append(asin)
+        if sponsored:
+            continue
+        formats = [m.group(1) for link in result.select('a[href*="/dp/"]') if (m := DP_LINK.search(link["href"]))]
+        for asin in [result["data-asin"].strip(), *formats]:
+            if asin and asin not in asins:
+                asins.append(asin)
     return asins
 
 
@@ -147,6 +158,14 @@ def _format(soup: BeautifulSoup) -> str | None:
         soup.select_one("#tmmSwatches .selected a span"))
 
 
+def _format_from_details(details: dict[str, str]) -> str | None:
+    """For a listing outside the format swatches, such as a large-print edition:
+    only a printed book has a large-print or dimensions card."""
+    if "large_print" in details:
+        return "Large Print"
+    return "Print" if "dimensions" in details else None
+
+
 def _cover(soup: BeautifulSoup) -> str | None:
     for selector in ("#landingImage", "#ebooksImgBlkFront", "#imgBlkFront"):
         if (image := soup.select_one(selector)) is not None:
@@ -175,6 +194,6 @@ def parse_product(html: str) -> dict | None:
         "pages": _pages(details.get("pages") or details.get("ebook_pages")),
         "language": details.get("language"),
         "series": series,
-        "format": _format(soup),
+        "format": _format(soup) or _format_from_details(details),
         "cover_url": _cover(soup),
     }

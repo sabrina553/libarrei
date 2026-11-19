@@ -194,7 +194,7 @@ def test_asins_are_routed_by_format():
 
 def test_known_amazon_asins_skip_the_search():
     session = FakeSession(PAGES)
-    found = Clues("mistborn", "sanderson", {Source.AUDIBLE: [], AZ: ["B002GYI9C4"]})
+    found = Clues("the final empire", "sanderson", {Source.AUDIBLE: [], AZ: ["B002GYI9C4"]})
     work = from_amazon(client(session), None, found, False, lambda n: None)
     assert [e.ids[AZ] for e in work.editions] == ["B002GYI9C4"]
     assert session.urls == ["https://www.amazon.co.uk/dp/B002GYI9C4"]
@@ -255,3 +255,21 @@ def test_dead_known_asin_falls_back_to_the_search():
     work = from_amazon(client(session), None, found, False, lambda n: None)
     assert [e.ids[AZ] for e in work.editions] == ["0575089911"]
     assert len(session.urls) == 3  # the dead page, the search, one product page
+
+
+def test_format_of_a_listing_outside_the_swatches_comes_from_its_detail_cards():
+    from libarrei.sources.amazon.scraper import _format_from_details
+    from libarrei.sources.formats import normalise_format
+
+    assert _format_from_details({"large_print": "Yes", "dimensions": "15 x 23 cm"}) == "Large Print"
+    assert _format_from_details({"dimensions": "15 x 23 cm"}) == "Print"
+    assert _format_from_details({"language": "English"}) is None
+    assert normalise_format("Large Print") == normalise_format("Print") == "physical"
+
+
+def test_amazon_search_skips_audiobook_listings():
+    audio = KINDLE.replace("Kindle Edition", "Audible Audiobook")
+    session = FakeSession({"s?k=the+final+empire+sanderson": (SEARCH, 200), "0575089911": (audio, 200),
+                           "B002GYI9C4": (KINDLE, 200)})
+    work = from_amazon(client(session), None, Clues("the final empire", "sanderson"), False, lambda n: None)
+    assert [e.ids[AZ] for e in work.editions] == ["B002GYI9C4"]
