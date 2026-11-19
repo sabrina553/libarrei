@@ -73,3 +73,11 @@ def test_lookup_keeps_a_vouched_result_and_drops_an_unlinked_one(monkeypatch):
     result = run_lookup(monkeypatch, {HC: english, GR: original, OL: hobbes}, "The Three-Body Problem")
     assert set(result.works) == {HC, GR}
     assert GR not in result.notes and result.notes[OL].startswith("no close title match")
+
+
+def test_a_bracketed_part_of_the_searched_title_can_match():
+    from libarrei.lookup import titled_like
+    wanted = "The Complete Collection [The Iliad & The Odyssey]"
+    assert titled_like(found(GR, "Ἰλιάς / Ὀδύσσεια"), wanted)
+    assert not titled_like(found(HC, "Delphi Collected Works of Thomas Hobbes"), wanted)
+    assert not titled_like(found(HC, "Illustrated Atlas"), "Middlemarch [Illustrated]")
