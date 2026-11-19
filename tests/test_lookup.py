@@ -43,3 +43,33 @@ def test_alternative_titles_count():
     work._aliases = ["Crime and Punishment"]
     assert titled_like(work, "Crime and Punishment")
     assert "_aliases" not in work.model_dump()
+
+
+def test_a_shared_identifier_and_author_vouch_for_a_translated_title():
+    from libarrei.lookup import vouched_for
+    original = found(GR, "三体", "Liu Cixin", isbn="9780765382030")
+    english = found(HC, "The Three-Body Problem", "Cixin Liu", isbn="9780765382030")
+    assert vouched_for(GR, original, {HC: english})
+    # Neither an identifier nor an author is enough alone.
+    assert not vouched_for(GR, found(GR, "三体", "Liu Cixin", isbn="9780000000002"), {HC: english})
+    assert not vouched_for(GR, found(GR, "Leviathan", "Thomas Hobbes", isbn="9780765382030"), {HC: english})
+
+
+def run_lookup(monkeypatch, works: dict[Source, Work], title: str):
+    for name in ("HARDCOVER_TOKEN", "GOODREADS_TOKEN"):
+        monkeypatch.setenv(name, "x")
+    monkeypatch.delenv("AMAZON_COOKIE", raising=False)
+    monkeypatch.setattr(lookup_module, "from_openlibrary", lambda *a: works.get(OL))
+    monkeypatch.setattr(lookup_module, "from_hardcover", lambda *a: works.get(HC))
+    monkeypatch.setattr(lookup_module, "from_goodreads", lambda *a: works.get(GR))
+    monkeypatch.setattr(lookup_module, "from_audible", lambda *a: None)
+    return lookup_module.lookup(title=title, use_cache=False)
+
+
+def test_lookup_keeps_a_vouched_result_and_drops_an_unlinked_one(monkeypatch):
+    english = found(HC, "The Three-Body Problem", "Cixin Liu", isbn="9780765382030")
+    original = found(GR, "三体", "Liu Cixin", isbn="9780765382030")
+    hobbes = found(OL, "Delphi Collected Works of Thomas Hobbes", "Thomas Hobbes", isbn="9781786560000")
+    result = run_lookup(monkeypatch, {HC: english, GR: original, OL: hobbes}, "The Three-Body Problem")
+    assert set(result.works) == {HC, GR}
+    assert GR not in result.notes and result.notes[OL].startswith("no close title match")

@@ -53,7 +53,7 @@ def _miscited_isbn(a: Edition, b: Edition) -> bool:
     return bool(pub_a and pub_b and year_a and year_b and _similar(pub_a, pub_b) < 0.5 and year_a != year_b)
 
 
-def _keys(source: Source, edition: Edition) -> list[tuple[str, str]]:
+def edition_keys(source: Source, edition: Edition) -> list[tuple[str, str]]:
     """Identifiers that mark the same real-world edition, wherever they were recorded."""
     keys = [(key, c.value) for key in ("isbn13", "asin") for c in getattr(edition, key)]
     # Open Library editions often cite their Goodreads edition, a link as firm as an ISBN.
@@ -121,7 +121,7 @@ def _by_identifier(editions: list[tuple[Source, Edition]]) -> list[EditionGroup]
     clashes: dict[int, set[str]] = defaultdict(set)
     owner: dict[tuple[str, str], int] = {}
     for i, (source, edition) in enumerate(editions):
-        for key, value in _keys(source, edition):
+        for key, value in edition_keys(source, edition):
             if (key, value) in owner:
                 first = editions[owner[(key, value)]][1]
                 reason = key
