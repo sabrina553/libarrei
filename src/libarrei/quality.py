@@ -42,7 +42,11 @@ def record_fields(edition: MergedEdition) -> dict[tuple[Source, str], set[str]]:
 def score(source: Source, fields: set[str], audiobook: bool) -> int:
     counted = [f for f in WEIGHTS if f in EDITION[source] and _relevant(f, audiobook)]
     total = sum(WEIGHTS[f] for f in counted)
-    return round(100 * sum(WEIGHTS[f] for f in counted if f in fields) / total) if total else 0
+    value = round(100 * sum(WEIGHTS[f] for f in counted if f in fields) / total) if total else 0
+    # However full, a record with no identifier cannot be matched or corrected reliably, so it stays sparse.
+    if any(f in counted for f in IDENTIFIERS) and not any(f in fields for f in IDENTIFIERS):
+        value = min(value, SPARSE - 1)
+    return value
 
 
 def edition_quality(edition: MergedEdition) -> dict[Source, int]:
