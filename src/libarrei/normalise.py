@@ -347,3 +347,19 @@ def is_edition_statement(text: str) -> bool:
     if words[-1] not in {"edition", "ed.", "ed", "version"}:
         return False
     return all(w in _EDITION_QUALIFIERS or re.fullmatch(r"\d+(st|nd|rd|th)?", w) for w in words[:-1])
+
+
+# A file or shop label in a title, not part of it: "Fahrenheit 451 (ebook)", "[EPUB]", "(Kindle Edition)".
+_FORMAT_LABEL = re.compile(
+    r"\s*[(\[](?:e-?book|epub|mobi|pdf|azw3?|kindle(?: edition)?|audiobook|unabridged|abridged|retail)[)\]]",
+    re.IGNORECASE)
+# Two capitalised words run together when a separator was lost: "IntelligenceMachine".
+_RUN_TOGETHER = re.compile(r"(?<=[a-z]{3})(?=[A-Z][a-z]{3})")
+
+
+def search_title(title: str | None) -> str | None:
+    """A title as typed or taken from a folder name, cleaned up for searching."""
+    if not title:
+        return title
+    cleaned = _RUN_TOGETHER.sub(" ", _FORMAT_LABEL.sub("", title))
+    return " ".join(cleaned.split()) or title

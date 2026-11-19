@@ -85,3 +85,13 @@ def test_genres_drop_shelves_and_machine_tags():
 def test_spanish_narration_label_is_stripped():
     from libarrei.normalise import strip_language_label
     assert strip_language_label("Carl el mazmorrero [Narración en español castellano]") == "Carl el mazmorrero"
+
+
+def test_search_title_drops_format_labels_and_splits_run_together_words():
+    from libarrei.normalise import search_title
+
+    assert search_title("Fahrenheit 451 (ebook)") == "Fahrenheit 451"
+    assert search_title("Artificial IntelligenceMachine Learning in Nuclear Medicine") == \
+        "Artificial Intelligence Machine Learning in Nuclear Medicine"
+    assert search_title("Brit(ish)") == "Brit(ish)"
+    assert search_title("McCarthy and the DiLouie Files") == "McCarthy and the DiLouie Files"
