@@ -123,3 +123,7 @@ button.split[aria-pressed='true'] { color: var(--good); }
 label.check { display: inline-flex; gap: 0.3rem; align-items: center; margin: 0 1rem 0.4rem 0; }
 fieldset { border: 1px solid var(--border, currentColor); border-radius: 6px; margin: 0 0 1rem; padding: 0.6rem 0.9rem; }
 .editions tr.copy td:first-child { padding-left: 1.5rem; } .editions tr.copy { opacity: 0.8; }
+.copy-review { padding: 0.5rem 0 0.5rem 1.5rem; border-left: 3px solid var(--accent); }
+.copy-card { padding: 0.5rem 0; border-top: 1px solid var(--border); }
+.copy-card ul { margin: 0.3rem 0; padding-left: 1.2rem; }
+.copy-actions { margin-top: 0.3rem; }

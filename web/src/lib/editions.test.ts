@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { copyExtras, duplicateLabel, editionIssues, foldCopies, issueCount, issueSummary, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
+import { copyExtras, describeExtra, duplicateLabel, matchEvidence, editionIssues, foldCopies, issueCount, issueSummary, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
 
 const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   ids: { hardcover: ['2'], goodreads: ['1'] },
@@ -110,5 +110,6 @@ test('likely copies fold under their original, and their extra details are named
   const orphan = edition({ ids: { hardcover: ['9'] }, stub_of: { hardcover: ['not-listed'] } })
   const folded = foldCopies([copy, original, orphan])
   expect(folded.map((g) => [g.edition.ids.hardcover, g.copies.length])).toEqual([[['30407789'], 1], [['9'], 0]])
-  expect(copyExtras(copy, original)).toEqual(['differs on pages: 447', 'adds cover url'])
+  expect(copyExtras(copy, original).map(describeExtra)).toEqual(['differs on pages: 447', 'adds cover url'])
+  expect(matchEvidence(copy, original)).toEqual(['publisher'])
 })
