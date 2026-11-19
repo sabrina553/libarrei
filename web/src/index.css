@@ -11,6 +11,10 @@
   --differs-bg: #fdecc8;
   --differs-mark: #f5c451;
   --missing-bg: #fde4e1;
+  /* Possible duplicates, kept apart from the conflict and gap colours; same-bg marks the fields that matched them. */
+  --dup-bg: #efe8fb;
+  --dup-edge: #8a63d2;
+  --same-bg: #e2f3e9;
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
   color-scheme: light dark;
@@ -32,6 +36,9 @@
     --differs-bg: #3d321b;
     --differs-mark: #8a6a1c;
     --missing-bg: #3b2224;
+    --dup-bg: #2a2238;
+    --dup-edge: #a989e8;
+    --same-bg: #1d3328;
   }
 }
 
@@ -122,8 +129,18 @@ button.split[aria-pressed='true'] { color: var(--good); }
 .editions td.issues { cursor: help; text-decoration: underline dotted; }
 label.check { display: inline-flex; gap: 0.3rem; align-items: center; margin: 0 1rem 0.4rem 0; }
 fieldset { border: 1px solid var(--border, currentColor); border-radius: 6px; margin: 0 0 1rem; padding: 0.6rem 0.9rem; }
-.editions tr.copy td:first-child { padding-left: 1.5rem; } .editions tr.copy { opacity: 0.8; }
-.copy-review { padding: 0.5rem 0 0.5rem 1.5rem; border-left: 3px solid var(--accent); }
+.editions tr.copy td { background: var(--dup-bg); }
+.editions tr.copy td:first-child { padding-left: 1.5rem; box-shadow: inset 3px 0 0 var(--dup-edge); }
+.editions tr.has-copies td:first-child { box-shadow: inset 3px 0 0 var(--good); }
+table.compare { width: 100%; border-collapse: collapse; margin: 0.4rem 0; font-size: 0.875rem; }
+table.compare th, table.compare td { text-align: left; padding: 0.2rem 0.5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.compare tr.same td { background: var(--same-bg); }
+table.compare tr.differs td { background: var(--differs-bg); }
+table.compare tr.adds td.mine { background: var(--dup-bg); font-weight: 600; }
+table.compare tr.gap td { color: var(--muted); }
+table.compare .why { font-size: 0.75rem; color: var(--good); font-weight: 600; }
+.legend span { display: inline-block; padding: 0 0.4rem; margin-right: 0.5rem; border-radius: 3px; font-size: 0.75rem; }
+.copy-review { padding: 0.5rem 0.75rem 0.5rem 1.5rem; border-left: 3px solid var(--dup-edge); background: var(--dup-bg); }
 .copy-card { padding: 0.5rem 0; border-top: 1px solid var(--border); }
 .copy-card ul { margin: 0.3rem 0; padding-left: 1.2rem; }
 .copy-actions { margin-top: 0.3rem; }

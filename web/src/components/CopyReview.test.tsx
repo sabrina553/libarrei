@@ -44,3 +44,21 @@ test('dismissing a possible duplicate lists it as an ordinary edition', () => {
   expect(screen.queryByText(/possible duplicate/)).toBeNull()
   expect(screen.getAllByRole('row')).toHaveLength(3)
 })
+
+test('the review compares fields in-line and marks the match keys', () => {
+  render(<EditionsTable editions={[best, copy]} book="Dungeon Crawler Carl" />)
+  fireEvent.click(screen.getByText('+1 possible duplicate'))
+  const pages = screen.getByRole('rowheader', { name: 'Pages' }).closest('tr')!
+  expect(pages).toHaveClass('differs')
+  const publisher = screen.getByRole('rowheader', { name: /Publisher/ }).closest('tr')!
+  expect(publisher).toHaveClass('same')
+  expect(publisher).toHaveTextContent('match key')
+})
+
+test('several editions can be open at once', () => {
+  const other = { ...best, ids: { hardcover: ['1'] }, fields: { isbn13: f('9780000000009', '1') } }
+  render(<EditionsTable editions={[best, other]} book="Dungeon Crawler Carl" />)
+  fireEvent.click(screen.getByText('9781405989411'))
+  fireEvent.click(screen.getByText('9780000000009'))
+  expect(screen.getAllByText(/Only problems/)).toHaveLength(2)
+})
