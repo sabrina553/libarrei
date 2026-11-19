@@ -127,6 +127,7 @@ export function editionIssues(edition: MergedEdition): Issues {
   const flags = [
     duplicateLabel(edition),
     edition.stub_of && 'possible stub of a fuller edition',
+    ...(edition.format_clash_isbns ?? []).map((isbn) => `ISBN ${isbn} shared by records with different format, publisher and year`),
     isSparse(edition) && 'sparse record',
     edition.match_reason === 'fuzzy' && `fuzzy match (${edition.confidence})`,
     edition.match_reason === 'asin' && 'matched only by a catalogue ASIN',

@@ -42,6 +42,17 @@ def _formats_agree(a: Edition, b: Edition) -> bool:
     return not formats_a or not formats_b or bool(formats_a & formats_b)
 
 
+def _miscited_isbn(a: Edition, b: Edition) -> bool:
+    """An ISBN belongs to one edition, but catalogues often record the format wrongly
+    (Hardcover defaults to "physical"), so format alone is not enough: the publisher
+    and year must disagree too before a record is taken to cite another edition's ISBN."""
+    if _formats_agree(a, b):
+        return False
+    pub_a, pub_b = _value(a.publisher), _value(b.publisher)
+    year_a, year_b = (_value(a.release_date) or "")[:4], (_value(b.release_date) or "")[:4]
+    return bool(pub_a and pub_b and year_a and year_b and _similar(pub_a, pub_b) < 0.5 and year_a != year_b)
+
+
 def _keys(source: Source, edition: Edition) -> list[tuple[str, str]]:
     """Identifiers that mark the same real-world edition, wherever they were recorded."""
     keys = [(key, c.value) for key in ("isbn13", "asin") for c in getattr(edition, key)]
@@ -58,6 +69,8 @@ class EditionGroup:
     # How the group was formed: "isbn13", "asin", "goodreads_id", "fuzzy", or None for a lone edition.
     reason: str | None = None
     confidence: float = 1.0
+    # ISBNs joining records that disagree on format, publisher and year: one probably cites the other's ISBN.
+    format_clashes: list[str] = field(default_factory=list)
 
     @property
     def sources(self) -> set[Source]:
@@ -105,12 +118,16 @@ def _by_identifier(editions: list[tuple[Source, Edition]]) -> list[EditionGroup]
         return i
 
     reasons: dict[int, str] = {}
+    clashes: dict[int, set[str]] = defaultdict(set)
     owner: dict[tuple[str, str], int] = {}
     for i, (source, edition) in enumerate(editions):
         for key, value in _keys(source, edition):
             if (key, value) in owner:
                 first = editions[owner[(key, value)]][1]
                 reason = key
+                # Still joined: Hardcover's defaults make this signal too noisy to split on, so it is only flagged.
+                if key == "isbn13" and _miscited_isbn(edition, first):
+                    clashes[i].add(value)
                 if key == "asin":
                     # One ASIN is one product, so a clashing format means someone cited it wrongly.
                     if not _formats_agree(edition, first):
@@ -126,9 +143,12 @@ def _by_identifier(editions: list[tuple[Source, Edition]]) -> list[EditionGroup]
                 owner[(key, value)] = i
 
     members = defaultdict(list)
+    group_clashes = defaultdict(set)
     for i, pair in enumerate(editions):
         members[root(i)].append(pair)
-    return [EditionGroup(m, reasons.get(r), WEAK_ASIN_CONFIDENCE if reasons.get(r) == "asin" else 1.0)
+        group_clashes[root(i)] |= clashes[i]
+    return [EditionGroup(m, reasons.get(r), WEAK_ASIN_CONFIDENCE if reasons.get(r) == "asin" else 1.0,
+                         sorted(group_clashes[r]))
             for r, m in members.items()]
 
 

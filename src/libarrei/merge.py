@@ -69,6 +69,8 @@ class MergedEdition(BaseModel):
     quality: dict[Source, int] = {}
     # The ids of a fuller edition this sparse, identifier-less one probably duplicates.
     stub_of: dict[Source, list[str]] | None = None
+    # ISBNs joining records that disagree on format, publisher and year: one probably cites the other's ISBN.
+    format_clash_isbns: list[str] = []
     # Page slugs for sources that address records by slug, such as Hardcover's book slug.
     slugs: dict[Source, str] = {}
 
@@ -130,6 +132,7 @@ def merge_group(group: EditionGroup) -> MergedEdition:
             fields[name] = resolved
     return MergedEdition(ids=ids, match_reason=group.reason, confidence=group.confidence,
                          duplicates=group.duplicates, duplicate_reasons=group.duplicate_reasons,
+                         format_clash_isbns=group.format_clashes,
                          fields=fields, slugs={s: slug for _, e in group.members for s, slug in e.slugs.items()})
 
 

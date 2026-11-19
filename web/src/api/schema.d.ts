@@ -207,6 +207,11 @@ export interface components {
                 [key: string]: string[];
             } | null;
             /**
+             * Format Clash Isbns
+             * @default []
+             */
+            format_clash_isbns: string[];
+            /**
              * Slugs
              * @default {}
              */

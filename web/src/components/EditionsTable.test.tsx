@@ -14,8 +14,8 @@ const disputed = (a: unknown, b: unknown) => ({
 })
 
 const editions: MergedEdition[] = [
-  { ids: { hardcover: ['1'], goodreads: ['5'] }, match_reason: null, confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000001'), pages: disputed(300, 310) } },
-  { ids: { hardcover: ['2'], goodreads: ['3'], openlibrary: ['OL4M'] }, match_reason: 'isbn13', confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000002') } },
+  { ids: { hardcover: ['1'], goodreads: ['5'] }, match_reason: null, confidence: 1, duplicates: [], duplicate_reasons: {}, format_clash_isbns: [], slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000001'), pages: disputed(300, 310) } },
+  { ids: { hardcover: ['2'], goodreads: ['3'], openlibrary: ['OL4M'] }, match_reason: 'isbn13', confidence: 1, duplicates: [], duplicate_reasons: {}, format_clash_isbns: [], slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000002') } },
 ]
 
 test('filters editions and opens one for detail', () => {

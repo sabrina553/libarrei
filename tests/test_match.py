@@ -171,3 +171,23 @@ def test_different_narrators_are_different_recordings():
                            contributors=people(*NEUTRAL_VOICES), **CASTILIAN)],
     ))
     assert len(groups) == 2
+
+
+DANDY = {"publisher": "Dandy House", "release_date": "2020-10-02"}
+
+
+def test_format_alone_does_not_split_an_isbn_group():
+    # Hardcover often records audiobooks as "physical"; same publisher and year means the same edition.
+    groups = align(works(
+        hardcover=[edition(HC, "1", isbn13="9781538555606", format="physical", publisher="Blackstone Audio", release_date="2018-06-12")],
+        goodreads=[edition(GR, "2", isbn13="9781538555606", format="audiobook", publisher="Blackstone Audiobooks", release_date="2018-06-12")],
+    ))
+    assert len(groups) == 1 and groups[0].format_clashes == []
+
+
+def test_isbn_shared_by_unrelated_looking_records_is_flagged_not_split():
+    groups = align(works(
+        hardcover=[edition(HC, "1", isbn13="9781405989411", format="ebook", **DANDY)],
+        goodreads=[edition(GR, "2", isbn13="9781405989411", format="physical", publisher="Penguin", release_date="2026-10-01")],
+    ))
+    assert len(groups) == 1 and groups[0].format_clashes == ["9781405989411"]
