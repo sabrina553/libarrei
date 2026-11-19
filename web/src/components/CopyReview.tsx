@@ -1,8 +1,15 @@
 import { buildChange, changeset, useChangeset } from '../lib/changeset'
-import { copyExtras, describeExtra, editionKey, matchEvidence, type MergedEdition } from '../lib/editions'
+import { compareCopy, copyExtras, editionKey, matchEvidence, type MergedEdition } from '../lib/editions'
 import { formatValue, SOURCE_LABELS, type SourceName } from '../lib/format'
 import { merges, recordId } from '../lib/merges'
+import { fieldLabel } from './FieldGrid'
 import { RecordLink } from './RecordLink'
+
+// Covers are long URLs; a thumbnail compares at a glance.
+function shown(field: string, value: unknown) {
+  if (value === null || value === undefined || value === '') return <span className="muted">—</span>
+  return field === 'cover_url' ? <img src={String(value)} alt="" height={60} /> : formatValue(value)
+}
 
 type Props = { book: string; best: MergedEdition; copies: MergedEdition[] }
 
@@ -28,6 +35,12 @@ export function CopyReview({ book, best, copies }: Props) {
 
   return (
     <div className="copy-review">
+      <p className="legend">
+        <span style={{ background: 'var(--same-bg)' }}>same</span>
+        <span style={{ background: 'var(--differs-bg)' }}>differs</span>
+        <span style={{ background: 'var(--dup-bg)', outline: '1px solid var(--dup-edge)' }}>only on the duplicate</span>
+        <span className="why">match key</span> fields are why the record was suspected
+      </p>
       <p className="muted">
         Possible duplicates: records with no identifier that match this edition. Merge one into this version once
         you agree, keeping anything worth saving first; the merge is staged for you to carry out on the source.
@@ -49,18 +62,23 @@ export function CopyReview({ book, best, copies }: Props) {
               <RecordLink level="edition" value={{ source: own.source, source_id: own.record }} />
               {' '}<span className="muted">matches on {evidence.join(', ') || 'title, format and language'}</span>
             </div>
-            {extras.length > 0 && (
-              <ul>
-                {extras.map((extra) => (
-                  <li key={extra.field}>
-                    {describeExtra(extra)}{' '}
-                    {isKept(extra.field, own.source, extra.value)
-                      ? <span className="muted">kept</span>
-                      : <button type="button" className="link" onClick={() => keep(extra.field, extra.value)}>Keep this value</button>}
-                  </li>
+            <table className="compare">
+              <thead><tr><th>Field</th><th>This version</th><th>Possible duplicate</th><th></th></tr></thead>
+              <tbody>
+                {compareCopy(copy, best).map((r) => (
+                  <tr key={r.field} className={r.state}>
+                    <th scope="row">{fieldLabel(r.field)}{r.why && <div className="why" title="Part of why this record was matched">match key</div>}</th>
+                    <td>{shown(r.field, r.theirs)}</td>
+                    <td className="mine">{shown(r.field, r.mine)}</td>
+                    <td>
+                      {(r.state === 'differs' || r.state === 'adds') && (isKept(r.field, own.source, r.mine)
+                        ? <span className="muted">kept</span>
+                        : <button type="button" className="link" onClick={() => keep(r.field, r.mine)}>Keep this value</button>)}
+                    </td>
+                  </tr>
                 ))}
-              </ul>
-            )}
+              </tbody>
+            </table>
             <div className="copy-actions">
               <button type="button" onClick={() => merges.stage({
                 id: recordId(own.source, own.record), book, source: own.source, record: own.record, into,

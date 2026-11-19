@@ -241,3 +241,30 @@ export function matchEvidence(copy: MergedEdition, original: MergedEdition): str
     ...(same('release_date', (v) => String(v).slice(0, 4)) ? ['year'] : []),
   ]
 }
+
+export type CompareRow = {
+  field: string
+  mine: unknown
+  theirs: unknown
+  // same: both agree; differs: both hold different values; adds: only the copy has it; gap: only the best version has it.
+  state: 'same' | 'differs' | 'adds' | 'gap'
+  // Whether this field is part of why the record was suspected to be a duplicate.
+  why: boolean
+}
+
+const COMPARE_FIELDS = ['title', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher', 'release_date', 'pages',
+  'duration_seconds', 'format', 'language', 'cover_url']
+
+const filled = (v: unknown) => v !== null && v !== undefined && v !== '' && !(Array.isArray(v) && !v.length)
+
+/** A field-by-field comparison of a possible duplicate with the best version, for side-by-side review. */
+export function compareCopy(copy: MergedEdition, best: MergedEdition): CompareRow[] {
+  const evidence = new Set(matchEvidence(copy, best).map((f) => (f === 'year' ? 'release_date' : f)))
+  return COMPARE_FIELDS.flatMap((field): CompareRow[] => {
+    const mine = copy.fields[field]?.value
+    const theirs = best.fields[field]?.value
+    if (!filled(mine) && !filled(theirs)) return []
+    const state = !filled(mine) ? 'gap' : !filled(theirs) ? 'adds' : compareKey(mine) === compareKey(theirs) ? 'same' : 'differs'
+    return [{ field, mine, theirs, state, why: evidence.has(field) }]
+  })
+}

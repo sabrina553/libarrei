@@ -16,6 +16,13 @@ const HEADERS: [SortColumn | null, string][] = [
   ['publisher', 'Publisher'], [null, 'Sources'], ['match', 'Match'], ['issues', 'Issues'], ['quality', 'Quality'],
 ]
 
+// Several editions can be open at once, so a librarian can compare them side by side.
+function toggled(set: Set<string>, key: string): Set<string> {
+  const next = new Set(set)
+  if (!next.delete(key)) next.add(key)
+  return next
+}
+
 const LANGUAGE_RULES = {
   off: 'Every language',
   preferred: 'Your preferred languages',
@@ -26,7 +33,7 @@ const LANGUAGE_RULES = {
 
 export function EditionsTable({ editions, book }: { editions: MergedEdition[]; book: string }) {
   const [filter, setFilter] = useState<FilterName>('all')
-  const [open, setOpen] = useState<string | null>(null)
+  const [open, setOpen] = useState<Set<string>>(new Set())
   const [limit, setLimit] = useState(PAGE)
   const [sort, setSort] = useState<Sort>(null)
   const [allLanguages, setAllLanguages] = useState(false)
@@ -41,14 +48,10 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
     return decisions.merges.some((m) => m.id === id) ? 'merged' : decisions.notDuplicates.includes(id) ? 'kept' : 'open'
   }
   const shown = foldCopies(sortEditions(inView.filter(FILTERS[filter].test), sort, prefs.preferred))
-  const toggleCopies = (key: string) => setUnfolded((was) => {
-    const next = new Set(was)
-    if (!next.delete(key)) next.add(key)
-    return next
-  })
-  const row = (edition: MergedEdition, note?: ReactNode) => (
-    <EditionRow key={editionKey(edition)} edition={edition} book={book} note={note}
-      open={open === editionKey(edition)} onToggle={() => setOpen(open === editionKey(edition) ? null : editionKey(edition))} />
+  const toggleCopies = (key: string) => setUnfolded((was) => toggled(was, key))
+  const row = (edition: MergedEdition, note?: ReactNode, hasCopies = false) => (
+    <EditionRow key={editionKey(edition)} edition={edition} book={book} note={note} hasCopies={hasCopies}
+      open={open.has(editionKey(edition))} onToggle={() => setOpen(toggled(open, editionKey(edition)))} />
   )
 
   return (
@@ -85,32 +88,32 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
           {shown.slice(0, limit).map(({ edition, copies }) => {
             const key = editionKey(edition)
             const unfold = unfolded.has(key)
-            const open = copies.filter((c) => verdict(c) === 'open')
+            const pending = copies.filter((c) => verdict(c) === 'open')
             const kept = copies.filter((c) => verdict(c) === 'kept')
-            const merged = copies.length - open.length - kept.length
+            const merged = copies.length - pending.length - kept.length
             return (
               <Fragment key={key}>
-                {row(edition, (open.length > 0 || merged > 0) && (
+                {row(edition, (pending.length > 0 || merged > 0) && (
                   <>
-                    {open.length > 0 && (
+                    {pending.length > 0 && (
                       <button type="button" className="link" aria-expanded={unfold}
                         onClick={(e) => { e.stopPropagation(); toggleCopies(key) }}
                         title="Records with no identifier whose title, format, language and publisher or year match this edition">
-                        {unfold ? '−' : '+'}{open.length} possible duplicate{open.length === 1 ? '' : 's'}
+                        {unfold ? '−' : '+'}{pending.length} possible duplicate{pending.length === 1 ? '' : 's'}
                       </button>
                     )}
                     {merged > 0 && <span className="muted"> {merged} merged</span>}
                   </>
-                ))}
-                {unfold && open.length > 0 && (
+                ), pending.length > 0)}
+                {unfold && pending.length > 0 && (
                   <>
-                    {open.map((copy) => {
+                    {pending.map((copy) => {
                       const extras = copyExtras(copy, edition)
                       return row(copy, <span className="badge hint" title={extras.map(describeExtra).join('\n') || undefined}>
                         possible duplicate{extras.length ? ` · ${extras.length} extra` : ''}
                       </span>)
                     })}
-                    <tr className="copy-panel"><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><CopyReview book={book} best={edition} copies={open} /></SlugsContext></td></tr>
+                    <tr className="copy-panel"><td colSpan={9}><SlugsContext value={edition.slugs ?? {}}><CopyReview book={book} best={edition} copies={pending} /></SlugsContext></td></tr>
                   </>
                 )}
                 {kept.map((copy) => row(copy))}
@@ -124,9 +127,9 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
   )
 }
 
-type RowProps = { edition: MergedEdition; book: string; open: boolean; onToggle: () => void; note?: ReactNode }
+type RowProps = { edition: MergedEdition; book: string; open: boolean; onToggle: () => void; note?: ReactNode; hasCopies?: boolean }
 
-function EditionRow({ edition, book, open, onToggle, note }: RowProps) {
+function EditionRow({ edition, book, open, onToggle, note, hasCopies }: RowProps) {
   const key = editionKey(edition)
   const value = (name: string) => formatValue(edition.fields[name]?.value)
   const issues = editionIssues(edition)
@@ -134,7 +137,7 @@ function EditionRow({ edition, book, open, onToggle, note }: RowProps) {
   const lowest = lowestQuality(edition)
   return (
     <>
-      <tr className={edition.stub_of ? 'row copy' : 'row'} onClick={onToggle} aria-expanded={open}>
+      <tr className={['row', edition.stub_of && 'copy', hasCopies && 'has-copies'].filter(Boolean).join(' ')} onClick={onToggle} aria-expanded={open}>
         <td className="mono">{value('isbn13')}</td>
         <td>{value('format')}</td>
         <td>{value('language')}</td>
