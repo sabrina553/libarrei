@@ -1,0 +1,45 @@
+# work
+title: The Sandman [hardcover]
+subtitle: Act I [hardcover] CONFLICT
+contributors: Dirk Maggs, Neil Gaiman [hardcover]
+description: [goodreads description] [goodreads] CONFLICT
+series: Sandman Audible Original #1 [hardcover] CONFLICT
+genres: Fantasy, Fiction, Horror, Graphic Novels, Comics, Mythology, Urban Fantasy, Magic, Supernatural [goodreads]
+original_release_date: 2020-07-15 [hardcover]
+
+# editions (35); ! marks a conflict
+audible:3748039824 | - | - | audiobook | it | 2020-11-09 | - | Audible Originals | The Sandman
+audible:B086WQCVVG goodreads:53412746 | store_asin | - | audiobook | en | 2020-07-15 | - | Audible! | The Sandman
+audible:B08M4CY3LX | - | - | audiobook | de | 2021-01-11 | - | Audible Originals | The Sandman
+audible:B08M4HKJKX goodreads:57328561 | fuzzy | - | audiobook | fr | 2021-02-25 | - | Audible Originals | The Sandman
+audible:B08WZD9BV2 | - | - | audiobook | es | 2021-02-22 | - | Audible Originals | The Sandman
+audible:B0971J63QL | - | - | audiobook | es | 2021-06-28 | - | Audible Originals | The Sandman
+audible:B09R2DWDV9 | - | - | audiobook | it | 2022-01-27 | - | Audible Originals | The Sandman: Atto II
+audible:B09WJ8LC83 | - | - | audiobook | hi | 2022-04-27 | - | Audible Originals | The Sandman, Act I
+goodreads:53406893 hardcover:30413276 | asin | - | audiobook | en | 2020-07-15 | - | Audible Originals | The Sandman
+goodreads:53411455 | - | - | audiobook | en | 2020-07-15 | - | Audible | The Sandman
+goodreads:53435637 | - | - | audiobook | en | 2020-07-15 | - | Audible Original | The Sandman
+goodreads:54337041 hardcover:30594511 | isbn13 | 9781713551270 | physical! | en | 2020-07-15! | 12 | Audible Studios on Brilliance Audio | The Sandman
+goodreads:54337042 hardcover:16988291 | isbn13 | 9781713551287 | physical! | en | 2020-07-15! | 11 | Audible Studios on Brilliance Audio | The Sandman
+goodreads:55332718 | - | - | audiobook | - | 2020-07-15 | - | - | The Sandman
+goodreads:55891011 | - | - | audiobook | it | 2020-11-09 | - | Audible Originals | The Sandman
+goodreads:56548093 hardcover:32696487 | asin | - | audiobook | de | 2021-01-11 | - | Audible Originals | The Sandman Akt I!
+goodreads:56888160 | - | - | audiobook | de | 2021-01-11 | - | audible | The Sandman Audible
+goodreads:56930218 | - | - | audiobook | en | 2020 | - | Audible | The Sandman
+goodreads:57214766 | - | - | audiobook | es | 2021-02-22 | - | Audible Originals | The Sandman
+goodreads:58637855 | - | 9781713645702 | audiobook | es | 2021-09-21 | - | Audible Studios on Brilliance Audio | The Sandman
+goodreads:58787381 | - | - | audiobook | en | 2020-07-15 | - | Audible | The Sandman
+goodreads:59328564 | - | - | audiobook | en | 2020-07-20 | - | Audible Originals | The Sandman
+goodreads:60300450 | - | - | audiobook | it | 2020-11-09 | - | Audible Originals | The Sandman
+goodreads:60454778 | - | - | audiobook | es | 2021-06-28 | - | Audible Originals | The Sandman
+goodreads:61185142 | - | - | audiobook | - | - | - | - | The Sandman
+goodreads:61675457 | - | - | audiobook | es | 2021 | - | DC Comics y Audible Originals, LLC | The Sandman
+goodreads:63098166 | - | 9781713558996 | audiobook | en | - | - | - | The Sandman
+hardcover:31105101 | - | - | audiobook | - | 2020-07-15 | - | - | The Sandman
+hardcover:31161810 | - | - | audiobook | it | 2020-07-15 | - | Audible Originals | The Sandman: Atto I
+hardcover:31617104 | - | - | physical | - | - | - | - | The Sandman
+hardcover:32627449 | - | - | audiobook | en | 2020-07-15 | - | Audible Studios | The Sandman
+hardcover:32757383 | - | - | audiobook | en | 2020-07-15 | - | Audible Originals | The Sandman
+hardcover:33255763 | - | - | audiobook | en | 2020-07-15 | - | Audible Originals | The Sandman
+hardcover:33366890 | - | - | audiobook | en | 2020-07-15 | - | Audible Originals | The Sandman
+openlibrary:OL35365237M | - | 9781713647256 | audiobook | - | 2021-09-22 | - | Audible Originals! | The Sandman: Act II

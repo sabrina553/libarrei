@@ -1,0 +1,38 @@
+import { COLUMN_SOURCES, type ColumnName, type SourceName } from '../lib/format'
+
+export type Level = 'work' | 'edition'
+
+// Which fields each source can ever fill, taken from src/libarrei/sources/*/mapping.py.
+// Keep in step with those files: a field missing here shows as "not provided".
+const CAPABILITIES: Record<Level, Record<SourceName, ReadonlySet<string>>> = {
+  edition: {
+    hardcover: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher',
+      'release_date', 'pages', 'format', 'format_detail', 'duration_seconds', 'language', 'cover_url']),
+    goodreads: new Set(['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher',
+      'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url']),
+    openlibrary: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin',
+      'identifiers', 'publisher', 'release_date', 'pages', 'format', 'format_detail', 'language', 'cover_url', 'series']),
+    audible: new Set(['title', 'subtitle', 'edition_statement', 'contributors', 'asin', 'publisher', 'release_date', 'format', 'format_detail',
+      'duration_seconds', 'language', 'cover_url', 'series']),
+    amazon: new Set(['title', 'subtitle', 'contributors', 'isbn13', 'isbn10', 'asin', 'publisher', 'release_date',
+      'pages', 'format', 'format_detail', 'language', 'cover_url', 'series']),
+  },
+  work: {
+    hardcover: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',
+      'original_release_date']),
+    goodreads: new Set(['title', 'contributors', 'description', 'series', 'genres', 'original_release_date']),
+    openlibrary: new Set(['title', 'subtitle', 'contributors', 'description', 'series', 'genres',
+      'original_release_date']),
+    audible: new Set(['title', 'subtitle', 'contributors', 'description', 'series']),
+    amazon: new Set(['title', 'subtitle', 'contributors', 'description', 'series']),
+  },
+}
+
+export function provides(level: Level, source: SourceName, field: string): boolean {
+  return CAPABILITIES[level][source].has(field)
+}
+
+/** A shared column provides a field when any of its sources does. */
+export function columnProvides(level: Level, column: ColumnName, field: string): boolean {
+  return COLUMN_SOURCES[column].some((source) => provides(level, source, field))
+}

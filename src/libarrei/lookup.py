@@ -1,0 +1,441 @@
+"""Finds a book in every configured source and returns one Work per source.
+
+Matching across sources is not attempted here: each source's best guess is
+returned side by side so the results can be compared. Stores that cannot be
+searched by ISBN (Audible) run in a second round, on the title, author and
+ASINs the catalogue sources found; Amazon, scraped only with the user's own
+cookie, runs in that round too.
+"""
+
+import os
+import re
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from difflib import SequenceMatcher
+
+from anyascii import anyascii
+
+from libarrei import normalise
+from libarrei.asin_check import Unavailable
+from libarrei.cache import Cache, NoCache
+from libarrei.match import edition_keys
+from libarrei.merge import text_key
+from libarrei.model import Edition, Source, Work
+from libarrei.ratelimit import INTERVALS, RateLimiter
+from libarrei.sources.amazon.client import DEFAULT_DOMAIN as AMAZON_DEFAULT_DOMAIN
+from libarrei.sources.amazon.client import Amazon, AmazonBlocked
+from libarrei.sources.amazon.mapping import to_work as amazon_work
+from libarrei.sources.amazon.scraper import parse_product, parse_search
+from libarrei.sources.formats import normalise_format
+from libarrei.sources.audible.client import DEFAULT_REGION as AUDIBLE_DEFAULT_REGION
+from libarrei.sources.audible.client import Audible
+from libarrei.sources.audible.mapping import to_work as audible_work
+from libarrei.sources.goodreads.client import Goodreads
+from libarrei.sources.goodreads.mapping import edition_from_editions_page, work_from_graphql
+from libarrei.sources.goodreads.scraper import fetch_editions, parse_id
+from libarrei.sources.goodreads.transport import TransportLayer as GoodreadsTransport
+from libarrei.sources.hardcover.client import Hardcover
+from libarrei.sources.hardcover.mapping import to_edition as hardcover_edition
+from libarrei.sources.hardcover.mapping import to_work as hardcover_work
+from libarrei.sources.hardcover.transport import TransportLayer as HardcoverTransport
+from libarrei.sources.openlibrary.client import OpenLibrary
+from libarrei.sources.openlibrary.mapping import author_keys
+from libarrei.sources.openlibrary.mapping import to_work as openlibrary_work
+
+# Each known ASIN costs one request, so a work with many audiobook editions is capped.
+MAX_KNOWN_ASINS = 10
+# Each Amazon page risks a block, so few are fetched however many editions exist.
+MAX_AMAZON_PAGES = 3
+# Extra product pages allowed when known ASINs or search hits turn out not to be the book.
+AMAZON_SPARE_PAGES = 4
+# Catalogue sources, best first, for the title and author that later stores search by.
+CATALOGUE_ORDER = [Source.HARDCOVER, Source.GOODREADS, Source.OPENLIBRARY]
+
+
+@dataclass
+class LookupResult:
+    works: dict[Source, Work] = field(default_factory=dict)
+    # Why a source returned nothing: missing token, not found, or an error.
+    notes: dict[Source, str] = field(default_factory=dict)
+    # Looks an ASIN up on a store, for checking catalogue ASINs once editions are merged.
+    probe: Callable[[Source, str], dict | None] | None = None
+
+
+def make_probe(audible: Audible, amazon: Amazon | None) -> Callable[[Source, str], dict | None]:
+    """A store lookup returning {"title", "authors"}, memoised; raises Unavailable when it cannot ask."""
+    seen: dict[tuple[Source, str], dict | None] = {}
+
+    def probe(store: Source, asin: str) -> dict | None:
+        if (store, asin) not in seen:
+            try:
+                seen[(store, asin)] = _probe(store, asin)
+            except OSError as error:  # requests errors are OSErrors; a failed check says nothing
+                raise Unavailable() from error
+        return seen[(store, asin)]
+
+    def _probe(store: Source, asin: str) -> dict | None:
+        if store == Source.AUDIBLE:
+            product = audible.product(asin)
+            return product and {"title": product.get("title"),
+                                "authors": [a.get("name") for a in product.get("authors") or []]}
+        if amazon is None:
+            raise Unavailable()
+        try:
+            page, domain, missing = amazon.product(asin), amazon.domain, []
+            if page is None:
+                domain, page, missing = amazon.product_elsewhere(asin)
+                missing = [amazon.domain, *missing]
+        except AmazonBlocked as blocked:
+            raise Unavailable() from blocked
+        product = parse_product(page or "")
+        if not product:
+            return {"missing_from": missing}
+        return {"title": product.get("title"), "authors": [n for n, _ in product.get("authors") or []], "found_on": domain}
+
+    return probe
+
+
+@dataclass
+class Clues:
+    """What the first round of sources learnt, for stores that search by title or ASIN."""
+    title: str | None = None
+    author: str | None = None
+    # Known ASINs, routed to the store that sells that format.
+    asins: dict[Source, list[str]] = field(default_factory=lambda: {Source.AUDIBLE: [], Source.AMAZON: []})
+    # The work's place in its series, which tells it apart from sequels that share the series name.
+    series_position: str | None = None
+
+
+def stores_for(edition: Edition) -> set[Source]:
+    """Audiobooks are Audible's, print and ebooks Amazon's; an unknown or mixed format asks both."""
+    formats = {c.value for c in edition.format}
+    if formats == {"audiobook"}:
+        return {Source.AUDIBLE}
+    if formats and "audiobook" not in formats:
+        return {Source.AMAZON}
+    return {Source.AUDIBLE, Source.AMAZON}
+
+
+def clues(works: dict[Source, Work], title: str | None, author: str | None) -> Clues:
+    found = Clues(title, author)
+    for source in CATALOGUE_ORDER:
+        if not (work := works.get(source)):
+            continue
+        if not found.title and work.title:
+            found.title = work.title[0].value
+        if not found.author and work.contributors:
+            found.author = next((c.name for c in work.contributors[0].value if c.role == "author"), None)
+        if not found.series_position and work.series:
+            found.series_position = next((s.position for s in work.series[0].value if s.position), None)
+        for edition in work.editions:
+            for store in stores_for(edition):
+                found.asins[store] += [c.value for c in edition.asin if c.value not in found.asins[store]]
+    found.asins = {store: asins[:MAX_KNOWN_ASINS] for store, asins in found.asins.items()}
+    return found
+
+
+def _name_words(name: str) -> set[str]:
+    return set(name.casefold().replace(".", " ").split())
+
+
+def same_author(product: dict, author: str | None) -> bool:
+    # Keyword search ranks loosely, so a hit must share a word with the wanted author's name.
+    if not author:
+        return True
+    return any(_name_words(author) & _name_words(a.get("name") or "") for a in product.get("authors") or [])
+
+
+def same_work(title: str | None, positions: set[str], found: Clues) -> bool:
+    """Keyword search also returns sequels and other books by the author, so a hit must be this work.
+
+    A series number decides when both sides have one, which also keeps translated editions whose
+    titles differ. Otherwise the hit's title must start with the work's title.
+    """
+    if found.series_position and positions:
+        return found.series_position in positions
+    return bool(found.title) and text_key(title or "").startswith(text_key(found.title))
+
+
+def audible_is_work(product: dict, found: Clues) -> bool:
+    positions = {s["sequence"] for s in product.get("series") or [] if s.get("sequence")}
+    return same_work(product.get("title"), positions, found)
+
+
+def amazon_is_work(product: dict, found: Clues, strict: bool = False) -> bool:
+    """Strict also wants the title itself, so a single matched edition is not a translation
+    that merely shares the series number."""
+    series = product.get("series")
+    if strict:
+        mine, wanted = _main_title(product.get("title") or ""), _main_title(found.title or "")
+        return bool(mine and wanted) and (mine.startswith(wanted) or wanted.startswith(mine))
+    return same_work(product.get("title"), {series[1]} if series and series[1] else set(), found)
+
+
+def from_audible(cache, region: str, found: Clues, all_editions: bool) -> Work | None:
+    client = Audible(region, cache=cache)
+    products = [p for asin in found.asins[Source.AUDIBLE] if (p := client.product(asin))]
+    if found.title and (all_editions or not products):
+        seen = {p["asin"] for p in products}
+        hits = client.search(found.title, found.author, limit=20 if all_editions else 5)
+        products += [p for p in hits if p["asin"] not in seen and same_author(p, found.author) and audible_is_work(p, found)]
+    if not products:
+        return None
+    return audible_work(products if all_editions else products[:1], region)
+
+
+def from_amazon(client: Amazon, isbn: str | None, found: Clues, all_editions: bool, note) -> Work | None:
+    """Stops at the first sign of a block, keeping whatever was already read."""
+    products: list[tuple[str, dict]] = []
+    wanted = MAX_AMAZON_PAGES if all_editions else 1
+    # Catalogue ASINs can be dead or another format, so a few more pages may be read to fill the quota.
+    budget = [wanted + AMAZON_SPARE_PAGES]
+    known = found.asins[Source.AMAZON][:wanted]
+
+    def read(asins: list[str], trusted: bool) -> None:
+        for asin in asins:
+            if len(products) >= wanted or budget[0] <= 0:
+                return
+            budget[0] -= 1
+            if (html := client.product(asin)) and (product := parse_product(html)):
+                # Audible covers audiobooks, so Amazon's search is kept to print and Kindle listings.
+                if not trusted and normalise_format(product.get("format")) == "audiobook":
+                    continue
+                # An ISBN or a known ASIN names this edition; a title search can land on a sequel.
+                if trusted or amazon_is_work(product, found, strict=not all_editions):
+                    products.append((asin, product))
+
+    try:
+        # Known ASINs can be any edition, such as a translation; only a full listing takes them all on trust.
+        read(known, trusted=all_editions)
+        query = isbn or " ".join(filter(None, [found.title, found.author]))
+        if query and len(products) < wanted and budget[0] > 0:
+            seen = set(known)
+            read([a for a in parse_search(client.search(query) or "") if a not in seen], trusted=bool(isbn))
+    except AmazonBlocked as blocked:
+        note(str(blocked))
+    return amazon_work(products, client.domain) if products else None
+
+
+def from_openlibrary(
+    cache, isbn: str | None, title: str | None, author: str | None, all_editions: bool
+) -> Work | None:
+    ol = OpenLibrary(cache=cache)
+    editions = []
+    if isbn:
+        edition = ol.edition_by_isbn(isbn)
+        if not edition or not edition.get("works"):
+            return None
+        editions, work_key = [edition], edition["works"][0]["key"]
+    else:
+        docs = ol.search(title or "", author, limit=1)
+        if not docs:
+            return None
+        work_key = docs[0]["key"]
+    work = ol.document(work_key)
+    if not work:
+        return None
+    # The ISBN's own edition stays first so it remains the best match.
+    if all_editions:
+        seen = {e["key"] for e in editions}
+        editions += [e for e in ol.all_editions(work_key) if e["key"] not in seen]
+    # Only the work's authors: edition-level keys across hundreds of editions
+    # would cost one request each on a cold cache.
+    names = ol.author_names(author_keys(work))
+    return openlibrary_work(work, editions, names)
+
+
+def from_hardcover(
+    cache, token: str, isbn: str | None, title: str | None, author: str | None, all_editions: bool
+) -> Work | None:
+    client = Hardcover(HardcoverTransport(token, cache=cache))
+    if isbn:
+        books = client.search({"isbn": [isbn], "hcid": []})["books"]
+    else:
+        documents = client.search_documents(title or "", author, limit=1)
+        ids = [int(d["id"]) for d in documents]
+        books = client.search({"isbn": [], "hcid": ids})["books"] if ids else []
+    if not books:
+        return None
+    work = hardcover_work(books[0])
+    if not isbn and documents:
+        work._aliases = [t for t in documents[0].get("alternative_titles") or [] if isinstance(t, str)]
+    if not all_editions:
+        return work
+    # The searched edition stays first so it remains the best match.
+    seen = {e.ids[Source.HARDCOVER] for e in work.editions}
+    work.editions += [
+        hardcover_edition(e, books[0].get("slug")) for e in client.all_editions(books[0]["id"]) if str(e["id"]) not in seen
+    ]
+    return work
+
+
+def from_goodreads(cache, token: str, query: str, all_editions: bool) -> Work | None:
+    client = Goodreads(GoodreadsTransport(token))
+    edges = client.search({"query": query})["getSearchSuggestions"]["edges"]
+    urls = [e["node"]["webUrl"] for e in edges if e and (e.get("node") or {}).get("webUrl")]
+    legacy_id = parse_id(urls[0]) if urls else None
+    if not legacy_id:
+        return None
+    book = client.legacy_id({"legacyId": int(legacy_id)})["getBookByLegacyId"]
+    if not book:
+        return None
+    work = work_from_graphql(book)
+    if all_editions and (work_id := work.ids.get(Source.GOODREADS)):
+        limiter = RateLimiter(INTERVALS["goodreads"])
+        seen = {e.ids.get(Source.GOODREADS) for e in work.editions}
+        scraped = [edition_from_editions_page(e) for e in fetch_editions(work_id, cache, limiter)]
+        work.editions += [e for e in scraped if e.ids.get(Source.GOODREADS) not in seen]
+    return work
+
+
+# How close a found title must be to the one searched for; below it the search found another book.
+TITLE_MATCH = 0.6
+
+
+def _main_title(text: str) -> str:
+    # Transliterated, so an original-script title ("Ἰλιάς") compares with its English one ("Iliad").
+    return text_key(re.split(r"[:(\[]", anyascii(text), maxsplit=1)[0])
+
+
+def _without_articles(text: str) -> str:
+    return text_key(re.sub(r"\b(the|an?)\b", " ", anyascii(text), flags=re.I))
+
+
+def _bracketed(wanted: str) -> list[str]:
+    """Bracketed parts of a searched title, which some name the actual works: "The Complete Collection
+    [The Iliad & The Odyssey]". Articles are dropped as originals rarely have them ("Ilias / Odysseia").
+    One-word brackets are skipped: they are nearly always edition labels ("[Illustrated]", "[Unabridged]")."""
+    parts = [re.sub(r"\b(the|an?)\b", " ", part, flags=re.I).split() for part in re.findall(r"\[([^\]]+)\]", wanted)]
+    return [_without_articles(" ".join(words)) for words in parts if len(words) >= 2]
+
+
+def first_title(work: Work) -> str | None:
+    return next((c.value for c in work.title), None) or next((c.value for e in work.editions for c in e.title), None)
+
+
+def titled_like(work: Work, wanted: str) -> bool:
+    """Whether the work, any of its editions or any of its other known titles is close to the one searched for.
+
+    Editions count too, as a work's own title may be the original-language one."""
+    target = _main_title(wanted)
+    if not target:
+        return True
+    titles = [c.value for c in work.title] + [c.value for e in work.editions for c in e.title] + work._aliases
+    for found in filter(None, titles):
+        main = _main_title(found)
+        if main and (main in target or target in main or SequenceMatcher(None, main, target).ratio() >= TITLE_MATCH):
+            return True
+        # Similarity only: a short bracket ("[Illustrated]") would otherwise be contained in other titles.
+        plain = _without_articles(re.split(r"[:(\[]", found, maxsplit=1)[0])
+        if any(SequenceMatcher(None, plain, part).ratio() >= TITLE_MATCH for part in _bracketed(wanted)):
+            return True
+    return not titles
+
+
+def _author_words(work: Work) -> set[str]:
+    people = [p for c in work.contributors for p in c.value]
+    people += [p for e in work.editions for c in e.contributors for p in c.value]
+    return {w for p in people if p.role == "author" and p.name for w in _name_words(anyascii(p.name))}
+
+
+def _identity(source: Source, work: Work) -> set[tuple[str, str]]:
+    return {key for e in work.editions for key in edition_keys(source, e)}
+
+
+def vouched_for(source: Source, work: Work, accepted: dict[Source, Work]) -> bool:
+    """Whether a source that matched the title shares an edition identifier and an author with this work.
+
+    A shared ISBN, ASIN or cross-site id is firmer evidence than any title comparison, so it covers
+    translations whose titles share nothing ("三体", "The Three-Body Problem"). The author is checked
+    too, as catalogues sometimes cite another book's identifier."""
+    mine, authors = _identity(source, work), _author_words(work)
+    return any(mine & _identity(s, other) and authors & _author_words(other)
+               for s, other in accepted.items() if s != source)
+
+
+def run_parallel(jobs: dict, attempt) -> None:
+    # Sources are independent and network-bound, so a round takes as long as
+    # the slowest source rather than all of them added up.
+    with ThreadPoolExecutor(max_workers=max(len(jobs), 1)) as pool:
+        for source, job in jobs.items():
+            pool.submit(attempt, source, job)
+
+
+def lookup(
+    isbn: str | None = None, title: str | None = None, author: str | None = None, use_cache: bool = True,
+    all_editions: bool = False, hardcover_token: str | None = None, amazon_cookie: str | None = None,
+) -> LookupResult:
+    """Without all_editions only the matched edition per source is fetched: a few
+    requests, rather than minutes for a book with hundreds of editions."""
+    result = LookupResult()
+    cache = Cache() if use_cache else NoCache()
+    title = normalise.search_title(title)
+
+    # Results whose title did not match, kept in case another source vouches for them.
+    held: dict[Source, Work] = {}
+
+    def attempt(source: Source, fetch) -> None:
+        try:
+            work = fetch()
+        except Exception as error:  # one failing source must not hide the others
+            result.notes[source] = f"error: {error}"
+            return
+        if work:
+            normalise.work(work)
+        if work and not isbn and title and not titled_like(work, title):
+            result.notes[source] = f"no close title match (found {first_title(work)!r})"
+            held[source] = work
+        elif work:
+            result.works[source] = work
+        else:
+            result.notes.setdefault(source, "not found")
+
+    def vouch() -> None:
+        # Checked after each round, against only the results that matched on their own title.
+        accepted = dict(result.works)
+        for source, work in list(held.items()):
+            if vouched_for(source, work, accepted):
+                del held[source], result.notes[source]
+                result.works[source] = work
+
+    jobs = {Source.OPENLIBRARY: lambda: from_openlibrary(cache, isbn, title, author, all_editions)}
+    # A caller's own token (a librarian's, via the API) wins over the server's.
+    if token := hardcover_token or os.getenv("HARDCOVER_TOKEN"):
+        jobs[Source.HARDCOVER] = lambda: from_hardcover(cache, token, isbn, title, author, all_editions)
+    else:
+        result.notes[Source.HARDCOVER] = "HARDCOVER_TOKEN not set"
+    if gr_token := os.getenv("GOODREADS_TOKEN"):
+        query = isbn or " ".join(filter(None, [title, author]))
+        jobs[Source.GOODREADS] = lambda: from_goodreads(cache, gr_token, query, all_editions)
+    else:
+        result.notes[Source.GOODREADS] = "GOODREADS_TOKEN not set"
+    run_parallel(jobs, attempt)
+    vouch()
+
+    found = clues(result.works, title, author)
+    region = os.getenv("AUDIBLE_REGION") or AUDIBLE_DEFAULT_REGION
+    later = {Source.AUDIBLE: lambda: from_audible(cache, region, found, all_editions)}
+    # Off unless someone supplies a cookie: scraping Amazon is opt-in.
+    amazon = None
+    if cookie := amazon_cookie or os.getenv("AMAZON_COOKIE"):
+        try:
+            amazon = Amazon(cookie, os.getenv("AMAZON_DOMAIN") or AMAZON_DEFAULT_DOMAIN, cache=cache)
+        except ValueError as error:  # a bad domain or cookie is a note, not a failed lookup
+            result.notes[Source.AMAZON] = f"error: {error}"
+        else:
+            later[Source.AMAZON] = lambda: from_amazon(
+                amazon, isbn, found, all_editions, lambda note: result.notes.__setitem__(Source.AMAZON, note))
+    else:
+        result.notes[Source.AMAZON] = "AMAZON_COOKIE not set"
+    run_parallel(later, attempt)
+    vouch()
+    try:
+        # The same clients, so ASIN checks share the stores' cache, rate limits and block state.
+        result.probe = make_probe(Audible(region, cache=cache), amazon)
+    except ValueError:
+        pass
+
+    # Fixed source order keeps output stable whichever source finished first.
+    result.works = {s: result.works[s] for s in Source if s in result.works}
+    return result

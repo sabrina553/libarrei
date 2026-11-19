@@ -1,0 +1,83 @@
+# work
+title: Hello Beautiful [hardcover]
+subtitle: The poignant and uplifting New York Times bestselling family saga [audible]
+contributors: Ann Napolitano [hardcover]
+description: [goodreads description] [goodreads] CONFLICT
+genres: Fiction, Historical Fiction, Romance, Literary Fiction, Contemporary, Family, Adult, Adult Fiction [goodreads]
+original_release_date: 2023-03-14 [goodreads]
+
+# editions (74); ! marks a conflict
+audible:B0BPYYKP98 goodreads:199619828 | fuzzy | - | audiobook | en | 2023-03-13 | - | Penguin | Hello Beautiful
+goodreads:131910714 hardcover:31522636 | isbn13 | 9780593664056 | audiobook | en | 2023-03-14 | - | Books on Tape | Hello Beautiful
+goodreads:163529945 | - | 9780593862391 | audiobook | en | 2023-08-01 | - | Random House Audio | Hello Beautiful
+goodreads:175407087 hardcover:30948881 openlibrary:OL51325620M | isbn13 | 9780241998496 | physical | en | 2023-03-14! | 416! | Penguin Books! | Hello Beautiful
+goodreads:197864999 | - | 9789897871603 | physical | pt | 2023-10-09 | 464 | TopSeller | Olá, Linda
+goodreads:199682171 | - | 9783755810018 | ebook | de | 2024-02-26 | 513 | DuMont Buchverlag | Hallo, du Schöne
+goodreads:202991248 | - | 9788381353670 | physical | pl | 2024-01-24 | 472 | Otwarte | Witaj, piękna
+goodreads:203501764 | - | - | ebook | nl | 2024-03-12 | 480 | Luitingh Sijthoff | Je bent prachtig
+goodreads:205089797 | - | 9789021044415 | physical | nl | 2024-03-12 | 446 | Luitingh-Sijthoff | Je bent prachtig
+goodreads:205565034 | - | 9788410138100 | physical | es | 2024-03-07 | 432 | AdN Editorial Grupo Anaya | Hola, preciosa
+goodreads:205565214 | - | 9788410138124 | physical | ca | 2024-03-07 | 472 | AdN Editorial Grupo Anaya | Hola, preciosa
+goodreads:207599286 hardcover:30737164 openlibrary:OL39420471M | isbn13 | 9780593243732 | physical | en | 2023-03-14 | 401! | The Dial Press! | Hello Beautiful
+goodreads:207672853 | - | 9788835732150 | ebook | it | 2024-03-05 | 432 | Mondadori | Tutto è meraviglia
+goodreads:208504440 | - | 9789634528371 | physical | hu | 2024-03-20 | 432 | General Press | Helló, gyönyörűm
+goodreads:209136025 | - | 9783832169459 | physical | de | 2024-02-26 | 520 | DuMont Buchverlag GmbH & Co. KG | Hallo, du Schöne
+goodreads:209518967 | - | 9788804781134 | physical | it | 2024-03-05 | 432 | Mondadori | Tutto è meraviglia
+goodreads:210286726 | - | 9789533861036 | physical | hr | 2024 | 384 | - | Dobar dan, ljepoto
+goodreads:210555852 | - | 9789021044422 | ebook | nl | 2024-03-12 | 380 | Luitingh Sijthoff | Je bent prachtig
+goodreads:210555863 | - | 9789021046785 | audiobook | nl | 2024-04-11 | - | Luitingh Sijthoff | Je bent prachtig
+goodreads:211219509 | - | 9786180155556 | physical | el | 2024-04-04 | 464 | Ψυχογιός | Γεια σου, όμορφη
+goodreads:211299405 | - | 9786303197043 | physical | ro | 2024-04-01 | 512 | Litera | Portret de familie
+goodreads:211816123 | - | 9786267406540 | physical | zh | 2024-04-29 | 496 | 悅知文化 | 美好是你
+goodreads:212312724 | - | 9786267406533 | ebook | zh | 2024-04-29 | 443 | 悅知文化 | Hello Beautiful美好是你
+goodreads:213150419 hardcover:31812849 | isbn13 | 9780241999448 | audiobook | en | 2023-03-14! | - | PENGUIN BOOKS LTD! | Hello Beautiful
+goodreads:213286953 | - | 9786060959199 | audiobook | ro | 2024-05 | - | Editura Litera | Portret de familie
+goodreads:213827570 | - | 9788410138131 | ebook | ca | 2024-03-07 | 507 | AdN Editorial Grupo Anaya | Hola, preciosa
+goodreads:214056745 | - | 9788410138117 | ebook | es | 2024-03-07 | 471 | AdN Editorial Grupo Anaya | Hola, preciosa
+goodreads:214761312 | - | 9789510504581 | physical | fi | 2024-08-01 | 478 | WSOY | Kau­no­kai­sia
+goodreads:215583806 hardcover:31469932 | isbn13 | 9788076253070 | physical | cs | 2023-03-14! | 211! | Grada Publishing a.s.! | Ahoj krásko
+goodreads:215596258 hardcover:31766480 | isbn13 | 9780593733479 | physical | en | 2024-07-17 | 400 | RANDOM HOUSE US | Hello Beautiful
+goodreads:215697340 | - | 9789542623748 | physical | bg | 2024-07-23 | 408 | Хермес | Здравей, красавице
+goodreads:215786176 | - | 9788022215923 | physical | sk | 2024-07-31 | 360 | Tatran | Ahoj, dievčatko
+goodreads:217005288 hardcover:31939010 openlibrary:OL53390490M | isbn13 | 9780593243756 | physical | en | 2023-03-14! | 417! | Random House! | Hello Beautiful
+goodreads:217974483 | - | 9789510504598 | ebook | fi | 2024-08-01 | 479 | WSOY | Kaunokaisia
+goodreads:217974511 | - | 9789510504604 | audiobook | fi | 2024-08-01 | - | WSOY | Kaunokaisia
+goodreads:218251156 | - | 9791191114560 | physical | ko | 2024-08-27 | 556 | 복복서가 | 헬로 뷰티풀
+goodreads:218797790 | - | 9789934326585 | physical | lv | 2024-09-10 | 480 | Zvaigzne ABC | Sveika, skaistulīt!
+goodreads:221993170 | - | 9786075745626 | ebook | es | 2024-10-25 | - | AdN | Hola, preciosa
+goodreads:222078182 | - | 9785864719794 | physical | ru | 2024-01-01 | 512 | Fantom Press | Привет, красавица
+goodreads:222315510 | - | - | physical | ko | 2024-08-27 | - | Bokbokseoga | Hello Beautiful
+goodreads:222664607 | - | 9789612982331 | physical | sl | 2024-12 | 424 | Beletrina | Živijo, lepotica
+goodreads:222739633 | - | 9782365698580 | physical | fr | 2025-03-13 | 430 | LES ESCALES | Les Bien-aimés
+goodreads:223247107 | - | 9789916145449 | physical | et | 2024-12-10 | 485 | Rahva Raamat | Tere, kaunitar!
+goodreads:225058746 | - | 9782365699648 | ebook | fr | 2025-03-13 | 420 | Les escales éditions | Les Bien-Aimés
+goodreads:227635171 | - | - | audiobook | fr | 2025-03-13 | - | Lizzie | Les Bien-aimés
+goodreads:228682753 | - | - | ebook | ru | 2025-03-04 | 465 | Фантом Пресс | Привет, красавица
+goodreads:229077534 | - | - | audiobook | ru | 2025-03-12 | - | Вимбо | Привет, красавица
+goodreads:229671531 | - | - | audiobook | it | 2024-04-26 | - | Mondadori Libri S.p.A. | Tutto è meraviglia
+goodreads:229739430 | - | - | audiobook | de | 2024-03-13 | - | DUMONT Buchverlag | Hallo, du Schöne
+goodreads:230938473 | - | 9785047304069 | ebook | ru | - | 453 | Фантом Пресс | Привет, красавица
+goodreads:231164817 | - | 9786171709089 | physical | uk | 2025-06-16 | 528 | Vivat | Привіт, красуне
+goodreads:233537807 | - | 9786075745619 | physical | es | - | - | - | Hola, preciosa
+goodreads:237850306 | - | 9782370834942 | physical | fr | 2025-09-01 | 636 | GABELIRE | Les Bien-aimés
+goodreads:238639121 | - | 9789934326592 | ebook | lv | 2024-09 | - | Zvaigzne ABC | Sveika, skaistulīt!
+goodreads:239413066 | - | 9786255898234 | physical | tr | 2025-08 | 424 | Mundi Kitap | Merhaba Güzellik
+goodreads:240329313 | - | 9786090167175 | physical | lt | 2025-09-11 | 496 | Alma Littera | Sveika, gražuole
+goodreads:243959068 | - | 9786555681734 | physical | pt | 2024-09-24 | 288 | Tordesilhas | Olá, Querida
+goodreads:245479688 | - | 9782266354981 | - | fr | 2026-04-16 | 608 | POCKET | Les Bien-aimés
+goodreads:246127212 | - | - | physical | sr | 2025 | 416 | Čarobna knjiga | Zdravo, lepotice
+goodreads:246830390 | - | 9789895898053 | ebook | pt | 2026-02-02 | 480 | PENGUIN COMERCIAL | Olá, Linda
+goodreads:249064073 | - | 9791036640926 | audiobook | fr | 2025-03-13 | - | Lizzie | Les Biens-aimés
+goodreads:253165336 | - | 9786555681819 | ebook | pt | 2024-09-30 | 351 | Tordesilhas | Olá, querida
+goodreads:262053275 | - | 9789935313829 | physical | is | 2026 | 427 | Sögur útgáfa | Halló, mín fagra
+goodreads:61771675 | - | - | ebook | en | 2023-03-14 | 594 | The Dial Press | Hello Beautiful
+goodreads:61827495 | - | - | physical | en | 2023-03-14 | 400 | The Dial Press | Hello Beautiful
+goodreads:61920967 hardcover:32665153 openlibrary:OL39551918M | isbn13 | 9780241628270 | physical | en | 2023-07-13 | 383! | Penguin Books! | Hello Beautiful
+goodreads:62049686 hardcover:30647036 openlibrary:OL48258408M | isbn13 | 9780593243749 | ebook | en | 2023-01-01! | 416! | The Dial Press! | Hello Beautiful
+goodreads:62234882 | - | - | audiobook | en | 2023-03-14 | - | Random House Audio | Hello Beautiful
+goodreads:62234889 | - | - | audiobook | en | 2023-03-14 | - | Random House Audio | Hello Beautiful
+goodreads:62986214 hardcover:30828827 openlibrary:OL40328757M | isbn13 | 9780241628263 | physical | en | 2023-07-13 | 400! | Viking! | Hello Beautiful
+goodreads:63024336 hardcover:30948880 openlibrary:OL42794673M | isbn13 | 9780593682937 | physical | en | 2023-03-21 | 592 | Random House Large Print! | Hello Beautiful
+goodreads:63314764 hardcover:31419588 openlibrary:OL42864513M | isbn13 | 9780593597262 | physical | en | 2023-03-14 | 401! | The Dial Press! | Hello Beautiful
+goodreads:63913966 hardcover:30828826 | isbn13 | 9780241998489 | physical! | en | 2023-03-13 | 369! | Random House! | Hello Beautiful
+hardcover:31592686 | - | 9780593664049 | audiobook | en | 2023-05-14 | - | Penguin Audio | Hello Beautiful

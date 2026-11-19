@@ -1,0 +1,51 @@
+{
+ "product": {
+  "asin": "B004EW5KKU",
+  "title": "The Hobbit",
+  "authors": [
+   {
+    "asin": "B0H8M7NMXY",
+    "name": "J. R. R. Tolkien"
+   }
+  ],
+  "narrators": [
+   {
+    "name": "Rob Inglis"
+   }
+  ],
+  "series": [
+   {
+    "asin": "B00HQ0XPUY",
+    "sequence": "0.5",
+    "title": "The Lord of the Rings"
+   }
+  ],
+  "publisher_name": "HarperCollins Publishers Limited",
+  "release_date": "2008-12-28",
+  "issue_date": "2008-12-28",
+  "language": "english",
+  "publisher_summary": "<p>Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure.</p> <p>Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the pantry of his hobbit-hole in Bag End.</p> <p>But his contentment is disturbed when the wizard, Gandalf, and a company of thirteen dwarves arrive on his doorstep one day to whisk him away on an unexpected journey ‘there and back again’. They have a plot to raid the treasure hoard of Smaug the ...</p>",
+  "merchandising_summary": "Bilbo Baggins is a hobbit who enjoys a comfortable and quiet life. His contentment is disturbed one day when the wizard, Gandalf, and the dwarves arrive to take him away on an adventure. Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the...",
+  "product_images": {
+   "1000": "https://m.media-amazon.com/images/I/A1Y78U6hxRL._SL1000_.jpg"
+  },
+  "runtime_length_min": 662,
+  "format_type": "unabridged",
+  "content_type": "Product",
+  "category_ladders": [
+   {
+    "ladder": [
+     {
+      "id": "19378442031",
+      "name": "Science Fiction & Fantasy"
+     },
+     {
+      "id": "19378443031",
+      "name": "Fantasy"
+     }
+    ],
+    "root": "Genres"
+   }
+  ]
+ }
+}
