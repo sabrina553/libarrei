@@ -8,7 +8,7 @@ const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   asin_checks: {},
   quality: {},
   duplicates: [],
-  duplicate_reasons: {},
+  duplicate_reasons: {}, format_clash_isbns: [],
   slugs: {},
   fields: {},
   ...over,
@@ -85,4 +85,9 @@ test('issues count conflicts, missing fields and record flags, with a hover summ
   expect(issueCount(e)).toBe(4)
   expect(issueSummary(issues)).toBe('Conflicts: pages\nMissing: publisher\nduplicate · ISBN\nfuzzy match (0.75)')
   expect(issueCount(edition({}))).toBe(0)
+})
+
+test('an ISBN shared by unrelated-looking records is an issue', () => {
+  const e = edition({ format_clash_isbns: ['9781405989411'] })
+  expect(editionIssues(e).flags).toEqual(['ISBN 9781405989411 shared by records with different format, publisher and year'])
 })
