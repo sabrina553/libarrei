@@ -14,9 +14,12 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 
+from anyascii import anyascii
+
 from libarrei import normalise
 from libarrei.asin_check import Unavailable
 from libarrei.cache import Cache, NoCache
+from libarrei.match import edition_keys
 from libarrei.merge import text_key
 from libarrei.model import Edition, Source, Work
 from libarrei.ratelimit import INTERVALS, RateLimiter
@@ -249,11 +252,14 @@ def from_hardcover(
     if isbn:
         books = client.search({"isbn": [isbn], "hcid": []})["books"]
     else:
-        ids = client.search_titles(title or "", author, limit=1)
+        documents = client.search_documents(title or "", author, limit=1)
+        ids = [int(d["id"]) for d in documents]
         books = client.search({"isbn": [], "hcid": ids})["books"] if ids else []
     if not books:
         return None
     work = hardcover_work(books[0])
+    if not isbn and documents:
+        work._aliases = [t for t in documents[0].get("alternative_titles") or [] if isinstance(t, str)]
     if not all_editions:
         return work
     # The searched edition stays first so it remains the best match.
@@ -288,7 +294,8 @@ TITLE_MATCH = 0.6
 
 
 def _main_title(text: str) -> str:
-    return text_key(re.split(r"[:(\[]", text, maxsplit=1)[0])
+    # Transliterated, so an original-script title ("Ἰλιάς") compares with its English one ("Iliad").
+    return text_key(re.split(r"[:(\[]", anyascii(text), maxsplit=1)[0])
 
 
 def first_title(work: Work) -> str | None:
@@ -296,18 +303,39 @@ def first_title(work: Work) -> str | None:
 
 
 def titled_like(work: Work, wanted: str) -> bool:
-    """Whether the work or any of its editions carries a title close to the one searched for.
+    """Whether the work, any of its editions or any of its other known titles is close to the one searched for.
 
     Editions count too, as a work's own title may be the original-language one."""
     target = _main_title(wanted)
     if not target:
         return True
-    titles = [c.value for c in work.title] + [c.value for e in work.editions for c in e.title]
+    titles = [c.value for c in work.title] + [c.value for e in work.editions for c in e.title] + work._aliases
     for found in filter(None, titles):
         main = _main_title(found)
         if main and (main in target or target in main or SequenceMatcher(None, main, target).ratio() >= TITLE_MATCH):
             return True
     return not titles
+
+
+def _author_words(work: Work) -> set[str]:
+    people = [p for c in work.contributors for p in c.value]
+    people += [p for e in work.editions for c in e.contributors for p in c.value]
+    return {w for p in people if p.role == "author" and p.name for w in _name_words(anyascii(p.name))}
+
+
+def _identity(source: Source, work: Work) -> set[tuple[str, str]]:
+    return {key for e in work.editions for key in edition_keys(source, e)}
+
+
+def vouched_for(source: Source, work: Work, accepted: dict[Source, Work]) -> bool:
+    """Whether a source that matched the title shares an edition identifier and an author with this work.
+
+    A shared ISBN, ASIN or cross-site id is firmer evidence than any title comparison, so it covers
+    translations whose titles share nothing ("三体", "The Three-Body Problem"). The author is checked
+    too, as catalogues sometimes cite another book's identifier."""
+    mine, authors = _identity(source, work), _author_words(work)
+    return any(mine & _identity(s, other) and authors & _author_words(other)
+               for s, other in accepted.items() if s != source)
 
 
 def run_parallel(jobs: dict, attempt) -> None:
@@ -328,19 +356,32 @@ def lookup(
     cache = Cache() if use_cache else NoCache()
     title = normalise.search_title(title)
 
+    # Results whose title did not match, kept in case another source vouches for them.
+    held: dict[Source, Work] = {}
+
     def attempt(source: Source, fetch) -> None:
         try:
             work = fetch()
         except Exception as error:  # one failing source must not hide the others
             result.notes[source] = f"error: {error}"
             return
+        if work:
+            normalise.work(work)
         if work and not isbn and title and not titled_like(work, title):
             result.notes[source] = f"no close title match (found {first_title(work)!r})"
+            held[source] = work
         elif work:
-            normalise.work(work)
             result.works[source] = work
         else:
             result.notes.setdefault(source, "not found")
+
+    def vouch() -> None:
+        # Checked after each round, against only the results that matched on their own title.
+        accepted = dict(result.works)
+        for source, work in list(held.items()):
+            if vouched_for(source, work, accepted):
+                del held[source], result.notes[source]
+                result.works[source] = work
 
     jobs = {Source.OPENLIBRARY: lambda: from_openlibrary(cache, isbn, title, author, all_editions)}
     # A caller's own token (a librarian's, via the API) wins over the server's.
@@ -354,6 +395,7 @@ def lookup(
     else:
         result.notes[Source.GOODREADS] = "GOODREADS_TOKEN not set"
     run_parallel(jobs, attempt)
+    vouch()
 
     found = clues(result.works, title, author)
     region = os.getenv("AUDIBLE_REGION") or AUDIBLE_DEFAULT_REGION
@@ -371,6 +413,7 @@ def lookup(
     else:
         result.notes[Source.AMAZON] = "AMAZON_COOKIE not set"
     run_parallel(later, attempt)
+    vouch()
     try:
         # The same clients, so ASIN checks share the stores' cache, rate limits and block state.
         result.probe = make_probe(Audible(region, cache=cache), amazon)
