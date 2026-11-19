@@ -7,9 +7,14 @@ const field = (value: unknown, conflict = false) => ({
   value, source: 'hardcover' as const, source_id: '1', conflict, alternatives: [],
   values: [{ value, source: 'hardcover' as const, source_id: '1' }],
 })
+// Two sources disagreeing, which is what the grid and the Issues count treat as a conflict.
+const disputed = (a: unknown, b: unknown) => ({
+  ...field(a, true),
+  values: [{ value: a, source: 'hardcover' as const, source_id: '1' }, { value: b, source: 'goodreads' as const, source_id: '5' }],
+})
 
 const editions: MergedEdition[] = [
-  { ids: { hardcover: ['1'] }, match_reason: null, confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000001'), pages: field(300, true) } },
+  { ids: { hardcover: ['1'], goodreads: ['5'] }, match_reason: null, confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000001'), pages: disputed(300, 310) } },
   { ids: { hardcover: ['2'], goodreads: ['3'], openlibrary: ['OL4M'] }, match_reason: 'isbn13', confidence: 1, duplicates: [], duplicate_reasons: {}, slugs: {}, asin_checks: {}, quality: {}, fields: { isbn13: field('9780000000002') } },
 ]
 
@@ -45,4 +50,10 @@ test('sorting keeps the filter', () => {
   fireEvent.click(screen.getByText('Conflicts (1)'))
   fireEvent.click(screen.getByRole('button', { name: 'ISBN-13' }))
   expect(screen.queryByText('9780000000002')).toBeNull()
+})
+
+test('the issues cell shows a count with the breakdown on hover', () => {
+  render(<EditionsTable editions={editions} book="Test" />)
+  const cell = screen.getByTitle(/Conflicts: pages/)
+  expect(cell).toHaveTextContent(/^\d+$/)
 })

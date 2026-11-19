@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { conflictCount, duplicateLabel, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
+import { duplicateLabel, editionIssues, issueCount, issueSummary, editionKey, FILTERS, nextSort, sortEditions, type MergedEdition } from './editions'
 
 const edition = (over: Partial<MergedEdition>): MergedEdition => ({
   ids: { hardcover: ['2'], goodreads: ['1'] },
@@ -15,9 +15,11 @@ const edition = (over: Partial<MergedEdition>): MergedEdition => ({
 })
 
 test('filters pick out the editions librarians need to look at', () => {
-  const conflicted = edition({ fields: { pages: { value: 1, source: 'hardcover', source_id: '2', conflict: true, alternatives: [], values: [] } } })
-  expect(conflictCount(conflicted)).toBe(1)
+  const conflicted = edition({ fields: { pages: { value: 1, source: 'hardcover', source_id: '2', conflict: true, alternatives: [],
+    values: [{ value: 1, source: 'hardcover', source_id: '2' }, { value: 2, source: 'goodreads', source_id: '1' }] } } })
+  expect(editionIssues(conflicted).conflicts).toEqual(['pages'])
   expect(FILTERS.conflicts.test(conflicted)).toBe(true)
+  expect(FILTERS.issues.test(conflicted)).toBe(true)
   expect(FILTERS.missing.test(edition({}))).toBe(true)
   expect(FILTERS.duplicates.test(edition({ duplicates: ['openlibrary'] }))).toBe(true)
   expect(FILTERS.fuzzy.test(edition({ match_reason: 'fuzzy' }))).toBe(true)
@@ -65,4 +67,22 @@ test('column sorts are numeric for numbers and keep gaps last both ways', () => 
   expect(nextSort(null, 'quality')).toEqual({ column: 'quality', descending: false })
   expect(nextSort({ column: 'quality', descending: false }, 'quality')).toEqual({ column: 'quality', descending: true })
   expect(nextSort({ column: 'quality', descending: true }, 'quality')).toBeNull()
+})
+
+test('issues count conflicts, missing fields and record flags, with a hover summary', () => {
+  const v = (value: unknown, source: 'hardcover' | 'goodreads') => ({ value, source, source_id: source === 'hardcover' ? '2' : '1' })
+  const e = edition({
+    match_reason: 'fuzzy', confidence: 0.75, duplicates: ['goodreads'], duplicate_reasons: { goodreads: ['isbn13'] },
+    fields: {
+      pages: { value: 1, source: 'hardcover', source_id: '2', conflict: true, alternatives: [], values: [v(1, 'hardcover'), v(2, 'goodreads')] },
+      publisher: { value: 'Ace', source: 'hardcover', source_id: '2', conflict: false, alternatives: [], values: [v('Ace', 'hardcover')] },
+    },
+  })
+  const issues = editionIssues(e)
+  expect(issues.conflicts).toEqual(['pages'])
+  expect(issues.missing).toEqual(['publisher'])
+  expect(issues.flags).toEqual(['duplicate · ISBN', 'fuzzy match (0.75)'])
+  expect(issueCount(e)).toBe(4)
+  expect(issueSummary(issues)).toBe('Conflicts: pages\nMissing: publisher\nduplicate · ISBN\nfuzzy match (0.75)')
+  expect(issueCount(edition({}))).toBe(0)
 })

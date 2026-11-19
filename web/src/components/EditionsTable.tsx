@@ -1,18 +1,15 @@
 import { Fragment, useState } from 'react'
-import { conflictCount, duplicateLabel, editionKey, FILTERS, isSparse, lowestQuality, nextSort, sortEditions, stubLabel, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
+import { EDITION_FIELDS, editionIssues, editionKey, FILTERS, issueSummary, isSparse, lowestQuality, nextSort, sortEditions, type FilterName, type MergedEdition, type Sort, type SortColumn } from '../lib/editions'
 import { COLUMN_LABELS, COLUMN_SOURCES, COLUMNS, formatValue } from '../lib/format'
 import { SlugsContext } from '../lib/links'
 import { FieldGrid } from './FieldGrid'
 
 // Rendering thousands of rows at once is slow; show a page and let the librarian ask for more.
 const PAGE = 100
-const EDITION_FIELDS = ['title', 'subtitle', 'edition_statement', 'contributors', 'isbn13', 'isbn10', 'asin',
-  'identifiers', 'publisher',
-  'release_date', 'pages', 'format', 'format_detail', 'duration_seconds', 'language', 'series', 'cover_url']
 // Column headers; null marks one that cannot be sorted.
 const HEADERS: [SortColumn | null, string][] = [
   ['isbn13', 'ISBN-13'], ['format', 'Format'], ['language', 'Language'], ['release_date', 'Released'],
-  ['publisher', 'Publisher'], [null, 'Sources'], ['match', 'Match'], ['conflicts', 'Conflicts'], ['quality', 'Quality'],
+  ['publisher', 'Publisher'], [null, 'Sources'], ['match', 'Match'], ['issues', 'Issues'], ['quality', 'Quality'],
 ]
 
 export function EditionsTable({ editions, book }: { editions: MergedEdition[]; book: string }) {
@@ -48,9 +45,9 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
           {shown.slice(0, limit).map((edition) => {
             const key = editionKey(edition)
             const value = (name: string) => formatValue(edition.fields[name]?.value)
-            const conflicts = conflictCount(edition)
+            const issues = editionIssues(edition)
+            const issueTotal = issues.conflicts.length + issues.missing.length + issues.flags.length
             const lowest = lowestQuality(edition)
-            const stub = stubLabel(edition, editions)
             return (
               <Fragment key={key}>
                 <tr className="row" onClick={() => setOpen(open === key ? null : key)} aria-expanded={open === key}>
@@ -63,11 +60,9 @@ export function EditionsTable({ editions, book }: { editions: MergedEdition[]; b
                     {COLUMNS.map((c) => (
                       <span key={c} className={COLUMN_SOURCES[c].some((s) => edition.ids[s]) ? 'src on' : 'src'} title={COLUMN_LABELS[c]}>{COLUMN_LABELS[c][0]}</span>
                     ))}
-                    {duplicateLabel(edition) && <span className="badge">{duplicateLabel(edition)}</span>}
-                    {stub && <span className="badge hint" title="No identifiers, and its title, format, language and publisher or year match a fuller edition">{stub}</span>}
                   </td>
                   <td>{edition.match_reason === 'fuzzy' ? `fuzzy ${edition.confidence}` : edition.match_reason ?? '—'}</td>
-                  <td>{conflicts || ''}</td>
+                  <td title={issueSummary(issues) || undefined} className={issueTotal ? 'issues' : undefined}>{issueTotal || ''}</td>
                   <td className={isSparse(edition) ? 'quality low' : 'quality'} title="Completeness of the weakest source record">
                     {lowest === null ? '—' : `${lowest} %`}
                   </td>
