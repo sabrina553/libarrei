@@ -245,7 +245,7 @@ def from_hardcover(
 def from_goodreads(cache, token: str, query: str, all_editions: bool) -> Work | None:
     client = Goodreads(GoodreadsTransport(token))
     edges = client.search({"query": query})["getSearchSuggestions"]["edges"]
-    urls = [e["node"]["webUrl"] for e in edges if e.get("node", {}).get("webUrl")]
+    urls = [e["node"]["webUrl"] for e in edges if e and (e.get("node") or {}).get("webUrl")]
     legacy_id = parse_id(urls[0]) if urls else None
     if not legacy_id:
         return None
