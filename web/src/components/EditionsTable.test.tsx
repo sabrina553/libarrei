@@ -57,3 +57,14 @@ test('the issues cell shows a count with the breakdown on hover', () => {
   const cell = screen.getByTitle(/Conflicts: pages/)
   expect(cell).toHaveTextContent(/^\d+$/)
 })
+
+test('the language setting hides other languages until asked', () => {
+  localStorage.setItem('libarrei.languages', JSON.stringify({ preferred: ['fr'], fallback: 'english' }))
+  const mixed = editions.map((e, i) => ({ ...e, fields: { ...e.fields, language: field(i ? 'en' : 'ja') } }))
+  render(<EditionsTable editions={mixed} book="Test" />)
+  expect(screen.queryByText('9780000000001')).toBeNull()
+  expect(screen.getByText(/None in your preferred languages, so English; 1 other-language edition hidden/)).toBeInTheDocument()
+  fireEvent.click(screen.getByText('Show all languages'))
+  expect(screen.getByText('9780000000001')).toBeInTheDocument()
+  localStorage.removeItem('libarrei.languages')
+})

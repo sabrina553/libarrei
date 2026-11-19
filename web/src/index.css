@@ -120,3 +120,5 @@ button.accept { margin-top: 0.5rem; }
 button.split { display: block; margin-top: 0.2rem; padding: 0; border: 0; background: none; color: var(--accent); font-size: 0.75rem; text-align: left; }
 button.split[aria-pressed='true'] { color: var(--good); }
 .editions td.issues { cursor: help; text-decoration: underline dotted; }
+label.check { display: inline-flex; gap: 0.3rem; align-items: center; margin: 0 1rem 0.4rem 0; }
+fieldset { border: 1px solid var(--border, currentColor); border-radius: 6px; margin: 0 0 1rem; padding: 0.6rem 0.9rem; }
